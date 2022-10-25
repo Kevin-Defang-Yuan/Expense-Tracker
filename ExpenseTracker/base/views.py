@@ -3,5 +3,5 @@ from django.http import HttpResponse
 
 # Tutorial Mode
 # Create your views here.
-def index(request):
+def dashboard(request):
     return HttpResponse('Hello World')
