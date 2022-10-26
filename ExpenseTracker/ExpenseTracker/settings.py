@@ -113,6 +113,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# If users are not authenticated, we want to send them to the login page
+# Customized for the Login mixin. 
+LOGIN_URL = 'login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

@@ -3,7 +3,14 @@
     But because I change dthe template_name attribute in the class, I can call this file a different name. 
 -->
 
-<h1>My Expenses</h1>
+{% if request.user.is_authenticated %}
+    <p>{{request.user}}</p> <!-- By default Django uses sessions to register users -->
+    <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+<hr> <!-- Indicates a header -->
+<h1>My Expenses: {{total_expense}}</h1>
 <a href="{% url 'expense-create' %}">Add Expense</a>
 
 <table>
