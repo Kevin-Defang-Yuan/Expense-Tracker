@@ -1,0 +1,10 @@
+<h3>Expense Form</h3>
+
+<a href="{% url 'dashboard' %}">Go Back</a>
+<form method="POST" action="">
+    {% csrf_token %}
+    <!-- By default it recognizes "form" because it's a CreateView class-->
+    <!-- The .as_p makes it look a bit prettier-->
+    {{form.as_p}}
+    <input type="submit" value="Submit">
+</form>

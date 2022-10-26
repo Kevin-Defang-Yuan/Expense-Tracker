@@ -1,0 +1,9 @@
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+<!--
+    By default we don't need to specify action here because it will redirect to dashboard because of view.
+-->
+<form method="POST">
+    {% csrf_token %}
+    <p>Are you sure you want to delete this task? "{{expense}}"</p>
+    <input type="submit" value="Delete">
+</form>
