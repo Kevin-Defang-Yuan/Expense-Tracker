@@ -84,6 +84,14 @@ class Dashboard(LoginRequiredMixin, ListView):
             total_expense += item.cost
         context['total_expense'] = total_expense
 
+        # Logic for searching
+        search_input = self.request.GET.get('search-area') or ''
+        if search_input:
+            context['expenses'] = context['expenses'].filter(category__startswith=search_input)
+
+        # Pass the search_input back to context
+        context['search_input'] = search_input
+
         # Here is some other code that the video showed to filter based on completed or not, i think? 
         # context['count'] = context['expenses'].filter(complete=False)
         return context

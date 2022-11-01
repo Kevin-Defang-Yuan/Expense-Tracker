@@ -1,4 +1,10 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+
 <h1>Expense: {{expense}}</h1>
 <p>Description: {{expense.description}}</p>
 <p>Date: {{expense.date}}</p>
 <p>Cost: {{expense.cost}}</p>
+
+{% endblock content %}

@@ -3,36 +3,58 @@
     But because I change dthe template_name attribute in the class, I can call this file a different name. 
 -->
 
-{% if request.user.is_authenticated %}
-    <p>{{request.user}}</p> <!-- By default Django uses sessions to register users -->
+{% extends 'base/main.html' %}
+
+{% block content %}
+
+<div class="header-bar">
+    <div>
+        <!-- CSS flexbox -->
+        <!-- The pipe title makes sure that the first letter is capitalized-->
+        <h1>Hello {{request.user|title}}</h1>
+        <h3 style="margin:0">Your total expense is <i>{{total_expense}}</i></h3>
+    </div>
+    {% if request.user.is_authenticated %}
+    <!-- <p>{{request.user}}</p> -> By default Django uses sessions to register users --> 
     <a href="{% url 'logout' %}">Logout</a>
-{% else %}
+    {% else %}
     <a href="{% url 'login' %}">Login</a>
-{% endif %}
+    {% endif %}
+</div>
+
+
 <hr> <!-- Indicates a header -->
 <h1>My Expenses: {{total_expense}}</h1>
 <a href="{% url 'expense-create' %}">Add Expense</a>
 
+<form method="GET">
+<input type="text" name='search-area', value={{search_input}}>
+<input type="submit" value="Search">
+
+</form>
+
 <table>
-    <tr>
-        <th>Expenses</th>
-        <th></th>
-        <th></th>
-        <th></th>
-    </tr>
-    <!--
-        For some reason, the ViewList passes the data into here, and it knows that it's all in object_list...
-    -->
-    {% for expense in expenses %}
-    <tr>
-        <td>{{expense}}</td>
-        <td><a href="{% url 'expense' expense.id %}">View</a></td>
-        <td><a href="{% url 'expense-update' expense.id %}">Edit</a></td>
-        <td><a href="{% url 'expense-delete' expense.id %}">Delete</a></td>
-    </tr>
-    {% empty %}
-        <h3>No expenses in list</h3>
-    {% endfor %}
-    
+<tr>
+    <th>Expenses</th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+<!--
+    For some reason, the ViewList passes the data into here, and it knows that it's all in object_list...
+-->
+{% for expense in expenses %}
+<tr>
+    <td>{{expense}}</td>
+    <td><a href="{% url 'expense' expense.id %}">View</a></td>
+    <td><a href="{% url 'expense-update' expense.id %}">Edit</a></td>
+    <td><a href="{% url 'expense-delete' expense.id %}">Delete</a></td>
+</tr>
+{% empty %}
+    <h3>No expenses in list</h3>
+{% endfor %}
+
 </table>
 
+
+{% endblock content %}

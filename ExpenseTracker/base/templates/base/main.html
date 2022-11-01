@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content='IE=edge'>
+        <title>Expense Tracker</title>
+        <meta name="description", content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Font from Google Font Nunino -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+
+        <style>
+            body{
+                background-color: #FAFAFA; 
+                font-family: 'Nunito', sans-serif;
+                padding-top: 50px; 
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6, {
+                font-family: 'Raleway', sans-serif; 
+            }
+
+            a,
+            p {
+                color: #4b5156;
+            }
+
+            .container{
+                max_width: 550px;
+                margin: auto; 
+                background-color: #fff;
+                /*
+                    Some stuff for shadows
+                */
+                -webkit-box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+                box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            {% block content %}
+
+            {% endblock content %}
+        </div>
+    </body>
+
+</html>

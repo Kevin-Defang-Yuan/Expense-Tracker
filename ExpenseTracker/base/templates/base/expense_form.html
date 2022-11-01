@@ -1,3 +1,7 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+
 <h3>Expense Form</h3>
 
 <a href="{% url 'dashboard' %}">Go Back</a>
@@ -8,3 +12,5 @@
     {{form.as_p}}
     <input type="submit" value="Submit">
 </form>
+
+{% endblock content %}
