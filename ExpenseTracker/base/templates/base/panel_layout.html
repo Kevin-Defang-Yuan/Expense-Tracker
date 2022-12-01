@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 550px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+        
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;} 
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="#">MycroExpense</a>
+        </div>
+        <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome User</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2 sidenav hidden-xs">
+      <h3>Expenses</h3>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#section1">Add Expense</a></li>
+        <li><a href="#section2">Edit Expenses</a></li>
+      </ul>
+      <h3>Summaries</h3>
+      <ul class="nav nav-pills nav-stacked">
+        <li  class="active"><a href="#section1">Today</a></li>
+        <li><a href="#section2">Daily</a></li>
+        <li><a href="#section2">Monthly</a></li>
+        <li><a href="#section2">Yearly</a></li>
+        <li><a href="#section2">Custom</a></li>
+      </ul>
+      <h3>Budgets</h3>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#section1">View</a></li>
+      </ul>
+      
+    </div>
+    <br>
+
+    <div class="col-sm-4">
+        <div class="well">
+            <h4>Recent Expenses</h4>
+            {% block bb %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="well">
+            <h4>Spending</h4>
+            {% block b1 %}
+            {% endblock %}
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="well">
+            <h4>Spending Rate</h4>
+            {% block b2 %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="well">
+            <h4>Budget Progress</h4>
+            {% block b3 %}
+            {% endblock %}
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="well">
+            <h4>Pie Chart</h4>
+            {% block b4 %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+</body>
+</html>

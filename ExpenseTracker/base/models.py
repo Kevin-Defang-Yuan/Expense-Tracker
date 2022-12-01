@@ -15,7 +15,7 @@ class Expense(models.Model):
     cost = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
-        output = str(self.category) + ' {' + str(self.cost) + '}'
+        output = str(self.category) + ' {' + str(self.cost) + '}' + ' {' + str(self.date) + '}' 
         return output
 
     # order the expenses by date, this orders the query set

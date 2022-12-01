@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .models import Expense
+import datetime
 
 # Branch
-# Post Setup
+# Newdb
 
 # We are using a class based view to handle logging in
 from django.contrib.auth.views import LoginView
@@ -56,6 +58,21 @@ class RegisterPage(FormView):
             return redirect('dashboard')
         return super(RegisterPage, self).get(*args, **kwargs)
 
+
+class TodayPanel(LoginRequiredMixin, TemplateView):
+    model = Expense
+    template_name = 'base/today_panel.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        this_day = datetime.date.today()
+        this_year = this_day.year
+        this_month = this_day.month
+        context['this_day'] = this_day
+        context['this_month'] = this_month
+        context['this_year'] = this_year
+        return context
+        
 
 
 
@@ -139,5 +156,6 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
     success_url = reverse_lazy('dashboard')
+
 
 
