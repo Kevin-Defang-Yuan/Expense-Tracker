@@ -1,10 +1,6 @@
-{% extends 'base/main.html' %}
-{% block content %}
-
-
 <h3>Expense Form</h3>
 
-<a href="{% url 'dashboard' %}">Go Back</a>
+<a href="{% url 'today-panel' %}">Go Back</a>
 <form method="POST" action="">
     {% csrf_token %}
     <!-- By default it recognizes "form" because it's a CreateView class-->
@@ -13,4 +9,3 @@
     <input type="submit" value="Submit">
 </form>
 
-{% endblock content %}

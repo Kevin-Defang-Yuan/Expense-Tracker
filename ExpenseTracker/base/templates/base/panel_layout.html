@@ -34,8 +34,8 @@
         <li class="active"><a href="#">Home</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome User</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome {{user.get_username}}</a></li>
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         </ul>
     </div>
 </nav>
@@ -46,7 +46,7 @@
     <div class="col-sm-2 sidenav hidden-xs">
       <h3>Expenses</h3>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#section1">Add Expense</a></li>
+        <li><a href="{% url 'fixed-expense-create' %}">Add Expense</a></li>
         <li><a href="#section2">Edit Expenses</a></li>
       </ul>
       <h3>Summaries</h3>

@@ -1,7 +1,36 @@
 {% extends 'base/panel_layout.html' %}
 
 {% block bb %}
-<ul>Date: {{this_day}}</ul>
-<ul>Month: {{this_month}}</ul>
-<ul>Year: {{this_year}}</ul>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Category</th>
+        <th scope="col">Cost</th>
+        <th scope="col">Date</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for expense in recent_expenses %}
+        <tr>
+            <td>{{expense.category}}</td>
+            <td>{{expense.cost}}</td>
+            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
+            <td>{{expense.description}}...</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+
 {% endblock %}
+
+
+{% block b1 %}
+<h4>Today's Spending: {{this_day_total}}</h4>
+<h4>This Month's Spending: {{this_month_total}}</h4>
+<h4>This Year's Spending: {{this_year_total}}</h4>
+
+
+
+{% endblock %}
+
