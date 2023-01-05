@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, time
 from .forms import CreateExpenseForm
 
 # Branch
-# CRUD
+# Layout
 LIM_NUM = 10
 
 # We need to restrict access for unauthenticated users
