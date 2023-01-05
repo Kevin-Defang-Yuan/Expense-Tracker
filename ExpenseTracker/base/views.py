@@ -4,12 +4,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
-from .models import FixedExpense
+from .models import FixedExpense, Category
 from datetime import datetime, timedelta, time
 from .forms import CreateFixedExpenseForm
 
 # Branch
-# Newdb
+# Rearrange
 LIM_NUM = 10
 # We are using a class based view to handle logging in
 from django.contrib.auth.views import LoginView
@@ -73,7 +73,27 @@ class TodayPanel(LoginRequiredMixin, TemplateView):
         context['this_day_total'] = self.get_this_day_expenditure()
         context['this_month_total'] = self.get_this_month_expenditure()
         context['this_year_total'] = self.get_this_year_expenditure()
+
+        categories_data = self.get_categories_expenditure()
+        context['labels'] = categories_data[0]
+        print(context['labels'])
+        context['data'] = categories_data[1]
+        print(categories_data[1])
         return context
+    
+    def get_categories_expenditure(self):
+        categories = Category.objects.filter(user=self.request.user)
+        category_labels = []
+        category_data = []
+        for category in categories:
+            fixed_expenses = category.fixed_category.all()
+            total = 0
+            for expense in fixed_expenses:
+                total += expense.cost
+            category_labels.append(category.name)
+
+            category_data.append(round(float(total)))
+        return (category_labels, category_data)
     
     def query_limited_fexpenses_entries(self):
         return FixedExpense.objects.all().filter(user=self.request.user).order_by('-date')[:LIM_NUM]
