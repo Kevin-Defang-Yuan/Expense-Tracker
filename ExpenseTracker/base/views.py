@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, time
 from .forms import CreateFixedExpenseForm
 
 # Branch
-# Rearrange
+# Rename_models
 LIM_NUM = 10
 # We are using a class based view to handle logging in
 from django.contrib.auth.views import LoginView
