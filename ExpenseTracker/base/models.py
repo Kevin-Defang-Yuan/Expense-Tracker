@@ -22,7 +22,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Expense(models.Model):
+class Payment(models.Model):
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
@@ -44,7 +44,7 @@ class Expense(models.Model):
     class Meta:
         abstract = True
 
-class FixedExpense(Expense):
+class Expense(Payment):
     date = models.DateField(
         verbose_name="Date of Expense"
     )
@@ -53,7 +53,7 @@ class FixedExpense(Expense):
     category = models.ForeignKey(
         Category, 
         on_delete=models.RESTRICT, 
-        related_name="fixed_category",    
+        related_name="all_expenses",    
     )
 
     def __str__(self):
@@ -63,7 +63,7 @@ class FixedExpense(Expense):
     class Meta:
         ordering = ['date']
     
-class RecurringExpense(Expense):
+class Subscription(Payment):
     start_date = models.DateField(
         verbose_name="Start Date of Recurring Expense"
     )
@@ -89,11 +89,11 @@ class RecurringExpense(Expense):
     CYCLE_CHOICES = (
         (DAILY, 'Daily'),
         (WEEKLY, 'Weekly'),
-        (DAILY, 'Biweekly'),
-        (DAILY, 'Monthly'),
-        (DAILY, 'Quarterly'),
-        (DAILY, 'Semiannually'),
-        (DAILY, 'Annually')
+        (BIWEEKLY, 'Biweekly'),
+        (MONTHLY, 'Monthly'),
+        (QUARTERLY, 'Quarterly'),
+        (SEMIANNUALLY, 'Semiannually'),
+        (ANNUALLY, 'Annually')
     )
 
     cycle = models.IntegerField(
@@ -108,7 +108,7 @@ class RecurringExpense(Expense):
     category = models.ForeignKey(
         Category, 
         on_delete=models.RESTRICT, 
-        related_name="recurring_category",    
+        related_name="all_subscriptions",    
     )
 
     class Meta:

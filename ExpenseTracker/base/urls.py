@@ -1,5 +1,5 @@
 from django .urls import path
-from .views import Dashboard, ExpenseDetail, FixedExpenseCreate, ExpenseUpdate, ExpenseDelete
+from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
 from .views import TodayPanel
 from django.contrib.auth.views import LogoutView
 
@@ -14,7 +14,7 @@ urlpatterns = [
     path('', TodayPanel.as_view(), name="default"),
     path('today-panel', TodayPanel.as_view(), name="today-panel"),
     path('expense/<int:pk>/', ExpenseDetail.as_view(), name='expense'),
-    path('fixed-expense-create/', FixedExpenseCreate.as_view(), name='fixed-expense-create'),
+    path('fixed-expense-create/', ExpenseCreate.as_view(), name='fixed-expense-create'),
     path('expense-update/<int:pk>/', ExpenseUpdate.as_view(), name='expense-update'),
     path('expense-delete/<int:pk>/', ExpenseDelete.as_view(), name='expense-delete'),
 

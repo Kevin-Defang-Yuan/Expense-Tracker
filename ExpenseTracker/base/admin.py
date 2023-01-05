@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import FixedExpense, RecurringExpense, Category, MonthlyBudget, YearlyBudget
+from .models import Expense, Subscription, Category, MonthlyBudget, YearlyBudget
 # Register your models here.
 
-admin.site.register(FixedExpense)
-admin.site.register(RecurringExpense)
+admin.site.register(Expense)
+admin.site.register(Subscription)
 admin.site.register(Category)
 admin.site.register(MonthlyBudget)
 admin.site.register(YearlyBudget)
