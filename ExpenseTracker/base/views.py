@@ -24,40 +24,40 @@ from django.contrib.auth import login
 # The order of how we add it MATTERS!
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# I don't know what the default is
-class CustomLoginView(LoginView):
-    template_name = 'base/login.html'
+# # I don't know what the default is
+# class CustomLoginView(LoginView):
+#     template_name = 'base/login.html'
 
-    # This view already handles the fields for you
-    fields = '__all__'
+#     # This view already handles the fields for you
+#     fields = '__all__'
 
-    # If a user is authenticated, they should be redirected back to dashboard
-    redirect_authenticated_user = True
+#     # If a user is authenticated, they should be redirected back to dashboard
+#     redirect_authenticated_user = True
 
-    # When users successfully login, we want to send them to dashboard. 
-    def get_success_url(self):
-        return reverse_lazy('today-panel')
+#     # When users successfully login, we want to send them to dashboard. 
+#     def get_success_url(self):
+#         return reverse_lazy('today-panel')
 
 
-# Registration
-class RegisterPage(FormView):
-    template_name = 'base/register.html'
-    form_class = UserCreationForm
-    redirect_authenticated_user = True
-    success_url = reverse_lazy('today-panel')
+# # Registration
+# class RegisterPage(FormView):
+#     template_name = 'base/register.html'
+#     form_class = UserCreationForm
+#     redirect_authenticated_user = True
+#     success_url = reverse_lazy('today-panel')
 
-    def form_valid(self, form):
-        # Once form is submitted, we need ot make sure that user is logged in. 
-        user = form.save() # Once the form is saved, the return value is going to be the user because we are working with the user create form
-        if user is not None: 
-            login(self.request, user)
-        return super(RegisterPage, self).form_valid(form)
+#     def form_valid(self, form):
+#         # Once form is submitted, we need ot make sure that user is logged in. 
+#         user = form.save() # Once the form is saved, the return value is going to be the user because we are working with the user create form
+#         if user is not None: 
+#             login(self.request, user)
+#         return super(RegisterPage, self).form_valid(form)
 
-    # Prevents users from accessing register page after they are already authenticated
-    def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('today-panel')
-        return super(RegisterPage, self).get(*args, **kwargs)
+#     # Prevents users from accessing register page after they are already authenticated
+#     def get(self, *args, **kwargs):
+#         if self.request.user.is_authenticated:
+#             return redirect('today-panel')
+#         return super(RegisterPage, self).get(*args, **kwargs)
 
 
 class TodayPanel(LoginRequiredMixin, TemplateView):
