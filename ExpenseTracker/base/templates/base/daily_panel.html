@@ -2,6 +2,12 @@
 
 {% block container-header %}
 <h4>{{month}} {{day}}, {{year}}</h4>
+<form action="{% url 'daily-panel' %}" method="GET">
+  <input type="text" placeholder="Year" name="year">
+  <input type="text" placeholder="Month (int)" name="month">
+  <input type="text" placeholder="Day" name="day">
+  <input type="submit" value="Submit">
+</form>
 {% endblock %}
 
 {% block bb %}

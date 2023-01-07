@@ -83,9 +83,9 @@ class DailyPanel(PanelView):
 
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()
-        year = self.request.GET['year'] if 'year' in self.request.GET else today.year
-        month = self.request.GET['month'] if 'month' in self.request.GET else today.month
-        day = self.request.GET['day'] if 'day' in self.request.GET else today.day
+        year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
+        month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
+        day = int(self.request.GET['day']) if 'day' in self.request.GET else today.day
         context['recent_expenses'] = self.query_recent_expenses(year=year, month=month, day=day)
         context['year'] = year
         context['month'] = MONTHS_NAME[month-1]
