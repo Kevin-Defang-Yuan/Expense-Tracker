@@ -1,6 +1,11 @@
-{% extends 'base/panel_layout.html' %}
+{% extends 'base/daily_layout.html' %}
+
+{% block container-header %}
+<h4>{{month}} {{day}}, {{year}}</h4>
+{% endblock %}
 
 {% block bb %}
+<h4>Recent Expenses</h4>
 <table class="table">
     <thead>
       <tr>
@@ -26,14 +31,29 @@
 
 
 {% block b1 %}
+<h4>Spending</h4>
 <h4>Today's Spending: {{this_day_total}}</h4>
 <h4>This Month's Spending: {{this_month_total}}</h4>
 <h4>This Year's Spending: {{this_year_total}}</h4>
 {% endblock %}
 
+{% block b2 %}
+<h4>Active Subscriptions</h4>
+  {% for subscription in active_subscriptions %}
+  <h4>{{subscription.category}} {{subscription.cost}}</h4>
+  {% endfor %}
+{% endblock %}
+
+{% block b3 %}
+<h4>Budget Progress</h4>
+{% endblock %}
+
+
 
 
 {% block b4 %}
+<h4>Pie Chart</h4>
+{% block piechart %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
 
@@ -65,5 +85,6 @@
     };
 
   </script>
+{% endblock piechart %}
 
 {% endblock %}

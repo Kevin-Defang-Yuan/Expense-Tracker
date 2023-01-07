@@ -23,7 +23,7 @@ class CustomLoginView(LoginView):
 
     # When users successfully login, we want to send them to dashboard. 
     def get_success_url(self):
-        return reverse_lazy('today-panel')
+        return reverse_lazy('daily-panel')
 
 
 # Registration
@@ -31,7 +31,7 @@ class RegisterPage(FormView):
     template_name = 'userauth/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('today-panel')
+    success_url = reverse_lazy('daily-panel')
 
     def form_valid(self, form):
         # Once form is submitted, we need ot make sure that user is logged in. 

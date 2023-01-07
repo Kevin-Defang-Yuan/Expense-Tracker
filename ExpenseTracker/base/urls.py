@@ -1,6 +1,6 @@
 from django .urls import path
 from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
-from .views import TodayPanel
+from .views import DailyPanel
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -11,8 +11,8 @@ urlpatterns = [
     # path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     # path('register/', RegisterPage.as_view(), name='register'),
     # # as_view is used to determine if the request is get or post
-    path('', TodayPanel.as_view(), name="default"),
-    path('today-panel', TodayPanel.as_view(), name="today-panel"),
+    path('', DailyPanel.as_view(), name="default"),
+    path('today-panel', DailyPanel.as_view(), name="daily-panel"),
     path('expense/<int:pk>/', ExpenseDetail.as_view(), name='expense'),
     path('fixed-expense-create/', ExpenseCreate.as_view(), name='fixed-expense-create'),
     path('expense-update/<int:pk>/', ExpenseUpdate.as_view(), name='expense-update'),

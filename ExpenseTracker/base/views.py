@@ -7,28 +7,93 @@ from django.urls import reverse_lazy
 from .models import Expense, Category
 from datetime import datetime, timedelta, time
 from .forms import CreateExpenseForm
+from .models import Subscription
+
+from django import template
+register = template.Library()
+
+
 
 # Branch
 # Layout
 LIM_NUM = 10
+MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-# We need to restrict access for unauthenticated users
-# This is easy to do with funciton based views using simple decorators or middleware
-# But in this case, we will use mixins and add it to every single view that should be restricted
-# The order of how we add it MATTERS!
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class TodayPanel(LoginRequiredMixin, TemplateView):
+class PanelView(LoginRequiredMixin, TemplateView):
     model = Expense
-    template_name = 'base/today_panel.html'
+
+    def query_recent_expenses(self, year=None, month=None, day=None):
+        expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
+        return expense_list.order_by('date')[:LIM_NUM]
+    
+    def get_expenses_by_time_range(self, year=None, month=None, day=None):
+        expense_list = Expense.objects.all().filter(user=self.request.user)
+        if year:
+            expense_list = expense_list.filter(date__year=year)
+        if month:
+            expense_list = expense_list.filter(date__month=month)
+        if day:
+            expense_list = expense_list.filter(date__day=day)
+        return expense_list
+    
+    def get_expenditure_by_time_range(self, year=None, month=None, day=None):
+        expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
+        total = 0
+        for expense in expense_list:
+            total += expense.cost
+        return total
+    
+    def get_subscriptions_by_time_range(self, year=None, month=None, day=None):
+        subscriptions = Subscription.objects.filter(user=self.request.user)
+        selected_date = datetime(int(year), int(month), int(day)).date()
+        active_subscriptions = []
+        for subscription in subscriptions:
+            end_date = subscription.get_end_date()
+            start_date = subscription.start_date
+            if selected_date >= start_date and selected_date <= end_date:
+                active_subscriptions.append(subscription)
+            
+        return active_subscriptions
+
+
+
+
+
+
+
+
+class DailyPanel(PanelView):
+    model = Expense
+    template_name = 'base/daily_panel.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['recent_expenses'] = self.query_limited_expenses_entries()
-        context['this_day_total'] = self.get_this_day_expenditure()
+        subscriptions = Subscription.objects.all()[0]
+        
+
+        # Determine Day (from GET params or assume Today Otherwise)
+        today = datetime.today()
+        year = self.request.GET['year'] if 'year' in self.request.GET else today.year
+        month = self.request.GET['month'] if 'month' in self.request.GET else today.month
+        day = self.request.GET['day'] if 'day' in self.request.GET else today.day
+        context['recent_expenses'] = self.query_recent_expenses(year=year, month=month, day=day)
+        context['year'] = year
+        context['month'] = MONTHS_NAME[month-1]
+        context['day'] = day
+
+        
+        # Expenditure Totals
+        context['this_day_total'] = self.get_expenditure_by_time_range(year=year, month=month, day=day)
+        print(context['this_day_total'])
         context['this_month_total'] = self.get_this_month_expenditure()
         context['this_year_total'] = self.get_this_year_expenditure()
+
+
+        # Subscriptions
+        context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month, day=day)
 
         categories_data = self.get_categories_expenditure()
         context['labels'] = categories_data[0]
@@ -51,17 +116,18 @@ class TodayPanel(LoginRequiredMixin, TemplateView):
             category_data.append(round(float(total)))
         return (category_labels, category_data)
     
-    def query_limited_expenses_entries(self):
-        return Expense.objects.all().filter(user=self.request.user).order_by('-date')[:LIM_NUM]
+    # def query_limited_expenses_entries(self):
+    #     return Expense.objects.all().filter(user=self.request.user).order_by('-date')[:LIM_NUM]
     
-    def get_this_day_expenditure(self):
-        today = datetime.today()
-        tomorrow = today + timedelta(1)
-        today_start = datetime.combine(today, time())
-        today_end = datetime.combine(tomorrow, time())
-        this_day_expenses = Expense.objects.all().filter(user=self.request.user).filter(date__lte=today_start, date__gte=today_end)
+    def get_this_day_expenditure(self, year, month, day):
+        # today = datetime.today()
+        # tomorrow = today + timedelta(1)
+        # today_start = datetime.combine(today, time())
+        # today_end = datetime.combine(tomorrow, time())
+        #this_day_expenses = Expense.objects.all().filter(user=self.request.user).filter(date__lte=today_start, date__gte=today_end)
+        expense_list = Expense.objects.all().filter(user=self.request.user).filter(date__year=year).filter(date__month=month).filter(date__day=day)
         total = 0
-        for expense in this_day_expenses:
+        for expense in expense_list:
             total += expense.cost
         return total
     

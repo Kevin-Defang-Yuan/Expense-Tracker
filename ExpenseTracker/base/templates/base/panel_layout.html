@@ -25,6 +25,7 @@
 </head>
 <body>
 
+<!-- Top Navbar -->
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -40,7 +41,7 @@
     </div>
 </nav>
 
-
+<!-- Left Navbar -->
 <div class="container-fluid">
   <div class="row content">
     <div class="col-sm-2 sidenav hidden-xs">
@@ -51,11 +52,11 @@
       </ul>
       <h3>Summaries</h3>
       <ul class="nav nav-pills nav-stacked">
-        <li  class="active"><a href="#section1">Today</a></li>
-        <li><a href="#section2">Daily</a></li>
+        <li  class="active"><a href="#section1">Daily</a></li>
         <li><a href="#section2">Monthly</a></li>
         <li><a href="#section2">Yearly</a></li>
         <li><a href="#section2">Custom</a></li>
+        <li><a href="#section2">Overview</a></li>
       </ul>
       <h3>Budgets</h3>
       <ul class="nav nav-pills nav-stacked">
@@ -64,51 +65,8 @@
       
     </div>
     <br>
-
-    <div class="col-sm-4">
-        <div class="well">
-            <h4>Recent Expenses</h4>
-            {% block bb %}
-            {% endblock %}
-        </div>
-    </div>
-
-    <div class="col-sm-6">
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="well">
-            <h4>Spending</h4>
-            {% block b1 %}
-            {% endblock %}
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="well">
-            <h4>Spending Rate</h4>
-            {% block b2 %}
-            {% endblock %}
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="well">
-            <h4>Budget Progress</h4>
-            {% block b3 %}
-            {% endblock %}
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="well">
-            <h4>Pie Chart</h4>
-            {% block b4 %}
-            {% endblock %}
-          </div>
-        </div>
-      </div>
-    </div>
-    
-  </div>
+  {% block main-container %}
+  {% endblock %}
 </div>
 
 </body>

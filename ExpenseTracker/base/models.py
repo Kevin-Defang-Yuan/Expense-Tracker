@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+import datetime
+# from dateutil.relativedelta import relativedelta
 
 # Create your models here.
 
@@ -115,7 +117,7 @@ class Subscription(Payment):
         ordering = ['start_date']
 
     def __str__(self):
-        output = str(self.category) + ' {' + str(self.cost) + '}' + ' {' + str(self.date) + '}' 
+        output = str(self.category) + ' {' + str(self.cost) + '}' + ' {' + str(self.start_date) + '}' 
         return output
     
     # Override clean method so that either end_date is specified or quantity is specified
@@ -126,6 +128,23 @@ class Subscription(Payment):
         
         if self.end_date and self.quantity:
             raise ValidationError(_('Input either end_date or quantity')) 
+    
+    def get_end_date(self):
+        if self.end_date:
+            return self.end_date
+
+        end_date = self.start_date
+        if self.cycle == 365:
+            for i in range(self.quantity):
+                end_date += datetime.timedelta(days=1)
+
+
+        return end_date
+
+        
+
+        
+
 
 # FIRST IDEA
 # Users will only have access to an "Edit Button"
