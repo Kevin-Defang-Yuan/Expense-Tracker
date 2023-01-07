@@ -16,7 +16,7 @@ register = template.Library()
 
 
 # Branch
-# year
+# view-expense
 LIM_NUM = 100
 MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
