@@ -15,7 +15,7 @@ register = template.Library()
 
 
 # Branch
-# calendar
+# monthly
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
