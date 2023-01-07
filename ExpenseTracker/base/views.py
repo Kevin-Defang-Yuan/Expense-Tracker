@@ -114,6 +114,24 @@ class YearlyPanel(PanelView):
     model = Expense
     template_name = 'base/yearly_panel.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        today = datetime.today()
+        year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
+
+        context['year'] = year
+        context['limited_expenses'] = self.query_limited_expenses(year=year)
+        context['year_expenditure'] = self.get_expenditure_by_time_range(year=year)
+
+        categories_data = self.get_categories_expenditure_by_time_range(year=year)
+        context['labels'] = categories_data[0]
+        context['data'] = categories_data[1]
+
+        context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
+
+        return context
+
 class MonthlyPanel(PanelView):
     model = Expense
     template_name = 'base/monthly_panel.html'

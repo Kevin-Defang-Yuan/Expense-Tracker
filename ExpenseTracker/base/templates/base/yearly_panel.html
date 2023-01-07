@@ -1,20 +1,48 @@
 {% extends 'base/daily_layout.html' %}
 
 {% block container-header %}
-
+<h4>Yearly Panel: {{year}}</h4>
+<form action="{% url 'yearly-panel' %}" method="GET">
+  <input type="text" placeholder="Year" name="year">
+  <input type="submit" value="Submit">
+</form>
 {% endblock %}
 
 {% block bb %}
-
+<h4>Recent Expenses</h4>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Category</th>
+        <th scope="col">Cost</th>
+        <th scope="col">Date</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for expense in limited_expenses %}
+        <tr>
+            <td>{{expense.category}}</td>
+            <td>{{expense.cost}}</td>
+            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
+            <td>{{expense.description}}...</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
 
 
 {% block b1 %}
-
+<h4>Spending</h4>
+<h4>This Year's Spending: {{year_expenditure}}</h4>
 {% endblock %}
 
 {% block b2 %}
-
+<h4>Active Subscriptions</h4>
+  {% for subscription in active_subscriptions %}
+  <h4>{{subscription.category}} {{subscription.cost}}</h4>
+  {% endfor %}
 {% endblock %}
 
 {% block b3 %}
