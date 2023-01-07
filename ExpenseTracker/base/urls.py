@@ -1,6 +1,6 @@
 from django .urls import path
 from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
-from .views import DailyPanel
+from .views import DailyPanel, MonthlyPanel
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     # # as_view is used to determine if the request is get or post
     path('', DailyPanel.as_view(), name="default"),
     path('daily-panel', DailyPanel.as_view(), name="daily-panel"),
+    path('monthly-panel', MonthlyPanel.as_view(), name="monthly-panel"),
     path('expense/<int:pk>/', ExpenseDetail.as_view(), name='expense'),
     path('fixed-expense-create/', ExpenseCreate.as_view(), name='fixed-expense-create'),
     path('expense-update/<int:pk>/', ExpenseUpdate.as_view(), name='expense-update'),

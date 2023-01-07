@@ -135,7 +135,7 @@ class Subscription(Payment):
 
         end_date = self.start_date
         if self.cycle == 365:
-            for i in range(self.quantity):
+            for i in range(self.quantity - 1): # Here we subtract by 1 or else difference is too large
                 end_date += datetime.timedelta(days=1)
 
 

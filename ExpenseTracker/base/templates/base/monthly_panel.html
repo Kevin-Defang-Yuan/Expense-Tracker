@@ -1,19 +1,16 @@
 {% extends 'base/daily_layout.html' %}
 
 {% block container-header %}
-<h4>Daily Panel: {{month}} {{day}}, {{year}}</h4>
-<form action="{% url 'daily-panel' %}" method="GET">
+<h4>Monthly Panel: {{month}}, {{year}}</h4>
+<form action="{% url 'monthly-panel' %}" method="GET">
   <input type="text" placeholder="Month (int)" name="month">
-  <input type="text" placeholder="Day" name="day">
   <input type="text" placeholder="Year" name="year">
-  
-
   <input type="submit" value="Submit">
 </form>
 {% endblock %}
 
 {% block bb %}
-<h4>Expenses of the Day</h4>
+<h4>Recent Expenses</h4>
 <table class="table">
     <thead>
       <tr>
@@ -34,15 +31,12 @@
         {% endfor %}
     </tbody>
   </table>
-
 {% endblock %}
 
 
 {% block b1 %}
 <h4>Spending</h4>
-<h4>Today's Spending: {{day_expenditure}}</h4>
-<h4>This Month's Spending: {{this_month_total}}</h4>
-<h4>This Year's Spending: {{this_year_total}}</h4>
+<h4>This Month's Spending: {{month_expenditure}}</h4>
 {% endblock %}
 
 {% block b2 %}
@@ -53,7 +47,7 @@
 {% endblock %}
 
 {% block b3 %}
-<h4>Average Spending per Day: {{expenditure_per_day}}</h4>
+<h4>Average Spending per Month: {{expenditure_per_month}}</h4>
 {% endblock %}
 
 
