@@ -56,6 +56,13 @@ class PanelView(LoginRequiredMixin, TemplateView):
                 active_subscriptions.append(subscription)
             
         return active_subscriptions
+    
+    def get_total_expenditure(self):
+        expenses = Expense.objects.filter(user=self.request.user)
+        total = 0
+        for expense in expenses:
+            total += expense.cost
+        return total
 
 
 
@@ -91,6 +98,8 @@ class DailyPanel(PanelView):
         context['this_month_total'] = self.get_this_month_expenditure()
         context['this_year_total'] = self.get_this_year_expenditure()
 
+        # Expenditure Per Day
+        context['expenditure_per_day'] = self.get_expenditure_per_day()
 
         # Subscriptions
         context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month, day=day)
@@ -100,7 +109,24 @@ class DailyPanel(PanelView):
         print(context['labels'])
         context['data'] = categories_data[1]
         print(categories_data[1])
+
+        print(self.get_expenditure_per_day())
         return context
+    
+    def get_expenditure_per_day(self):
+        total = self.get_total_expenditure()
+        expenses = Expense.objects.filter(user=self.request.user)
+        earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        if not earliest_expense:
+            return None
+
+        earliest_date = earliest_expense.date
+        today = datetime.today().date()
+        delta = today - earliest_date
+        days_passed = delta.days + 1 # Add extra day for difference
+        return round(total / days_passed, 2)
+
     
     def get_categories_expenditure(self):
         categories = Category.objects.filter(user=self.request.user)
