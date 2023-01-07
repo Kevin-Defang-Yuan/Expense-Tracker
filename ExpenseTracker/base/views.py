@@ -16,7 +16,7 @@ register = template.Library()
 
 
 # Branch
-# monthly
+# year
 LIM_NUM = 100
 MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
@@ -110,6 +110,9 @@ class PanelView(LoginRequiredMixin, TemplateView):
         return (category_labels, category_data)
 
 
+class YearlyPanel(PanelView):
+    model = Expense
+    template_name = 'base/yearly_panel.html'
 
 class MonthlyPanel(PanelView):
     model = Expense
