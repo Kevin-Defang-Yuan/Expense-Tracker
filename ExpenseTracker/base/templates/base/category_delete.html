@@ -23,6 +23,8 @@
                 <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
                 <td>{{expense.description}}...</td>
             </tr>
+            {% empty %}
+            <p>None</p>
             {% endfor %}
         </tbody>
       </table>
