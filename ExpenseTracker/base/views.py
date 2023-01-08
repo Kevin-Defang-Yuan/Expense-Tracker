@@ -415,6 +415,16 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('dashboard')
 
 
+class CategoryList(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'base/category_list.html'
+    context_object_name = 'categories'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+        
+
+
 
 
 

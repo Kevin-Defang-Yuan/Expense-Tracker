@@ -1,0 +1,44 @@
+{% extends 'base/panel_layout.html' %}
+
+{% block main-container %}
+<div class="row-sm-1">
+    <div class="col-sm-10">
+      <div class="well">
+        <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
+        <h4>Expenditure Categories</h4>
+      </div>
+    </div>
+  </div>
+
+<div class="row-sm-1">
+    <div class="col-sm-10">
+        <div class="well">
+            <table class="table">
+                <div class="w-auto">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <td>{{category.name}}</td>
+                            <td>EDIT</td>
+                            <td>DELETE</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
