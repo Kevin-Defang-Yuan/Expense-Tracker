@@ -17,10 +17,33 @@ register = template.Library()
 
 # Branch
 # view-expense
-LIM_NUM = 100
+LIM_NUM = 10
 MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
+EXPENSE_PAGINATION = 15
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+class ExpenseList(LoginRequiredMixin, ListView):
+    model = Expense
+    context_object_name = 'expenses'
+    paginate_by = EXPENSE_PAGINATION
+    template_name = 'base/expense_list.html'
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(user=self.request.user)
+        year = int(self.request.GET['year']) if 'year' in self.request.GET else None
+        month = int(self.request.GET['month']) if 'month' in self.request.GET else None
+        day = int(self.request.GET['day']) if 'day' in self.request.GET else None
+
+        if year:
+            queryset = queryset.filter(date__year=year)
+        if month:
+            queryset = queryset.filter(date__month=month)
+        if day:
+            queryset = queryset.filter(date__day=day)
+        
+        return queryset
+
 
 class PanelView(LoginRequiredMixin, TemplateView):
     model = Expense
@@ -143,7 +166,8 @@ class MonthlyPanel(PanelView):
         year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
         month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
         context['year'] = year
-        context['month'] = MONTHS_NAME[month-1]
+        context['month'] = month
+        context['month_name'] = MONTHS_NAME[month-1]
 
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month)
         context['month_expenditure'] = self.get_expenditure_by_time_range(year=year, month=month)
@@ -193,7 +217,8 @@ class DailyPanel(PanelView):
         day = int(self.request.GET['day']) if 'day' in self.request.GET else today.day
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month, day=day)
         context['year'] = year
-        context['month'] = MONTHS_NAME[month-1]
+        context['month'] = month
+        context['month_name'] = MONTHS_NAME[month-1]
         context['day'] = day
 
         

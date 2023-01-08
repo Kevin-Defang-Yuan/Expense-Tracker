@@ -1,7 +1,7 @@
 {% extends 'base/daily_layout.html' %}
 
 {% block container-header %}
-<h4>Daily Panel: {{month}} {{day}}, {{year}}</h4>
+<h4>Daily Panel: {{month_name}} {{day}}, {{year}}</h4>
 <form action="{% url 'daily-panel' %}" method="GET">
   <input type="text" placeholder="Month (int)" name="month">
   <input type="text" placeholder="Day" name="day">
@@ -34,6 +34,7 @@
         {% endfor %}
     </tbody>
   </table>
+  <a href="{% url 'expense-list' %}?year={{year}}&month={{month}}&day={{day}}">View More</a>
 
 {% endblock %}
 

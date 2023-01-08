@@ -1,6 +1,7 @@
 from django .urls import path
 from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
 from .views import DailyPanel, MonthlyPanel, YearlyPanel
+from .views import ExpenseList
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     path('daily-panel/', DailyPanel.as_view(), name="daily-panel"),
     path('monthly-panel/', MonthlyPanel.as_view(), name="monthly-panel"),
     path('yearly-panel/', YearlyPanel.as_view(), name="yearly-panel"),
+    path('expense-list/', ExpenseList.as_view(), name="expense-list"),
     path('expense/<int:pk>/', ExpenseDetail.as_view(), name='expense'),
     path('fixed-expense-create/', ExpenseCreate.as_view(), name='fixed-expense-create'),
     path('expense-update/<int:pk>/', ExpenseUpdate.as_view(), name='expense-update'),
