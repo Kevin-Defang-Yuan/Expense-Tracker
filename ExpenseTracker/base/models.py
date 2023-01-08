@@ -57,7 +57,7 @@ class Expense(Payment):
     # https://stackoverflow.com/questions/2642613/what-is-related-name-used-for
     category = models.ForeignKey(
         Category, 
-        on_delete=models.RESTRICT, 
+        on_delete=models.CASCADE, 
         related_name="all_expenses",    
     )
 

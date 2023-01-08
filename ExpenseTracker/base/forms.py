@@ -1,4 +1,4 @@
-from django.forms import ModelForm, DateField, DecimalField, ModelChoiceField, TextInput, SelectDateWidget
+from django.forms import ModelForm, DateField, DecimalField, ModelChoiceField, TextInput, SelectDateWidget, CharField
 from .models import Expense, Category
 from django.core.exceptions import ValidationError
 import datetime
@@ -34,3 +34,11 @@ class CreateExpenseForm(ModelForm):
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(user=user)
         #self.fields['category'].queryset = Category.objects.filter(id__in=Expense.objects.all().filter(user=user).values('category'))
+
+class CreateCategoryForm(ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+    
+    name = CharField(max_length=200)
+

@@ -1,7 +1,7 @@
 from django .urls import path
 from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
 from .views import DailyPanel, MonthlyPanel, YearlyPanel
-from .views import ExpenseList, CategoryList
+from .views import ExpenseList, CategoryList, CategoryCreate, CategoryUpdate, CategoryDelete
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -19,7 +19,11 @@ urlpatterns = [
     path('expense-list/', ExpenseList.as_view(), name="expense-list"),
     path('category-list/', CategoryList.as_view(), name="category-list"),
     path('expense/<int:pk>/', ExpenseDetail.as_view(), name='expense'),
-    path('fixed-expense-create/', ExpenseCreate.as_view(), name='fixed-expense-create'),
+    path('expense-create/', ExpenseCreate.as_view(), name='expense-create'),
     path('expense-update/<int:pk>/', ExpenseUpdate.as_view(), name='expense-update'),
     path('expense-delete/<int:pk>/', ExpenseDelete.as_view(), name='expense-delete'),
+    path('category-create/', CategoryCreate.as_view(), name='category-create'),
+    path('category-update/<int:pk>/', CategoryUpdate.as_view(), name='category-update'),
+    path('category-delete/<int:pk>/', CategoryDelete.as_view(), name='category-delete'),
+
 ]

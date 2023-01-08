@@ -47,12 +47,12 @@
     <div class="col-sm-2 sidenav hidden-xs">
       <h4>Expenses</h4>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="{% url 'fixed-expense-create' %}">Add Expense</a></li>
+        <li><a href="{% url 'expense-create' %}">Add Expense</a></li>
         <li><a href="filler">Edit Expenses</a></li>
       </ul>
       <h4>Categories</h4>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="filler">Add Category</a></li>
+        <li><a href="{% url 'category-create' %}">Add Category</a></li>
         <li><a href="{% url 'category-list' %}">Edit Categories</a></li>
       </ul>
       <h4>Summaries</h4>

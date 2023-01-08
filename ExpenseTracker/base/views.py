@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .models import Expense, Category
 from datetime import datetime, timedelta, time
-from .forms import CreateExpenseForm
+from .forms import CreateExpenseForm, CreateCategoryForm
 from .models import Subscription
 import calendar
 
@@ -426,9 +426,34 @@ class CategoryList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
-        
 
+class CategoryCreate(LoginRequiredMixin, CreateView):
+    model = Category
+    form_class = CreateCategoryForm
+    template_name = 'base/category_create.html'
+    success_url = reverse_lazy('category-list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(CategoryCreate, self).form_valid(form)
 
+class CategoryUpdate(LoginRequiredMixin, UpdateView):
+    model = Category
+    fields = ['name']
+    success_url = reverse_lazy('category-list')
+    template_name = 'base/category_update.html'
+    context_object_name = 'category'
+
+class CategoryDelete(LoginRequiredMixin, DeleteView):
+    model = Category
+    success_url = reverse_lazy('category-list')
+    template_name = 'base/category_delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs.get('pk')
+        expenses_under_category = Expense.objects.filter(user=self.request.user).filter(category=category_id)
+        context['expenses_under_category'] = expenses_under_category
+        return context
 
 

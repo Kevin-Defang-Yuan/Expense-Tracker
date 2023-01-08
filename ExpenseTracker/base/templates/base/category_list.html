@@ -26,8 +26,8 @@
                         {% for category in categories %}
                         <tr>
                             <td>{{category.name}}</td>
-                            <td>EDIT</td>
-                            <td>DELETE</td>
+                            <td><a href="{% url 'category-update' category.pk %}" method="POST">EDIT</a></td>
+                            <td><a href="{% url 'category-delete' category.pk %}" method="POST">DELETE</a></td>
 
                         </tr>
                         {% endfor %}
