@@ -43,6 +43,18 @@ class ExpenseList(LoginRequiredMixin, ListView):
             queryset = queryset.filter(date__day=day)
         
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.request.GET['year']) if 'year' in self.request.GET else None
+        month = int(self.request.GET['month']) if 'month' in self.request.GET else None
+        day = int(self.request.GET['day']) if 'day' in self.request.GET else None
+
+        if year: context['year'] = year
+        if month: context['month'] = MONTHS_NAME[month-1]
+        if day: context['day'] = day
+
+        return context
 
 
 class PanelView(LoginRequiredMixin, TemplateView):
@@ -153,7 +165,23 @@ class YearlyPanel(PanelView):
 
         context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
 
+        bar_graph = self.get_expenditure_by_year_per_month(year=year)
+        context['bar_graph_labels'] = bar_graph[0]
+        context['bar_graph_data'] = bar_graph[1]
+
         return context
+    
+    def get_expenditure_by_year_per_month(self, year):
+        expenses = Expense.objects.filter(user=self.request.user).filter(date__year=year)
+        month_list = [i for i in range(1, 12+1)]
+        month_expenses = []
+        for num in month_list:
+            expenses_of_month = expenses.filter(date__month=num)
+            total = 0
+            for expense in expenses_of_month:
+                total += expense.cost
+            month_expenses.append(round(float(total)))
+        return (month_list, month_expenses)
 
 class MonthlyPanel(PanelView):
     model = Expense
@@ -162,7 +190,6 @@ class MonthlyPanel(PanelView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = datetime.today()
-
         year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
         month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
         context['year'] = year
@@ -179,6 +206,9 @@ class MonthlyPanel(PanelView):
         context['expenditure_per_month'] = self.get_expenditure_per_month()
 
         context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month)
+        bar_graph = self.get_expenditure_by_month_per_day(year=year, month=month)
+        context['bar_graph_labels'] = bar_graph[0]
+        context['bar_graph_data'] = bar_graph[1]
     
         return context
     
@@ -192,10 +222,26 @@ class MonthlyPanel(PanelView):
         
         earliest_date = earliest_expense.date
         today = datetime.today().date()
-        print("early month", earliest_date.month)
-        print("late month", today.month)
         months_passed = (today.year - earliest_date.year) * 12 + today.month - earliest_date.month
         return round(total / months_passed, 2)
+    
+    def get_expenditure_by_month_per_day(self, year, month):
+        expenses = Expense.objects.filter(user=self.request.user)
+        expenses = expenses.filter(date__year=year).filter(date__month=month)
+
+        days = calendar.monthrange(year, month)[1]
+        day_list = [i for i in range(1, days+1)]
+        day_expenses = []
+        for num in day_list:
+            expenses_of_day = expenses.filter(date__day=num)
+            total = 0
+            for expense in expenses_of_day:
+                total += expense.cost
+            day_expenses.append(round(float(total)))
+        return (day_list, day_expenses)
+
+
+
 
 
 
@@ -367,7 +413,7 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
     #   form_class = ExpenseForm
 
     # So if everything goes correctly, redirect user to the url named 'dashboard'
-    success_url = reverse_lazy('today-panel')
+    success_url = reverse_lazy('daily-panel')
 
     # We want the form to automatically know which user to submit the data
     def form_valid(self, form):
