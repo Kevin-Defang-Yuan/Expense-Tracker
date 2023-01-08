@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import datetime
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # from dateutil.relativedelta import relativedelta
 
 # Create your models here.
@@ -188,5 +191,42 @@ class MonthlyBudget(Budget):
         return self.date.year + ": " + self.date.month 
 
 
+# https://www.statista.com/statistics/183657/average-size-of-a-family-in-the-us/#:~:text=As%20of%202021%2C%20the%20U.S.,18%20living%20in%20the%20household
+HOUSEHOLD_SIZE = 3.13
+
+# https://www.bls.gov/news.release/cesan.nr0.htm
+# Represents a single consumer unit per year
+BLS_2021_DATA = {
+    'Food': 8289,
+    'Alcohol and tobacco': 895,
+    'Housing and utilities': 22624,
+    'Apparel and services': 1754,
+    'Transportation': 10961,
+    'Healthcare': 5452,
+    'Entertainment': 3568,
+    'Personal care': 771,
+    'Reading': 114,
+    'Education': 1226,
+    'Miscellaneous': 986,
+    'Cash contributions': 2415,
+    'Personal insurance and pensions': 7873      
+}
 
 
+
+@receiver(post_save, sender=User)
+def init_new_user(instance, created, raw, **kwargs):
+    if created and not raw:
+        Category.objects.create(user=instance, name='Food')
+        Category.objects.create(user=instance, name='Alcohol and tobacco')
+        Category.objects.create(user=instance, name='Housing and utilities')
+        Category.objects.create(user=instance, name='Apparel and services')
+        Category.objects.create(user=instance, name='Transportation')
+        Category.objects.create(user=instance, name='Healthcare')
+        Category.objects.create(user=instance, name='Entertainment')
+        Category.objects.create(user=instance, name='Personal care')
+        Category.objects.create(user=instance, name='Reading')
+        Category.objects.create(user=instance, name='Education')
+        Category.objects.create(user=instance, name='Miscellaneous')
+        Category.objects.create(user=instance, name='Cash contributions')
+        Category.objects.create(user=instance, name='Personal insurance and pensions')

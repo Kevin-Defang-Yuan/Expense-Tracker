@@ -32,4 +32,5 @@ class CreateExpenseForm(ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.filter(id__in=Expense.objects.all().filter(user=user).values('category'))
+        self.fields['category'].queryset = Category.objects.filter(user=user)
+        #self.fields['category'].queryset = Category.objects.filter(id__in=Expense.objects.all().filter(user=user).values('category'))

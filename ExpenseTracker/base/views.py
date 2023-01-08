@@ -10,6 +10,8 @@ from .forms import CreateExpenseForm
 from .models import Subscription
 import calendar
 
+from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
+
 from django import template
 register = template.Library()
 
@@ -20,6 +22,8 @@ register = template.Library()
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
+
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ExpenseList(LoginRequiredMixin, ListView):
@@ -134,9 +138,6 @@ class PanelView(LoginRequiredMixin, TemplateView):
             if day:
                 expenses = expenses.filter(date__day=day)
             total = 0
-            print("EXPENSES")
-            print(expenses)
-            print("ENDDDD")
             for expense in expenses:
                 total += expense.cost
             category_labels.append(category.name)
@@ -255,7 +256,6 @@ class DailyPanel(PanelView):
 
         subscriptions = Subscription.objects.all()[0]
         
-
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()
         year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
@@ -281,11 +281,7 @@ class DailyPanel(PanelView):
 
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month, day=day)
         context['labels'] = categories_data[0]
-        print(context['labels'])
         context['data'] = categories_data[1]
-        print(categories_data[1])
-
-        print(self.get_expenditure_per_day())
         return context
     
     def get_expenditure_per_day(self):
@@ -303,29 +299,9 @@ class DailyPanel(PanelView):
         return round(total / days_passed, 2)
 
     
-    # def get_categories_expenditure(self):
-    #     categories = Category.objects.filter(user=self.request.user)
-    #     category_labels = []
-    #     category_data = []
-    #     for category in categories:
-    #         expenses = category.all_expenses.all()
-    #         total = 0
-    #         for expense in expenses:
-    #             total += expense.cost
-    #         category_labels.append(category.name)
-
-    #         category_data.append(round(float(total)))
-    #     return (category_labels, category_data)
-    
-    # def query_limited_expenses_entries(self):
-    #     return Expense.objects.all().filter(user=self.request.user).order_by('-date')[:LIM_NUM]
+  
     
     def get_this_day_expenditure(self, year, month, day):
-        # today = datetime.today()
-        # tomorrow = today + timedelta(1)
-        # today_start = datetime.combine(today, time())
-        # today_end = datetime.combine(tomorrow, time())
-        #this_day_expenses = Expense.objects.all().filter(user=self.request.user).filter(date__lte=today_start, date__gte=today_end)
         expense_list = Expense.objects.all().filter(user=self.request.user).filter(date__year=year).filter(date__month=month).filter(date__day=day)
         total = 0
         for expense in expense_list:
@@ -437,6 +413,8 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
     success_url = reverse_lazy('dashboard')
+
+
 
 
 
