@@ -224,6 +224,10 @@ class MonthlyPanel(PanelView):
         earliest_date = earliest_expense.date
         today = datetime.today().date()
         months_passed = (today.year - earliest_date.year) * 12 + today.month - earliest_date.month
+
+        # If no months have passed yet, just return total
+        if months_passed == 0:
+            return total
         return round(total / months_passed, 2)
     
     def get_expenditure_by_month_per_day(self, year, month):
