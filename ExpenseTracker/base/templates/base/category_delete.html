@@ -24,7 +24,9 @@
                 <td>{{expense.description}}...</td>
             </tr>
             {% empty %}
-            <p>None</p>
+            <tr>
+                <td>None</td>
+            </tr>
             {% endfor %}
         </tbody>
       </table>
