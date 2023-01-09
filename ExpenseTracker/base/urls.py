@@ -1,4 +1,4 @@
-from django .urls import path
+from django .urls import path, include
 from .views import Dashboard, ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
 from .views import DailyPanel, MonthlyPanel, YearlyPanel
 from .views import ExpenseList, CategoryList, CategoryCreate, CategoryUpdate, CategoryDelete
@@ -25,5 +25,6 @@ urlpatterns = [
     path('category-create/', CategoryCreate.as_view(), name='category-create'),
     path('category-update/<int:pk>/', CategoryUpdate.as_view(), name='category-update'),
     path('category-delete/<int:pk>/', CategoryDelete.as_view(), name='category-delete'),
+    path('', include('budget.urls')),
 
 ]

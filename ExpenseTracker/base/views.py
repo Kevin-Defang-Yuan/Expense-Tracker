@@ -9,18 +9,18 @@ from datetime import datetime, timedelta, time
 from .forms import CreateExpenseForm, CreateCategoryForm
 from .models import Subscription
 import calendar
-
+from budget.models import MonthlyBudget, YearlyBudget
 from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
 
-from django import template
-register = template.Library()
+# from django import template
+# register = template.Library()
 
 
 
 # Branch
 # budget2
 LIM_NUM = 10
-MONTHS_NAME = ['January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
 
 

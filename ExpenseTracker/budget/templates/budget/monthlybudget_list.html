@@ -1,0 +1,47 @@
+{% extends 'base/panel_layout.html' %}
+
+{% block main-container %}
+<div class="row-sm-1">
+    <div class="col-sm-10">
+      <div class="well">
+        <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
+        <h4>Spending Budgets</h4>
+      </div>
+    </div>
+  </div>
+
+<div class="row-sm-1">
+    <div class="col-sm-10">
+        <div class="well">
+            <table class="table">
+                <div class="w-auto">
+                    <thead>
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col">Month</th>
+                        <th scope="col">Spending Budget</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for budget in budgets %}
+                        <tr>
+                            <td>{{budget.year}}</td>
+                            <td>{{budget.month}}</td>
+                            <td>{{budget.budget}}</td>
+                            <td><a href="{% url 'monthlybudget-update' budget.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'monthlybudget-delete' budget.pk %}">DELETE</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

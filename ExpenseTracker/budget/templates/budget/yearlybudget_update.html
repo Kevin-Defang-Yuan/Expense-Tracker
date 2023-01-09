@@ -1,0 +1,10 @@
+<h3>Yearly Spending Budget Form</h3>
+
+<a href="{% url 'category-list' %}">Go Back (BROKEN PLZ FIX)</a>
+<form method="POST" action="{% url 'yearlybudget-update' budget.pk %}">
+    {% csrf_token %}
+    <!-- By default it recognizes "form" because it's a CreateView class-->
+    <!-- The .as_p makes it look a bit prettier-->
+    {{form.as_p}}
+    <input type="submit" value="Submit">
+</form>

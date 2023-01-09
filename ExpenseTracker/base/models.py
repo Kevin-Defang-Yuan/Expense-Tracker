@@ -149,46 +149,7 @@ class Subscription(Payment):
         
 
 
-# FIRST IDEA
-# Users will only have access to an "Edit Button"
-# The Edit Buttons sends them to a Normal View, which checks if year (or month) exists
-# Done using the BudgetYearly.objects.filter(order_date__year = 2000)
-# If year doesn't exist, create new object and save and then redirect to edit page. 
-# If year exists, redirect to edit page.
 
-# SECOND IDEA
-# Template should have an ADD if Budget doesn't exist
-# And EDIT if Budget does exist
-
-class Budget(models.Model):
-    user = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
-        null=True, 
-        blank=True
-    )
-
-    goal = models.DecimalField(
-        max_digits=8, 
-        decimal_places=2,
-        verbose_name="Budget Goal"
-    )
-
-    class Meta:
-        abstract = True
-
-class YearlyBudget(Budget):
-    # Non editable data
-    date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.date.year 
-
-class MonthlyBudget(Budget):
-    # Non editable data
-    date = models.DateField(auto_now_add=True)
-    def __str__(self):
-        return self.date.year + ": " + self.date.month 
 
 
 # https://www.statista.com/statistics/183657/average-size-of-a-family-in-the-us/#:~:text=As%20of%202021%2C%20the%20U.S.,18%20living%20in%20the%20household

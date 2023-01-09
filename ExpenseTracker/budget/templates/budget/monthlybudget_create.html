@@ -1,0 +1,9 @@
+<h3>Monthly Spending Budget Form</h3>
+
+<a href="{% url 'daily-panel' %}">Go Back (BROKEN PLZ FIX)</a>
+<form method="POST" action="{% url 'monthlybudget-create' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Submit">
+</form>
+
