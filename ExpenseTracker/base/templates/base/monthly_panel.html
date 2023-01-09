@@ -38,6 +38,17 @@
 {% block b1 %}
 <h4>Spending</h4>
 <h4>This Month's Spending: {{month_expenditure}}</h4>
+  {% if monthlybudget %}
+    <h4>Monthly Spending Budget: {{monthlybudget}}</h4>
+    <progress max="{{monthlybudget}}" value="{{month_expenditure}}"></progress>
+      {% if surpass %}
+      <h5>Monthly expenditure has exceeded the Monthly budget</h5>
+      {% endif %}
+      <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}">Edit spending budget</a>
+  {% else %}
+    <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
+  {% endif %}
+
 {% endblock %}
 
 {% block b2 %}

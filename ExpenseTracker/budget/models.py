@@ -81,3 +81,4 @@ class MonthlyBudget(Budget):
 
     def __str__(self):
             return f'{self.month}, {self.year}: {self.budget}'
+    

@@ -160,6 +160,12 @@ class YearlyPanel(PanelView):
         context['limited_expenses'] = self.query_limited_expenses(year=year)
         context['year_expenditure'] = self.get_expenditure_by_time_range(year=year)
 
+        yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
+        if yearlybudget:
+            context['yearlybudget'] = yearlybudget.budget
+            context['yearlybudget_object'] = yearlybudget
+            context['surpass'] = True if yearlybudget.budget < context['year_expenditure'] else False
+
         categories_data = self.get_categories_expenditure_by_time_range(year=year)
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
@@ -200,6 +206,12 @@ class MonthlyPanel(PanelView):
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month)
         context['month_expenditure'] = self.get_expenditure_by_time_range(year=year, month=month)
 
+        monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month).first()
+        if monthlybudget:
+            context['monthlybudget'] = monthlybudget.budget
+            context['monthlybudget_object'] = monthlybudget
+            context['surpass'] = True if monthlybudget.budget < context['month_expenditure'] else False
+
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month)
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
@@ -210,6 +222,8 @@ class MonthlyPanel(PanelView):
         bar_graph = self.get_expenditure_by_month_per_day(year=year, month=month)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
+
+
     
         return context
     

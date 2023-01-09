@@ -37,6 +37,16 @@
 {% block b1 %}
 <h4>Spending</h4>
 <h4>This Year's Spending: {{year_expenditure}}</h4>
+  {% if yearlybudget %}
+  <h4>Yearly Spending Budget: {{yearlybudget}}</h4>
+  <progress max="{{yearlybudget}}" value="{{year_expenditure}}"></progress>
+    {% if surpass %}
+    <h5>Yearly expenditure has exceeded the Yearly budget</h5>
+    {% endif %}
+    <a href="{% url 'yearlybudget-update' yearlybudget_object.pk %}">Edit spending budget</a>
+  {% else %}
+  <a href="{% url 'yearlybudget-create' %}?year={{year}}">Add Spending Budget for Year</a>
+  {% endif %}
 {% endblock %}
 
 {% block b2 %}

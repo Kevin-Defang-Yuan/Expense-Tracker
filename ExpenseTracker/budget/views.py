@@ -29,6 +29,13 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(YearlyBudgetCreate, self).form_valid(form)
     
+    def get_initial(self):
+        if 'year' in self.request.GET:
+            year = self.request.GET['year']
+            return {
+                'year': year,
+            }
+    
 class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
@@ -65,12 +72,39 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(MonthlyBudgetCreate, self).form_valid(form)
     
+    def get_initial(self):
+        if 'year' in self.request.GET and 'month' in self.request.GET:
+            year = self.request.GET['year']
+            month = self.request.GET['month']
+            return {
+                'year': year,
+                'month': month
+            }
+    
+    # def get_form(self):
+    #     form = super(MonthlyBudgetCreate, self).get_form()
+    #     if 'year' in self.request.GET and 'month' in self.request.GET:
+    #         form.fields['year'].widget.attrs.update({'value': self.request.GET['year']})
+    #         form.fields['month'].widget.attrs.update({'value': self.request.GET['month']})
+    #         print(form.fields['year'].widget.attrs)
+    #     return form
+
+    
 class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')
     fields = ['budget']
     template_name = 'budget/monthlybudget_update.html'
     context_object_name = 'budget'
+
+    def get_initial(self):
+        if 'year' in self.request.GET and 'month' in self.request.GET:
+            year = self.request.GET['year']
+            month = self.request.GET['month']
+            return {
+                'year': year,
+                'month': month
+            }
 
 class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
     model = MonthlyBudget
