@@ -226,6 +226,9 @@ class MonthlyPanel(PanelView):
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
 
+        subs = Subscription.objects.all()
+        for sub in subs:
+            print(f'Start: {sub.start_date}, quantity: {sub.quantity}, cycle: {sub.cycle}, End: {sub.get_end_date()}')
 
     
         return context

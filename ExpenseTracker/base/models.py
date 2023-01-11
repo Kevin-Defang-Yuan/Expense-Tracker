@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import datetime
+from dateutil import relativedelta
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -137,11 +138,23 @@ class Subscription(Payment):
             return self.end_date
 
         end_date = self.start_date
-        if self.cycle == 365:
-            for i in range(self.quantity - 1): # Here we subtract by 1 or else difference is too large
+   
+        for i in range(self.quantity - 1): # Here we subtract by 1 or else difference is too large
+            if self.cycle == 365:
                 end_date += datetime.timedelta(days=1)
-
-
+            if self.cycle == 52:
+                end_date += datetime.timedelta(days=7)
+            if self.cycle == 26:
+                end_date += datetime.timedelta(days=14)
+            if self.cycle == 12:
+                end_date += relativedelta.relativedelta(months=1)
+            if self.cycle == 4:
+                end_date += relativedelta.relativedelta(months=3)
+            if self.cycle == 2:
+                end_date += relativedelta.relativedelta(months=6)
+            if self.cycle == 1:
+                end_date += relativedelta.relativedelta(months=12)
+            
         return end_date
 
         
