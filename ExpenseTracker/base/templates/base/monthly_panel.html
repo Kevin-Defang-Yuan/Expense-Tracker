@@ -59,7 +59,15 @@
 {% endblock %}
 
 {% block b3 %}
-<h4>Average Spending per Month: {{expenditure_per_month}}</h4>
+
+  {% if expenditure_per_month %}
+    <h4>Average Spending per Month: {{expenditure_per_month}}</h4>
+  {% else %}
+    <h4>Average Spending per Month: ~Needs two weeks of data </h4>
+  {% endif %}
+
+
+
 {% endblock %}
 
 

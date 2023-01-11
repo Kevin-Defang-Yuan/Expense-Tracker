@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .models import Expense, Category
 from datetime import datetime, timedelta, time
+import dateutil.relativedelta
 from .forms import CreateExpenseForm, CreateCategoryForm
 from .models import Subscription
 import calendar
@@ -22,6 +23,8 @@ from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
+AVG_DAYS_PER_MONTH = 30.437
+MIN_DAYS_PASSED = 14
 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -228,21 +231,61 @@ class MonthlyPanel(PanelView):
         return context
     
     def get_expenditure_per_month(self):
+        # total = self.get_total_expenditure()
+        # expenses = Expense.objects.filter(user=self.request.user)
+        # earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        # if not earliest_expense:
+        #     return None
+        
+        # earliest_date = earliest_expense.date
+        # today = datetime.today().date()
+        # months_passed = (today.year - earliest_date.year) * 12 + today.month - earliest_date.month
+
+        # # If no months have passed yet, just return total
+        # if months_passed == 0:
+        #     return total
+        # return round(total / months_passed, 2)
         total = self.get_total_expenditure()
         expenses = Expense.objects.filter(user=self.request.user)
         earliest_expense = None if not expenses else expenses.order_by('date')[0]
 
         if not earliest_expense:
             return None
-        
         earliest_date = earliest_expense.date
-        today = datetime.today().date()
-        months_passed = (today.year - earliest_date.year) * 12 + today.month - earliest_date.month
 
-        # If no months have passed yet, just return total
-        if months_passed == 0:
-            return total
-        return round(total / months_passed, 2)
+        # We query all expenses except those in current month
+        # The approach here is a bit backhanded, essentially we calculate previous month, get last day of previous month, and then grab all expenses using that date
+        today = datetime.today().date()
+
+
+        # # Gets date 1 month ago
+        # date_one_month_ago = today - dateutil.relativedelta.relativedelta(months=1)
+        # last_day_last_month = datetime(date_one_month_ago.year, date_one_month_ago.month, calendar.monthrange(date_one_month_ago.year, date_one_month_ago.month)[1]).date()
+        # expenses = expenses.filter(date__lte=last_day_last_month)
+        
+        
+        # total = 0
+        # for expense in expenses:
+        #     total += expense.cost
+        # delta = last_day_last_month - earliest_date
+        # days_passed = delta.days + 1 # Add extra day for difference
+        # expenditure_per_day = total / days_passed
+        # expenditure_per_month = float(expenditure_per_day) * AVG_DAYS_PER_MONTH
+        # return round(expenditure_per_month, 2)
+        
+
+        delta = today - earliest_date
+        days_passed = delta.days + 1 # Add extra day for difference
+
+
+        if days_passed < 30:
+            return None # Give message that returns WE NEED MORE DAYS
+        
+
+        expenditure_per_day = total / days_passed
+        expenditure_per_month = float(expenditure_per_day) * AVG_DAYS_PER_MONTH
+        return round(expenditure_per_month, 2)
     
     def get_expenditure_by_month_per_day(self, year, month):
         expenses = Expense.objects.filter(user=self.request.user)
