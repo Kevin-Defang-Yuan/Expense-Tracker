@@ -21,6 +21,8 @@
                         <th scope="col">Cost</th>
                         <th scope="col">Date</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,6 +32,8 @@
                             <td>{{expense.cost}}</td>
                             <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
                             <td>{{expense.description}}</td>
+                            <td><a href="{% url 'expense-update' expense.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'expense-delete' expense.pk %}">DELETE</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

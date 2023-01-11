@@ -445,15 +445,8 @@ class ExpenseDetail(LoginRequiredMixin, DetailView):
 class ExpenseCreate(LoginRequiredMixin, CreateView):
     model = Expense
     form_class = CreateExpenseForm
-
-    # Lists all the items in the field: fields = '__all__'
-    # Can use this instead
-    #   fields = ['category', 'cost']
-    # Or alternatively, we can set our own ExpenseForm class
-    #   form_class = ExpenseForm
-
-    # So if everything goes correctly, redirect user to the url named 'dashboard'
-    success_url = reverse_lazy('daily-panel')
+    success_url = reverse_lazy('expense-list')
+    template_name = 'base/expense_create.html'
 
     # We want the form to automatically know which user to submit the data
     def form_valid(self, form):
@@ -470,13 +463,15 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
 class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     model = Expense
     fields = ['category', 'description', 'date', 'cost']
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('expense-list')
+    template_name = 'base/expense_update.html'
 
 # Default template is {expense}_confirm_delete.html
 class ExpenseDelete(LoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('expense-list')
+    template_name = 'base/expense_delete.html'
 
 
 class CategoryList(LoginRequiredMixin, ListView):
