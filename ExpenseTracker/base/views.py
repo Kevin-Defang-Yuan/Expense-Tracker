@@ -24,6 +24,7 @@ LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
 AVG_DAYS_PER_MONTH = 30.437
+AVG_DAYS_PER_YEAR = 365
 MIN_DAYS_PASSED = 14
 
 
@@ -175,6 +176,8 @@ class YearlyPanel(PanelView):
 
         context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
 
+        context['expenditure_per_year'] = self.get_avg_expenditure_per_year()
+
         bar_graph = self.get_expenditure_by_year_per_month(year=year)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
@@ -192,6 +195,30 @@ class YearlyPanel(PanelView):
                 total += expense.cost
             month_expenses.append(round(float(total)))
         return (month_list, month_expenses)
+    
+    def get_avg_expenditure_per_year(self):
+        total = self.get_total_expenditure()
+        expenses = Expense.objects.filter(user=self.request.user)
+        earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        if not earliest_expense:
+            return None
+        earliest_date = earliest_expense.date
+
+        # We query all expenses except those in current month
+        # The approach here is a bit backhanded, essentially we calculate previous month, get last day of previous month, and then grab all expenses using that date
+        today = datetime.today().date()
+        delta = today - earliest_date
+        days_passed = delta.days + 1 # Add extra day for difference
+
+
+        if days_passed < MIN_DAYS_PASSED:
+            return None # Give message that returns WE NEED MORE DAYS
+        
+
+        expenditure_per_day = total / days_passed
+        expenditure_per_year = float(expenditure_per_day) * AVG_DAYS_PER_YEAR
+        return round(expenditure_per_year, 2)
 
 class MonthlyPanel(PanelView):
     model = Expense
@@ -219,36 +246,21 @@ class MonthlyPanel(PanelView):
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
 
-        context['expenditure_per_month'] = self.get_expenditure_per_month()
+        context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 
         context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month)
         bar_graph = self.get_expenditure_by_month_per_day(year=year, month=month)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
 
-        subs = Subscription.objects.all()
-        for sub in subs:
-            print(f'Start: {sub.start_date}, quantity: {sub.quantity}, cycle: {sub.cycle}, End: {sub.get_end_date()}')
+        # subs = Subscription.objects.all()
+        # for sub in subs:
+        #     print(f'Start: {sub.start_date}, quantity: {sub.quantity}, cycle: {sub.cycle}, End: {sub.get_end_date()}')
 
     
         return context
     
-    def get_expenditure_per_month(self):
-        # total = self.get_total_expenditure()
-        # expenses = Expense.objects.filter(user=self.request.user)
-        # earliest_expense = None if not expenses else expenses.order_by('date')[0]
-
-        # if not earliest_expense:
-        #     return None
-        
-        # earliest_date = earliest_expense.date
-        # today = datetime.today().date()
-        # months_passed = (today.year - earliest_date.year) * 12 + today.month - earliest_date.month
-
-        # # If no months have passed yet, just return total
-        # if months_passed == 0:
-        #     return total
-        # return round(total / months_passed, 2)
+    def get_avg_expenditure_per_month(self):
         total = self.get_total_expenditure()
         expenses = Expense.objects.filter(user=self.request.user)
         earliest_expense = None if not expenses else expenses.order_by('date')[0]
@@ -260,29 +272,11 @@ class MonthlyPanel(PanelView):
         # We query all expenses except those in current month
         # The approach here is a bit backhanded, essentially we calculate previous month, get last day of previous month, and then grab all expenses using that date
         today = datetime.today().date()
-
-
-        # # Gets date 1 month ago
-        # date_one_month_ago = today - dateutil.relativedelta.relativedelta(months=1)
-        # last_day_last_month = datetime(date_one_month_ago.year, date_one_month_ago.month, calendar.monthrange(date_one_month_ago.year, date_one_month_ago.month)[1]).date()
-        # expenses = expenses.filter(date__lte=last_day_last_month)
-        
-        
-        # total = 0
-        # for expense in expenses:
-        #     total += expense.cost
-        # delta = last_day_last_month - earliest_date
-        # days_passed = delta.days + 1 # Add extra day for difference
-        # expenditure_per_day = total / days_passed
-        # expenditure_per_month = float(expenditure_per_day) * AVG_DAYS_PER_MONTH
-        # return round(expenditure_per_month, 2)
-        
-
         delta = today - earliest_date
         days_passed = delta.days + 1 # Add extra day for difference
 
-
-        if days_passed < 30:
+        print("Days passed, ", days_passed)
+        if days_passed < MIN_DAYS_PASSED:
             return None # Give message that returns WE NEED MORE DAYS
         
 

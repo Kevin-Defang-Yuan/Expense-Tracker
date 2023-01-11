@@ -58,6 +58,14 @@
 
 {% block b3 %}
 
+  {% if expenditure_per_year %}
+    <h4>Average Spending per Year: {{expenditure_per_year}}</h4>
+  {% else %}
+    <h4>Average Spending per Year: ~Needs two weeks of data </h4>
+  {% endif %}
+
+
+
 {% endblock %}
 
 
