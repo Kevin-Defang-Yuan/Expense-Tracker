@@ -26,7 +26,7 @@ class SubscriptionConfig(AppConfig):
                 date = subscription.start_date
                 while((subscription.indefinite and date <= today) or (date <= today and date <= subscription.get_end_date)):
                     if date == today:
-                        expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=subscription.pk)
+                        expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=subscription)
                         expense.save()
                     if subscription.cycle == 365:
                         date += timedelta(days=1)

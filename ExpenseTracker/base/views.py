@@ -19,7 +19,7 @@ from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
 
 
 # Branch
-# sub
+# timezone
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
