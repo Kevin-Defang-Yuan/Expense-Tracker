@@ -154,6 +154,8 @@ class Subscription(models.Model):
             return False
     
     def save(self, *args, **kwargs):
+        super(Subscription, self).save(*args, **kwargs)
+
         # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
         today = datetime.today().date()
         user = self.user
@@ -164,7 +166,7 @@ class Subscription(models.Model):
         date = self.start_date
 
         while((self.indefinite and date <= today) or (date <= today and date <= self.get_end_date)):
-            expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self.pk)
+            expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self)
             expense.save()
             if self.cycle == 365:
                 date += timedelta(days=1)
@@ -182,6 +184,6 @@ class Subscription(models.Model):
                 date += relativedelta.relativedelta(months=12)
 
 
-        super(Subscription, self).save(*args, **kwargs)
+        
 
         
