@@ -26,5 +26,6 @@ urlpatterns = [
     path('category-update/<int:pk>/', CategoryUpdate.as_view(), name='category-update'),
     path('category-delete/<int:pk>/', CategoryDelete.as_view(), name='category-delete'),
     path('', include('budget.urls')),
+    path('', include('subscription.urls'))
 
 ]

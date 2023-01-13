@@ -8,7 +8,7 @@ from .models import Expense, Category
 from datetime import datetime, timedelta, time
 import dateutil.relativedelta
 from .forms import CreateExpenseForm, CreateCategoryForm
-from .models import Subscription
+from subscription.models import Subscription
 import calendar
 from budget.models import MonthlyBudget, YearlyBudget
 from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
@@ -107,14 +107,21 @@ class PanelView(LoginRequiredMixin, TemplateView):
         # selected_date = datetime(int(year), int(month), int(day)).date()
         active_subscriptions = []
         for subscription in subscriptions:
-            sub_end_date = subscription.get_end_date()
-            sub_start_date = subscription.start_date
-            if day:
-                if selected_start_date >= sub_start_date and selected_end_date <= sub_end_date:
-                    active_subscriptions.append(subscription)
+            # If the subscription is indefinite and the start date is earlier than the selected_start_date
+            if subscription.indefinite and subscription.start_date <= selected_start_date:
+                active_subscriptions.append(subscription)
+            
+            # Otherwise if subscriptions is not indefinite, calculate like normally
             else:
-                if sub_end_date >= selected_start_date and sub_start_date <= selected_end_date:
-                    active_subscriptions.append(subscription)
+                print('No', subscription)
+                sub_end_date = subscription.get_end_date
+                sub_start_date = subscription.start_date
+                if day:
+                    if selected_start_date >= sub_start_date and selected_end_date <= sub_end_date:
+                        active_subscriptions.append(subscription)
+                else:
+                    if sub_end_date >= selected_start_date and sub_start_date <= selected_end_date:
+                        active_subscriptions.append(subscription)
 
             
 
@@ -312,7 +319,7 @@ class DailyPanel(PanelView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        subscriptions = Subscription.objects.all()[0]
+        # subscriptions = Subscription.objects.all()[0]
         
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base',
     'userauth',
-    'budget'
+    'budget',
+    'subscription.apps.SubscriptionConfig',
 ]
 
 MIDDLEWARE = [

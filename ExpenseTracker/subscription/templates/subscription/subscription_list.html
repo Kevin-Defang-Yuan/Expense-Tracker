@@ -1,0 +1,53 @@
+{% extends 'base/panel_layout.html' %}
+
+{% block main-container %}
+<div class="row-sm-1">
+    <div class="col-sm-10">
+      <div class="well">
+        <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
+        <h4>Subscriptions</h4>
+      </div>
+    </div>
+  </div>
+
+<div class="row-sm-1">
+    <div class="col-sm-10">
+        <div class="well">
+            <table class="table">
+                <div class="w-auto">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Cycle</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Active</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for subscription in subscriptions %}
+                        <tr>
+                            <td>{{subscription.name}}</td>
+                            <td>{{subscription.category}}</td>
+                            <td>{{subscription.cost}}</td>
+                            <td>{{subscription.cycle}}</td>
+                            <td>{{subscription.start_date}}</td>
+                            <td>{{subscription.get_end_date}}</td>
+                            <td>{{subscription.quantity}}</td>
+                            <td>{{subscription.is_active}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

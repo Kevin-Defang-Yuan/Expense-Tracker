@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-import datetime
-from dateutil import relativedelta
+
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -62,6 +60,15 @@ class Expense(Payment):
         related_name="all_expenses",    
     )
 
+    subscription = models.ForeignKey(
+        # This is to avoid circular import problem
+        # https://stackoverflow.com/questions/4379042/django-circular-model-import-issue
+        'subscription.Subscription',
+        on_delete=models.CASCADE,
+        related_name='all_expenses',
+        null=True,
+        blank=True
+    )
     def __str__(self):
         output = str(self.category) + ' {' + str(self.cost) + '}' + ' {' + str(self.date) + '}' 
         return output
@@ -69,95 +76,7 @@ class Expense(Payment):
     class Meta:
         ordering = ['date']
     
-class Subscription(Payment):
-    start_date = models.DateField(
-        verbose_name="Start Date of Recurring Expense"
-    )
-    end_date = models.DateField(
-        null=True, 
-        blank=True,
-        verbose_name="Final Date of Recurring Expense"
-    )
-    quantity = models.IntegerField(
-        null=True, 
-        blank=True,
-        verbose_name="Expected Times to Pay Recurring Expense"
-    )
 
-    DAILY = 365
-    WEEKLY = 52
-    BIWEEKLY = 26
-    MONTHLY = 12
-    QUARTERLY = 4
-    SEMIANNUALLY = 2
-    ANNUALLY = 1
-
-    CYCLE_CHOICES = (
-        (DAILY, 'Daily'),
-        (WEEKLY, 'Weekly'),
-        (BIWEEKLY, 'Biweekly'),
-        (MONTHLY, 'Monthly'),
-        (QUARTERLY, 'Quarterly'),
-        (SEMIANNUALLY, 'Semiannually'),
-        (ANNUALLY, 'Annually')
-    )
-
-    cycle = models.IntegerField(
-        choices=CYCLE_CHOICES, 
-        default=MONTHLY,
-        verbose_name="Interval of Recurring Expense"
-    )
-    # This means we can do something like 
-    # thing.cycle = Things.WEEKLY
-
-    # related_names have to be unique
-    category = models.ForeignKey(
-        Category, 
-        on_delete=models.RESTRICT, 
-        related_name="all_subscriptions",    
-    )
-
-    class Meta:
-        ordering = ['start_date']
-
-    def __str__(self):
-        output = str(self.category) + ' {' + str(self.cost) + '}' + ' {' + str(self.start_date) + '}' 
-        return output
-    
-    # Override clean method so that either end_date is specified or quantity is specified
-    # https://stackoverflow.com/questions/12021911/either-or-fields-in-django-models
-    def clean(self):
-        if self.end_date is None and self.quantity is None:
-            raise ValidationError(_('Input either end_date or quantity')) 
-        
-        if self.end_date and self.quantity:
-            raise ValidationError(_('Input either end_date or quantity')) 
-    
-    def get_end_date(self):
-        if self.end_date:
-            return self.end_date
-
-        end_date = self.start_date
-   
-        for i in range(self.quantity - 1): # Here we subtract by 1 or else difference is too large
-            if self.cycle == 365:
-                end_date += datetime.timedelta(days=1)
-            if self.cycle == 52:
-                end_date += datetime.timedelta(days=7)
-            if self.cycle == 26:
-                end_date += datetime.timedelta(days=14)
-            if self.cycle == 12:
-                end_date += relativedelta.relativedelta(months=1)
-            if self.cycle == 4:
-                end_date += relativedelta.relativedelta(months=3)
-            if self.cycle == 2:
-                end_date += relativedelta.relativedelta(months=6)
-            if self.cycle == 1:
-                end_date += relativedelta.relativedelta(months=12)
-            
-        return end_date
-
-        
 
         
 
