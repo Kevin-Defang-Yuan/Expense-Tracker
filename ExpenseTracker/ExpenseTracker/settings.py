@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'base',
     'userauth',
     'budget',
-    'subscription.apps.SubscriptionConfig',
+    'subscription',
 ]
 
 MIDDLEWARE = [

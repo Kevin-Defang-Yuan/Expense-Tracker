@@ -112,8 +112,7 @@ class PanelView(LoginRequiredMixin, TemplateView):
                 active_subscriptions.append(subscription)
             
             # Otherwise if subscriptions is not indefinite, calculate like normally
-            else:
-                print('No', subscription)
+            elif not subscription.indefinite:
                 sub_end_date = subscription.get_end_date
                 sub_start_date = subscription.start_date
                 if day:
