@@ -22,30 +22,8 @@ class SubscriptionConfig(AppConfig):
             subscriptions = Subscription.objects.all() 
             for subscription in subscriptions:
                 if subscription.is_active:
-                    today = datetime.today().date()
-                    user = subscription.user
-                    category = subscription.category
-                    cost = subscription.cost
-                    description = subscription.name
-
-                    date = subscription.start_date
-                    while((subscription.indefinite and date <= today) or (date <= today and date <= subscription.get_end_date)):
-                        if date == today:
-                            existing_expense = Expense.objects.filter(subscription=subscription, date=date, user=user).first()
-                            if not existing_expense:
-                                expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=subscription)
-                                expense.save()
-                        if subscription.cycle == 365:
-                            date += timedelta(days=1)
-                        if subscription.cycle == 52:
-                            date += timedelta(days=7)
-                        if subscription.cycle == 26:
-                            date += timedelta(days=14)
-                        if subscription.cycle == 12:
-                            date += relativedelta.relativedelta(months=1)
-                        if subscription.cycle == 4:
-                            date += relativedelta.relativedelta(months=3)
-                        if subscription.cycle == 2:
-                            date += relativedelta.relativedelta(months=6)
-                        if subscription.cycle == 1:
-                            date += relativedelta.relativedelta(months=12)
+                    existing_expense_instances = subscription.get_existing_expense_instances()
+                    for expense in existing_expense_instances:
+                        existing_expense = Expense.objects.filter(subscription=expense.subscription, date=expense.date, user=expense.user).first()
+                        if not existing_expense:
+                            expense.save()

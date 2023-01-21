@@ -153,35 +153,57 @@ class Subscription(models.Model):
         else:
             return False
     
-    def save(self, *args, **kwargs):
-        super(Subscription, self).save(*args, **kwargs)
-
-        # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
+    def progress_cycle(self):
+        if self.cycle == 365:
+            return timedelta(days=1)
+        if self.cycle == 52:
+            return timedelta(days=7)
+        if self.cycle == 26:
+            return timedelta(days=14)
+        if self.cycle == 12:
+            return relativedelta.relativedelta(months=1)
+        if self.cycle == 4:
+            return relativedelta.relativedelta(months=3)
+        if self.cycle == 2:
+            return relativedelta.relativedelta(months=6)
+        if self.cycle == 1:
+            return relativedelta.relativedelta(months=12)
+    
+    def get_existing_expense_instances(self):
         today = datetime.today().date()
         user = self.user
         category = self.category
         cost = self.cost
         description = self.name
-
         date = self.start_date
 
+        ret = []
         while((self.indefinite and date <= today) or (date <= today and date <= self.get_end_date)):
             expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self)
+            ret.append(expense)
+            date += self.progress_cycle()
+        return ret
+
+    
+    def save(self, *args, **kwargs):
+        super(Subscription, self).save(*args, **kwargs)
+        existing_expense_instances = self.get_existing_expense_instances()
+        for expense in existing_expense_instances:
             expense.save()
-            if self.cycle == 365:
-                date += timedelta(days=1)
-            if self.cycle == 52:
-                date += timedelta(days=7)
-            if self.cycle == 26:
-                date += timedelta(days=14)
-            if self.cycle == 12:
-                date += relativedelta.relativedelta(months=1)
-            if self.cycle == 4:
-                date += relativedelta.relativedelta(months=3)
-            if self.cycle == 2:
-                date += relativedelta.relativedelta(months=6)
-            if self.cycle == 1:
-                date += relativedelta.relativedelta(months=12)
+
+        # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
+        # today = datetime.today().date()
+        # user = self.user
+        # category = self.category
+        # cost = self.cost
+        # description = self.name
+
+        # date = self.start_date
+
+        # while((self.indefinite and date <= today) or (date <= today and date <= self.get_end_date)):
+        #     expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self)
+        #     expense.save()
+        #     date += self.progress_cycle()
 
 
         
