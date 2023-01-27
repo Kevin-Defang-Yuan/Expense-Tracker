@@ -53,13 +53,13 @@ class Subscription(models.Model):
         verbose_name="Expected Times to Pay Recurring Expense"
     )
 
-    DAILY = 365
-    WEEKLY = 52
-    BIWEEKLY = 26
-    MONTHLY = 12
-    QUARTERLY = 4
-    SEMIANNUALLY = 2
-    ANNUALLY = 1
+    DAILY = 'Daily'
+    WEEKLY = 'Weekly'
+    BIWEEKLY = 'Biweekly'
+    MONTHLY = 'Monthly'
+    QUARTERLY = 'Quarterly'
+    SEMIANNUALLY = 'Semiannually'
+    ANNUALLY = 'Annually'
 
 
     CYCLE_CHOICES = (
@@ -72,7 +72,8 @@ class Subscription(models.Model):
         (ANNUALLY, 'Annually')
     )
 
-    cycle = models.IntegerField(
+    cycle = models.CharField(
+        max_length=20,
         choices=CYCLE_CHOICES, 
         default=MONTHLY,
         verbose_name="Interval of Recurring Expense"
@@ -120,21 +121,7 @@ class Subscription(models.Model):
         end_date = self.start_date
    
         for i in range(self.quantity - 1): # Here we subtract by 1 or else difference is too large
-            if self.cycle == 365:
-                end_date += timedelta(days=1)
-            if self.cycle == 52:
-                end_date += timedelta(days=7)
-            if self.cycle == 26:
-                end_date += timedelta(days=14)
-            if self.cycle == 12:
-                end_date += relativedelta.relativedelta(months=1)
-            if self.cycle == 4:
-                end_date += relativedelta.relativedelta(months=3)
-            if self.cycle == 2:
-                end_date += relativedelta.relativedelta(months=6)
-            if self.cycle == 1:
-                end_date += relativedelta.relativedelta(months=12)
-            
+            end_date += self.progress_cycle()            
         return end_date
     
     @property
@@ -154,20 +141,21 @@ class Subscription(models.Model):
             return False
     
     def progress_cycle(self):
-        if self.cycle == 365:
+        if self.cycle == self.DAILY:
             return timedelta(days=1)
-        if self.cycle == 52:
+        if self.cycle == self.WEEKLY:
             return timedelta(days=7)
-        if self.cycle == 26:
+        if self.cycle == self.BIWEEKLY:
             return timedelta(days=14)
-        if self.cycle == 12:
+        if self.cycle == self.MONTHLY:
             return relativedelta.relativedelta(months=1)
-        if self.cycle == 4:
+        if self.cycle == self.QUARTERLY:
             return relativedelta.relativedelta(months=3)
-        if self.cycle == 2:
+        if self.cycle == self.SEMIANNUALLY:
             return relativedelta.relativedelta(months=6)
-        if self.cycle == 1:
+        if self.cycle == self.ANNUALLY:
             return relativedelta.relativedelta(months=12)
+        print(self, self.cycle)
     
     def get_existing_expense_instances(self):
         today = datetime.today().date()

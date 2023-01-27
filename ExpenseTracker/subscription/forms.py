@@ -26,13 +26,13 @@ class CreateSubscriptionForm(ModelForm):
     end_date = DateField(widget=SelectDateWidget(years=range(EARLIEST_YEAR, LATEST_YEAR)), required=False)
     quantity = IntegerField(required=False)
 
-    DAILY = 365
-    WEEKLY = 52
-    BIWEEKLY = 26
-    MONTHLY = 12
-    QUARTERLY = 4
-    SEMIANNUALLY = 2
-    ANNUALLY = 1
+    DAILY = 'Daily'
+    WEEKLY = 'Weekly'
+    BIWEEKLY = 'Biweekly'
+    MONTHLY = 'Monthly'
+    QUARTERLY = 'Quarterly'
+    SEMIANNUALLY = 'Semiannually'
+    ANNUALLY = 'Annually'
 
 
     CYCLE_CHOICES = (
@@ -45,7 +45,7 @@ class CreateSubscriptionForm(ModelForm):
         (ANNUALLY, 'Annually')
     )
 
-    cycle = IntegerField(widget=Select(choices=CYCLE_CHOICES))
+    cycle = CharField(widget=Select(choices=CYCLE_CHOICES))
 
 
     

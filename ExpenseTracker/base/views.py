@@ -512,3 +512,6 @@ class CategoryDelete(LoginRequiredMixin, DeleteView):
         return context
 
 
+
+
+
