@@ -1,0 +1,48 @@
+
+/* We add padding to body so that header does not overlap with body 
+    The 50px is the default size of a navbar (the header)
+*/
+body {
+    padding-top: 50px; 
+    
+    
+}
+
+/* Here I added a shadow to the header to contrast between the header and content */
+#header {
+    background-color: white;
+}
+#header-container {
+    box-shadow: 0px 2px 10px rgb(218, 216, 216);
+}
+
+.navbar-brand, .nav.navbar-nav.navbar-right li a {
+    color: rgb(33, 79, 75);
+}
+
+.navbar-brand, .nav.navbar-nav.navbar-right li {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+#main-content {
+    
+    background-color: rgb(237,237,237);
+}
+
+#sidebar {
+    padding-top: 20px;
+}
+
+/* Here we add a breakpoint cause the header automatically collapses. 
+    Since the default padding we use is 50px, this needs to increase to adjust to the collapsed header. 
+*/
+@media (max-width: 768px) {
+    body {
+        padding-top: 100px;
+    }
+}
+
+
+
+

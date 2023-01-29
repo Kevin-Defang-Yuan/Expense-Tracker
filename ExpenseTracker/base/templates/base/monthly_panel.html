@@ -9,7 +9,7 @@
 </form>
 {% endblock %}
 
-{% block bb %}
+{% block expense-table %}
 <h4>Recent Expenses</h4>
 <table class="table">
     <thead>
@@ -35,7 +35,7 @@
 {% endblock %}
 
 
-{% block b1 %}
+{% block spending %}
 <h4>Spending</h4>
 <h4>This Month's Spending: {{month_expenditure}}</h4>
   {% if monthlybudget %}
@@ -73,7 +73,7 @@
 
 
 
-{% block b4 %}
+{% block chart %}
 <h4>Pie Chart</h4>
 {% include 'base/pie_chart.html' %}
 
