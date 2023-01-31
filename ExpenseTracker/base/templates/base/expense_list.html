@@ -13,6 +13,14 @@
 <div class="row-sm-1">
     <div class="col-sm-10">
         <div class="well">
+            <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+        </div>
+    </div>
+</div>
+
+<div class="row-sm-1">
+    <div class="col-sm-10">
+        <div class="well">
             <table class="table">
                 <div class="w-auto">
                     <thead>
@@ -65,5 +73,5 @@
 </div>
 
 
-
+{% include 'base/expense_modal.html' %}
 {% endblock %}

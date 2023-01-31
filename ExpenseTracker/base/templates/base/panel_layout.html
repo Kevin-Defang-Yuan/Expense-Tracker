@@ -55,33 +55,23 @@
 <div class="container-fluid" id="sidebar-container">
   <div class="row" id="sidebar-row">
     <div class="col-sm-2" id="sidebar">
-      <h4>Expenses</h4>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="{% url 'expense-create' %}">Add Expense</a></li>
-        <li><a href="{% url 'expense-list' %}">Edit Expenses</a></li>
-      </ul>
-      <h4>Categories</h4>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="{% url 'category-create' %}">Add</a></li>
-        <li><a href="{% url 'category-list' %}">Edit</a></li>
-      </ul>
       <h4>Summaries</h4>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="{% url 'daily-panel' %}">Daily</a></li>
         <li><a href="{% url 'monthly-panel' %}">Monthly</a></li>
         <li><a href="{% url 'yearly-panel' %}">Yearly</a></li>
-        <li><a href="filler">Custom-range</a></li>
         <li><a href="filler">Overview</a></li>
       </ul>
-      <h4>Yearly Spending Budgets</h4>
+      <h4>Edit</h4>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="{% url 'yearlybudget-create' %}">Add</a></li>
-        <li><a href="{% url 'yearlybudget-list' %}">Edit</a></li>
-      </ul>
-      <h4>Monthly Spending Budgets</h4>
+        <li><a href="{% url 'expense-list' %}">Expenses</a></li>
+        <li><a href="{% url 'category-list' %}">Categories</a></li>
+        <li><a href="{% url 'subscription-list' %}">Subscriptions</a></li>
+      </ul>   
+      <h4>Budgets</h4>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="{% url 'monthlybudget-create' %}">Add</a></li>
-        <li><a href="{% url 'monthlybudget-list' %}">Edit</a></li>
+        <li><a href="{% url 'monthlybudget-list' %}">Monthly</a></li>
+        <li><a href="{% url 'yearlybudget-list' %}">Yearly</a></li>
       </ul>
     </div>
     <div class="col-sm-10" id="main-content">
