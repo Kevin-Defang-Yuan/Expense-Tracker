@@ -16,18 +16,47 @@
   </div>
 </div>
 
-
 <div class="row-sm-1" id="below-content-title">
-  <div class="col-sm-8">
-    <div class="well">
-        {% block spending %}
-        {% endblock %}
+  <div class="col-sm-7">
+
+    <div class="row-sm-1">
+      <div class="col-sm-auto">
+        <div class="well">
+          {% block spending %}
+          {% endblock %}
+        </div>
+        
+      </div>
     </div>
+    <div class="row-sm-1">
+      <div class="col-sm-auto">
+        <div class="well">
+          BUDGETS
+        </div>
+      </div>
+    </div>
+    <div class="row-sm-1">
+      <div class="col-sm-auto">
+        <div class="well">
+          {% block add-expense %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="col-sm-4">
+  <div class="col-sm-5">
+    
     <div class="well">
-        {% block add-expense %}
+      <button id="toggle">Click Me</button>
+      <div id="piechart">
+        {% block chart %}
         {% endblock %}
+      </div>
+      <div id="barchart" hidden>
+        {% block bc %}
+        {% endblock %}
+      </div>
     </div>
   </div>
 </div>
@@ -68,6 +97,7 @@
     };
   
 </script>
+
 {% include 'base/expense_modal.html' %}
 {% endblock %}
 

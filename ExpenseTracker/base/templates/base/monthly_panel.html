@@ -1,4 +1,4 @@
-{% extends 'base/daily_layout.html' %}
+{% extends 'base/summary_layout.html' %}
 
 {% block container-header %}
 <h4>Monthly Panel: {{month_name}}, {{year}}</h4>
@@ -48,10 +48,13 @@
   {% else %}
     <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
   {% endif %}
-
 {% endblock %}
 
-{% block b2 %}
+{% block add-expense %}
+<a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+{% endblock %}
+
+{% block subscription-table %}
 <h4>Active Subscriptions</h4>
   {% for subscription in active_subscriptions %}
   <h4>{{subscription.category}} {{subscription.cost}}</h4>

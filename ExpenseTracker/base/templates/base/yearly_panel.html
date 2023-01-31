@@ -1,4 +1,4 @@
-{% extends 'base/daily_layout.html' %}
+{% extends 'base/summary_layout.html' %}
 
 {% block container-header %}
 <h4>Yearly Panel: {{year}}</h4>
@@ -49,7 +49,7 @@
   {% endif %}
 {% endblock %}
 
-{% block b2 %}
+{% block subscription-table %}
 <h4>Active Subscriptions</h4>
   {% for subscription in active_subscriptions %}
   <h4>{{subscription.category}} {{subscription.cost}}</h4>

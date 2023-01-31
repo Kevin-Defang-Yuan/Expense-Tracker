@@ -42,11 +42,13 @@
 {% block spending %}
 <h4>Spending</h4>
 <h4>Today's Spending: {{day_expenditure}}</h4>
-<h4>This Month's Spending: {{this_month_total}}</h4>
-<h4>This Year's Spending: {{this_year_total}}</h4>
 {% endblock %}
 
-{% block b2 %}
+{% block add-expense %}
+<a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+{% endblock %}
+
+{% block subscription-table %}
 <h4>Active Subscriptions</h4>
   {% for subscription in active_subscriptions %}
   <h4>{{subscription.category}} {{subscription.cost}}</h4>

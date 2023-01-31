@@ -457,6 +457,15 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
         kwargs = super(ExpenseCreate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+    
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
 
 
 # Default is {expense}_form.html
@@ -491,6 +500,7 @@ class CategoryCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CategoryCreate, self).form_valid(form)
+    
 
 class CategoryUpdate(LoginRequiredMixin, UpdateView):
     model = Category
