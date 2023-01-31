@@ -14,7 +14,7 @@
 
 {% block expense-table %}
 <h4>Expenses of the Day</h4>
-<table class="table">
+<table class="table table-sm table-bordered table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">Category</th>
@@ -45,7 +45,7 @@
 {% endblock %}
 
 {% block add-expense %}
-<a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
 {% endblock %}
 
 {% block subscription-table %}
@@ -60,10 +60,3 @@
 {% endblock %}
 
 
-
-
-{% block chart %}
-<h4>Pie Chart</h4>
-{% include 'base/pie_chart.html' %}
-
-{% endblock %}

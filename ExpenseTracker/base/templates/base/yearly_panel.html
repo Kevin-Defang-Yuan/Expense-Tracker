@@ -10,7 +10,7 @@
 
 {% block expense-table %}
 <h4>Recent Expenses</h4>
-<table class="table">
+<table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">Category</th>
@@ -37,6 +37,9 @@
 {% block spending %}
 <h4>Spending</h4>
 <h4>This Year's Spending: {{year_expenditure}}</h4>
+{% endblock %}
+
+{% block budgets %}
   {% if yearlybudget %}
   <h4>Yearly Spending Budget: {{yearlybudget}}</h4>
   <progress max="{{yearlybudget}}" value="{{year_expenditure}}"></progress>
@@ -47,6 +50,10 @@
   {% else %}
   <a href="{% url 'yearlybudget-create' %}?year={{year}}">Add Spending Budget for Year</a>
   {% endif %}
+{% endblock %}
+
+{% block add-expense %}
+<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
 {% endblock %}
 
 {% block subscription-table %}

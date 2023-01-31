@@ -1,18 +1,19 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
 
-<canvas id="pie-chart" width="100", height="100"></canvas>
+<canvas id="pie-chart" width="300", height="300"></canvas>
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   <script>
     var config = {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         datasets: [{
           data: {{ data|safe }},
           backgroundColor: [
-            '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'
+            '#70161E', '#E6AF2E', '#FF0035', '#214F4B', '#17C3B2', '#7261A3', '#A67DB8', '#EEE0CB', '#776871', '#074F57', '#077187', '#E4C5AF', '#EAC5D8',
+            '#212227', '#637074', '#DBD8F0'
           ],
           label: 'Population'
         }],
@@ -20,7 +21,7 @@
       },
       options: {
         legend: {display: false},
-        responsive: true
+        responsive: false
       }
     };
 

@@ -9,7 +9,7 @@ new Chart("myChart", {
   data: {
     labels: {{bar_graph_labels|safe}},
     datasets: [{
-      backgroundColor: 'blue',
+      backgroundColor: '#A67DB8',
       data: {{bar_graph_data|safe}}
     }]
   },
@@ -17,7 +17,7 @@ new Chart("myChart", {
     legend: {display: false},
     title: {
       display: true,
-      text: "Expenditure Throughout the Month"
+      text: "Expenditure Throughout Period"
     }
   }
 });

@@ -2,7 +2,7 @@
 
     padding: 20px;
     background-color: rgba(23, 195, 178, 0.636);
-    color: white;
+    color: black;
 }
 
 #below-content-title {
@@ -13,4 +13,9 @@
 .well {
     background-color: white;
     box-shadow: 2px 2px 10px rgb(218, 216, 216);
+}
+
+progress {
+    height: 25px;
+    width: 250px;
 }

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
  
   <link rel="stylesheet" href="{% static 'layout.css' %}">
@@ -44,8 +45,10 @@
     </div>
 
       <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" data-toggle="modal" data-target="#modal"><span class="material-symbols-outlined">calculate</span></a></li>
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome {{user.get_username}}</a></li>
         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        <i class="fa-solid fa-calculator"></i>
       </ul>
   </div>
 
@@ -73,6 +76,7 @@
         <li><a href="{% url 'monthlybudget-list' %}">Monthly</a></li>
         <li><a href="{% url 'yearlybudget-list' %}">Yearly</a></li>
       </ul>
+      
     </div>
     <div class="col-sm-10" id="main-content">
       {% block main-container %}
@@ -117,6 +121,19 @@
     <br>
     put block here
 </div> -->
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-body">
+            <iframe width="219" height="302" src="http://calculator-1.com/outdoor/?f=000000&r=000000" scrolling="no" frameborder="0"></iframe><br /><a href="https://calculator-1.com/"></a>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
 
 </body>
 
