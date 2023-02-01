@@ -23,7 +23,7 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         year = form.instance.year
-        yearlybudget = YearlyBudget.objects.filter(year=year)
+        yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year)
         if yearlybudget:
             yearlybudget.delete()
         form.instance.user = self.request.user
@@ -66,7 +66,7 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         year = form.instance.year
         month = form.instance.month
-        monthlybudget = MonthlyBudget.objects.filter(year=year).filter(month=month)
+        monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month)
         if monthlybudget:
             monthlybudget.delete()
         form.instance.user = self.request.user
