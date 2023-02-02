@@ -1,13 +1,12 @@
 #content-title {
 
-    padding: 30px;
-    padding-top: 40px;
+    padding: 20px;
     background-color: rgba(23, 195, 178, 0.636);
     color: black;
 }
 
 #below-content-title {
-    padding-top: 20px; 
+    padding-top: 30px;
     border: 0px;
 }
 
@@ -19,9 +18,4 @@
 progress {
     height: 25px;
     width: 250px;
-}
-
-.ui-datepicker-trigger{
-    border:none;
-    background:none;
 }
