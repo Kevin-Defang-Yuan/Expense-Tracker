@@ -1,13 +1,45 @@
 {% extends 'base/summary_layout.html' %}
 
+
+{% block custom-script %}
+  <script>
+    // This listens for any changes in DOM. If there are any changes, hide the datepicker calendar
+    // $(document).bind("DOMSubtreeModified", function() {
+    //   $(".ui-datepicker-calendar").hide();
+    // });
+
+    // Datepicker for month and year ONLY. 
+  //   $(function () {     
+  //     $("#datepicker").datepicker({
+  //       buttonImage: "https://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+  //       buttonImageOnly: true,
+  //       changeMonth: true,
+  //       changeYear: true,
+  //       showButtonPanel: true,
+  //       showOn: 'both',
+  //       // When DONE is clicked, submit form and data as a string 'mm/yy'
+  //       onClose: function(dateText, inst) {
+  //         let month = $(".ui-datepicker-month :selected").val();
+  //         let year = $(".ui-datepicker-year :selected").val();
+  //         $(this).val($.datepicker.formatDate("mm/yy", new Date(year, month)));
+  //         // $(this).val($.datepicker.formatDate("mm/dd/yy", new Date(year, month, 1)));
+
+  //         $('#dateform').submit();
+  //       }
+  //     });
+  //   });
+  // </script>
+{% endblock %}
+
+
 {% block container-header %}
-<h4>Monthly Panel: {{month_name}}, {{year}}</h4>
-<form action="{% url 'monthly-panel' %}" method="GET">
-  <input type="text" placeholder="Month (int)" name="month">
-  <input type="text" placeholder="Year" name="year">
-  <input type="submit" value="Submit">
+<h4 style="display: inline">Monthly Panel: {{month_name}}, {{year}}</h4>
+<form id="dateform" action="{% url 'monthly-panel' %}" method="GET" style="display: inline">
+  <input type="hidden" name="date" id="datepicker">
 </form>
 {% endblock %}
+
+
 
 {% block expense-table %}
 <h4>Recent Expenses</h4>

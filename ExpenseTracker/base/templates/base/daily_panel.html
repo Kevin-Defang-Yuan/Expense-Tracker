@@ -1,15 +1,36 @@
 {% extends 'base/daily_layout.html' %}
 
-{% block container-header %}
-<h4>Daily Panel: {{month_name}} {{day}}, {{year}}</h4>
-<form action="{% url 'daily-panel' %}" method="GET">
-  <input type="text" placeholder="Month (int)" name="month">
-  <input type="text" placeholder="Day" name="day">
-  <input type="text" placeholder="Year" name="year">
-  
+{% block custom-script %}
+  <!-- <script>
+    // Datepicker form for day. 
+    $(function () {
+      $("#datepicker").datepicker({
+        buttonImage: "https://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+        buttonImageOnly: true,
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        showOn: 'both',
+        // Whenever a date is selected, submit form
+        // Default form submission value is mm/dd/yyyy
+        onSelect: function(dateText, inst) {
+          $('#dateform').submit();
+        }
+      });
+    });
+  </script> -->
+{% endblock %}
 
-  <input type="submit" value="Submit">
+{% block container-header %}
+<h4 style="display: inline">Daily Panel: {{month_name}} {{day}}, {{year}}</h4>
+
+<form id="dateform" action="{% url 'daily-panel' %}" method="GET" style="display: inline">
+  <input type="hidden" name="date" id="datepicker">
 </form>
+
+
+
+
 {% endblock %}
 
 {% block expense-table %}

@@ -233,8 +233,19 @@ class MonthlyPanel(PanelView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = datetime.today()
-        year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
-        month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
+
+        # Determine Day (from GET params or assume Today Otherwise)
+        year = today.year
+        month = today.month
+
+        # If there is datepicker, then override previous
+        # Format is mm/yyyy
+        if 'date' in self.request.GET: 
+            date_params = [int(x) for x in self.request.GET['date'].split('/')]
+            month = date_params[0]
+            year = date_params[1]
+        # year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
+        # month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
         context['year'] = year
         context['month'] = month
         context['month_name'] = MONTHS_NAME[month-1]
@@ -318,13 +329,22 @@ class DailyPanel(PanelView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # subscriptions = Subscription.objects.all()[0]
-        
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()
-        year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
-        month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
-        day = int(self.request.GET['day']) if 'day' in self.request.GET else today.day
+        year = today.year
+        month = today.month
+        day = today.day
+
+        # If there is datepicker, then override previous
+        # Format for GET data is mm/dd/yyyy
+        if 'date' in self.request.GET: 
+            date_params = [int(x) for x in self.request.GET['date'].split('/')]
+            month = date_params[0]
+            day = date_params[1]
+            year = date_params[2]
+        
+        
+        
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month, day=day)
         context['year'] = year
         context['month'] = month
