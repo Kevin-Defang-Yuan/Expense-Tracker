@@ -12,6 +12,7 @@ from subscription.models import Subscription
 import calendar
 from budget.models import MonthlyBudget, YearlyBudget
 from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
+from .forms import EARLIEST_YEAR, LATEST_YEAR
 
 # from django import template
 # register = template.Library()
@@ -170,6 +171,17 @@ class YearlyPanel(PanelView):
         context['limited_expenses'] = self.query_limited_expenses(year=year)
         context['year_expenditure'] = self.get_expenditure_by_time_range(year=year)
 
+        # Arrow Nav for monthly view
+        # Context for view for the previous month
+        context['prev_date_year'] = year - 1
+
+        # COntexxt for view for the next month
+
+        context['next_date_year'] = year + 1
+
+        # Pass in year range for the year select form
+        context['year_range'] = [i for i in range(EARLIEST_YEAR, LATEST_YEAR)]
+
         yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
         if yearlybudget:
             context['yearlybudget'] = yearlybudget.budget
@@ -238,6 +250,22 @@ class MonthlyPanel(PanelView):
         context['year'] = year
         context['month'] = month
         context['month_name'] = MONTHS_NAME[month-1]
+
+        # Arrow Nav for monthly view
+        # Context for view for the previous month
+        context['prev_date_month'] = month - 1 if month != 1 else 12
+        context['prev_date_year'] = year if month != 1 else year - 1
+
+        # COntexxt for view for the next month
+        context['next_date_month'] = month + 1 if month != 12 else 1
+        context['next_date_year'] = year if month != 12 else year + 1
+
+
+        # Pass in year range for the year select form
+        context['year_range'] = [i for i in range(EARLIEST_YEAR, LATEST_YEAR)]
+        # Here I create a dictionary associating month number with month name for the month select form
+        month_numbers = [i for i in range(1, 13)] 
+        context['month_range'] = dict(zip(MONTHS_NAME, month_numbers))
 
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month)
         context['month_expenditure'] = self.get_expenditure_by_time_range(year=year, month=month)
@@ -322,9 +350,27 @@ class DailyPanel(PanelView):
         
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()
-        year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
-        month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
-        day = int(self.request.GET['day']) if 'day' in self.request.GET else today.day
+        year = today.year
+        month = today.month
+        day = today.day
+
+        # If users submit a GET to change the date: yyyy-mm-dd
+        if 'date' in self.request.GET: 
+            date_params = [int(x) for x in self.request.GET['date'].split('-')]
+            year = date_params[0]
+            month = date_params[1]
+            day = date_params[2]
+
+
+        # Arrow nav buttons
+        display_date = datetime(year, month, day)
+        tomorrow = display_date + timedelta(days=1)
+        yesterday = display_date - timedelta(days=1)
+        context['tmr_date'] = str(tomorrow.year) + '-' + str(tomorrow.month) + '-' + str(tomorrow.day)
+        context['yst_date'] = str(yesterday.year) + '-' + str(yesterday.month) + '-' + str(yesterday.day)
+
+
+
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month, day=day)
         context['year'] = year
         context['month'] = month

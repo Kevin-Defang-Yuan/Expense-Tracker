@@ -1,12 +1,46 @@
 {% extends 'base/summary_layout.html' %}
 
 {% block container-header %}
-<h4>Monthly Panel: {{month_name}}, {{year}}</h4>
+
+<a href="{% url 'monthly-panel' %}?year={{prev_date_year}}&month={{prev_date_month}}" style="display: inline">Last Month</a>
+<a href="{% url 'monthly-panel' %}?year={{next_date_year}}&month={{next_date_month}}" style="display: inline">Next Month</a>
+<h3>Monthly Panel</h3>
+<h2 id="date-title" style="display: inline">{{month_name}}, {{year}}</h2>
+
+<form action="{% url 'monthly-panel'%}" method="GET" id="date-form">
+  <select class="form-select" name="month">
+    {% for select_month_name, month_value in month_range.items %}
+      {% if select_month_name == month_name %}
+        <option value="{{month_value}}" selected>{{select_month_name}}</option>
+      {% else %}
+        <option value="{{month_value}}">{{select_month_name}}</option>
+      {% endif %}
+    {% endfor %}
+    
+  </select>
+
+  <select class="form-select" name="year">
+    <option selected>Year</option>
+    {% for select_year in year_range %}
+      {% if select_year == year %}
+        <option value="{{select_year}}" selected>{{select_year}}</option>
+      {% else %}
+        <option value="{{select_year}}">{{select_year}}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+
+  <input type="submit">
+</form>
+
+
+
+<!-- <h4>Monthly Panel: {{month_name}}, {{year}}</h4>
 <form action="{% url 'monthly-panel' %}" method="GET">
   <input type="text" placeholder="Month (int)" name="month">
   <input type="text" placeholder="Year" name="year">
   <input type="submit" value="Submit">
-</form>
+</form> -->
 {% endblock %}
 
 {% block expense-table %}
