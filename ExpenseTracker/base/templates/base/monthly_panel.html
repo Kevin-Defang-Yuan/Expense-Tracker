@@ -20,7 +20,6 @@
   </select>
 
   <select class="form-select" name="year">
-    <option selected>Year</option>
     {% for select_year in year_range %}
       {% if select_year == year %}
         <option value="{{select_year}}" selected>{{select_year}}</option>

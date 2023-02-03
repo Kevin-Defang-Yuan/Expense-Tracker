@@ -71,7 +71,7 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     def query_limited_expenses(self, year=None, month=None, day=None):
         expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
-        return expense_list.order_by('date')[:LIM_NUM]
+        return expense_list.order_by('-date')[:LIM_NUM]
     
     def get_expenses_by_time_range(self, year=None, month=None, day=None):
         expense_list = Expense.objects.all().filter(user=self.request.user)

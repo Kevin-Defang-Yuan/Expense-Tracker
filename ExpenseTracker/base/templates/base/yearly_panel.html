@@ -6,7 +6,6 @@
 <h4>Yearly Panel: {{year}}</h4>
 <form action="{% url 'yearly-panel'%}" method="GET" id="date-form">
   <select class="form-select" name="year">
-    <option selected>Year</option>
     {% for select_year in year_range %}
       {% if select_year == year %}
         <option value="{{select_year}}" selected>{{select_year}}</option>
