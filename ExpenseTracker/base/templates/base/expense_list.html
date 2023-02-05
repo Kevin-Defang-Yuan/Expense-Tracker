@@ -1,6 +1,7 @@
 {% extends 'base/panel_layout.html' %}
 
 {% block main-container %}
+{% load base_extras %}
 
 <div class="row-sm-1">
     <div class="col-sm-10">
@@ -18,13 +19,15 @@
             
             <!--Advice on how to style the filter forms -->
             <!-- https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html -->
-            {% if year == None and month == None and day == None %}
+
             <form action="{% url 'expense-list' %}?year={{year}}&month={{month}}&day={{day}}" method="GET">
-                <input type="text" name="month" value="10">
+                <input type="text" name="year" value="{{year}}" hidden>
+                <input type="text" name="month" value="{{month_num}}" hidden>
+                <input type="text" name="day" value="{{day}}" hidden>
                 {{ filter.form.as_p }}
                 <input type="submit" />
             </form>
-            {% endif %}
+
         </div>
     </div>
 </div>
@@ -46,7 +49,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% for expense in filter.qs %}
+                        {% for expense in object_list %}
                         <tr>
                             <td>{{expense.category}}</td>
                             <td>{{expense.cost}}</td>
@@ -72,7 +75,7 @@
                         </span>
                 
                         {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.next_page_number }}">next</a>
                             <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
                         {% endif %}
                     </span>

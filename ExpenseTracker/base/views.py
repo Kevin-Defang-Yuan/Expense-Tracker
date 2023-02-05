@@ -15,6 +15,7 @@ from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
 from .forms import EARLIEST_YEAR, LATEST_YEAR
 from django_filters.views import FilterView
 from .filters import ExpenseFilter
+import re
 
 # from django import template
 # register = template.Library()
@@ -25,7 +26,7 @@ from .filters import ExpenseFilter
 # filter
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-EXPENSE_PAGINATION = 15
+EXPENSE_PAGINATION = 10
 AVG_DAYS_PER_MONTH = 30.437
 AVG_DAYS_PER_YEAR = 365
 MIN_DAYS_PASSED = 14
@@ -50,9 +51,9 @@ class ExpenseList(LoginRequiredMixin, FilterView):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(user=self.request.user)
-        year = int(self.request.GET['year']) if 'year' in self.request.GET else None
-        month = int(self.request.GET['month']) if 'month' in self.request.GET else None
-        day = int(self.request.GET['day']) if 'day' in self.request.GET else None
+        year = int(self.request.GET['year']) if 'year' in self.request.GET and self.request.GET['year'] else None
+        month = int(self.request.GET['month']) if 'month' in self.request.GET and self.request.GET['month'] else None
+        day = int(self.request.GET['day']) if 'day' in self.request.GET and self.request.GET['day'] else None
 
         if year:
             queryset = queryset.filter(date__year=year)
@@ -65,18 +66,27 @@ class ExpenseList(LoginRequiredMixin, FilterView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        year = int(self.request.GET['year']) if 'year' in self.request.GET else None
-        month = int(self.request.GET['month']) if 'month' in self.request.GET else None
-        day = int(self.request.GET['day']) if 'day' in self.request.GET else None
+        year = int(self.request.GET['year']) if 'year' in self.request.GET and self.request.GET['year'] else None
+        month = int(self.request.GET['month']) if 'month' in self.request.GET and self.request.GET['month'] else None
+        day = int(self.request.GET['day']) if 'day' in self.request.GET and self.request.GET['day'] else None
 
         if year: context['year'] = year
-        if month: context['month'] = MONTHS_NAME[month-1]
+        if month: context['month'], context['month_num'] = MONTHS_NAME[month-1], month
         if day: context['day'] = day
 
         context['filterset'] = self.filterset
 
         return context
 
+
+
+
+    
+
+
+
+
+  
 
 class PanelView(LoginRequiredMixin, TemplateView):
     model = Expense
@@ -533,12 +543,30 @@ class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('expense-list')
     template_name = 'base/expense_update.html'
 
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
+
 # Default template is {expense}_confirm_delete.html
 class ExpenseDelete(LoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
     success_url = reverse_lazy('expense-list')
     template_name = 'base/expense_delete.html'
+
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
 
 
 class CategoryList(LoginRequiredMixin, ListView):
