@@ -33,15 +33,24 @@
     <div class="row-sm-1">
       <div class="col">
         <div class="well">
-          <button id="toggle">Click Me</button>
-          <div id="piechart">
-            {% block chart %}
-            {% endblock %}
+
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#piechart">Home</a></li>
+            <li><a data-toggle="tab" href="#barchart">Menu 1</a></li>
+          </ul>
+          
+          <div class="tab-content">
+            <div id="piechart" class="tab-pane fade in active">
+              {% block chart %}
+              {% endblock %}
+            </div>
+            <div id="barchart" class="tab-pane fade">
+              {% block bc %}
+              {% endblock %}
+            </div>
           </div>
-          <div id="barchart" hidden>
-            {% block bc %}
-            {% endblock %}
-          </div>
+       
         </div>
       </div>
     </div>
@@ -58,6 +67,8 @@
 
 
 
+
+<!-- 
 <script>
   let item = document.querySelector("#toggle");
   item.addEventListener("click", myFunction);
@@ -77,7 +88,7 @@
     
     };
   
-</script>
+</script> -->
 
 {% include 'base/expense_modal.html' %}
 {% endblock %}

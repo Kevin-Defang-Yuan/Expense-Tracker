@@ -15,10 +15,10 @@
     box-shadow: 2px 2px 10px rgb(218, 216, 216);
 }
 
-progress {
+/* progress {
     height: 25px;
     width: 250px;
-}
+} */
 
 #change-date {
     cursor: pointer
