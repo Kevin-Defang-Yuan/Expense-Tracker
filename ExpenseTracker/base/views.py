@@ -20,7 +20,7 @@ from .forms import EARLIEST_YEAR, LATEST_YEAR
 
 
 # Branch
-# sub
+# filter
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 15
