@@ -13,6 +13,8 @@ import calendar
 from budget.models import MonthlyBudget, YearlyBudget
 from .models import BLS_2021_DATA, HOUSEHOLD_SIZE
 from .forms import EARLIEST_YEAR, LATEST_YEAR
+from django_filters.views import FilterView
+from .filters import ExpenseFilter
 
 # from django import template
 # register = template.Library()
@@ -31,11 +33,19 @@ MIN_DAYS_PASSED = 14
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class ExpenseList(LoginRequiredMixin, ListView):
+
+# Here is a filter view based on django-filter
+class ExpenseList(LoginRequiredMixin, FilterView):
     model = Expense
+
+    # Context object is actually changed to filter.qs
     context_object_name = 'expenses'
     paginate_by = EXPENSE_PAGINATION
+
     template_name = 'base/expense_list.html'
+
+    # We need to add this
+    filterset_class = ExpenseFilter
 
 
     def get_queryset(self):
@@ -62,6 +72,8 @@ class ExpenseList(LoginRequiredMixin, ListView):
         if year: context['year'] = year
         if month: context['month'] = MONTHS_NAME[month-1]
         if day: context['day'] = day
+
+        context['filterset'] = self.filterset
 
         return context
 

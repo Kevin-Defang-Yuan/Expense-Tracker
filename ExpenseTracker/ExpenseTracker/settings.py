@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'userauth',
     'budget',
     'subscription',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
