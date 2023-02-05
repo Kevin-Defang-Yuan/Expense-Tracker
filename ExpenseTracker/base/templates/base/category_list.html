@@ -34,8 +34,8 @@
                         {% for category in categories %}
                         <tr>
                             <td>{{category.name}}</td>
-                            <td><a href="{% url 'category-update' category.pk %}" method="POST">EDIT</a></td>
-                            <td><a href="{% url 'category-delete' category.pk %}" method="POST">DELETE</a></td>
+                            <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}">DELETE</a></td>
 
                         </tr>
                         {% endfor %}
@@ -50,6 +50,6 @@
 
 
 
-{% include 'base/category_modal.html' %}
+{% include 'modal.html' %}
 
 {% endblock %}

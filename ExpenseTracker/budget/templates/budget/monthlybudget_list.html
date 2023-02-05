@@ -38,8 +38,8 @@
                             <td>{{budget.year}}</td>
                             <td>{{budget.month}}</td>
                             <td>{{budget.budget}}</td>
-                            <td><a href="{% url 'monthlybudget-update' budget.pk %}">EDIT</a></td>
-                            <td><a href="{% url 'monthlybudget-delete' budget.pk %}">DELETE</a></td>
+                            <td><a href="{% url 'monthlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' budget.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'monthlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-delete' budget.pk %}">DELETE</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -51,5 +51,5 @@
 </div>
 
 
-{% include 'budget/monthlybudget_modal.html' %}
+{% include 'modal.html' %}
 {% endblock %}

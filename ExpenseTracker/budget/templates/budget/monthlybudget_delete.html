@@ -2,7 +2,7 @@
 <!--
     By default we don't need to specify action here because it will redirect to dashboard because of view.
 -->
-<form method="POST">
+<form method="POST" action="{% url 'monthlybudget-delete' budget.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to delete this monthly spending budget? "{{budget.year}}, {{budget.month}}: {{budget.budget}}"</p>    
     <input type="submit" value="Delete">

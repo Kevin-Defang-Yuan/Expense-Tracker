@@ -33,6 +33,8 @@
                         <th scope="col">End Date</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Active</th>
+                        <th scope="col">EDIT</th>
+                        <th scope="col">DELETE</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,6 +48,8 @@
                             <td>{{subscription.get_end_date}}</td>
                             <td>{{subscription.quantity}}</td>
                             <td>{{subscription.is_active}}</td>
+                            <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}">DELETE</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -57,5 +61,5 @@
 </div>
 
 
-{% include 'subscription/subscription_modal.html' %}
+{% include 'modal.html' %}
 {% endblock %}

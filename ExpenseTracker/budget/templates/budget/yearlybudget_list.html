@@ -36,8 +36,8 @@
                         <tr>
                             <td>{{budget.year}}</td>
                             <td>{{budget.budget}}</td>
-                            <td><a href="{% url 'yearlybudget-update' budget.pk %}">EDIT</a></td>
-                            <td><a href="{% url 'yearlybudget-delete' budget.pk %}">DELETE</a></td>
+                            <td><a href="{% url 'yearlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' budget.pk %}">EDIT</a></td>
+                            <td><a href="{% url 'yearlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' budget.pk %}">DELETE</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -49,5 +49,5 @@
 </div>
 
 
-{% include 'budget/yearlybudget_modal.html' %}
+{% include 'modal.html' %}
 {% endblock %}
