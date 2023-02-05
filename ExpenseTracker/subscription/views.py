@@ -40,6 +40,7 @@ class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'subscription/subscription_update.html'
     context_object_name = 'subscription'
 
+
 class SubscriptionDelete(LoginRequiredMixin, DeleteView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')

@@ -175,9 +175,18 @@ class Subscription(models.Model):
     
     def save(self, *args, **kwargs):
         super(Subscription, self).save(*args, **kwargs)
+
+        # Check if there are old expenses based on the subscription, delete them if they exist
+        old_expense_instances = self.all_expenses.all()
+        for expense in old_expense_instances:
+            expense.delete()
+        
+        # Then repopulate new expenses
         existing_expense_instances = self.get_existing_expense_instances()
         for expense in existing_expense_instances:
             expense.save()
+        
+        
 
         # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
         # today = datetime.today().date()
