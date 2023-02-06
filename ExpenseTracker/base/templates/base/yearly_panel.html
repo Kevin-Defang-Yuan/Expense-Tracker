@@ -1,7 +1,7 @@
 {% extends 'base/summary_layout.html' %}
 
 {% block container-header %}
-<a href="{% url 'yearly-panel' %}?year={{prev_date_year}}" style="display: inline">Last Year</a>
+<a href="{% url 'yearly-panel' %}?year={{prev_date_year}}" style="display: inline">Previous Year</a>
 <a href="{% url 'yearly-panel' %}?year={{next_date_year}}" style="display: inline">Next Year</a>
 <h4>Yearly Panel: {{year}}</h4>
 <form action="{% url 'yearly-panel'%}" method="GET" id="date-form">

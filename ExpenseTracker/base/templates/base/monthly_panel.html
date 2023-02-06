@@ -2,7 +2,7 @@
 
 {% block container-header %}
 
-<a href="{% url 'monthly-panel' %}?year={{prev_date_year}}&month={{prev_date_month}}" style="display: inline">Last Month</a>
+<a href="{% url 'monthly-panel' %}?year={{prev_date_year}}&month={{prev_date_month}}" style="display: inline">Previous Month</a>
 <a href="{% url 'monthly-panel' %}?year={{next_date_year}}&month={{next_date_month}}" style="display: inline">Next Month</a>
 <h3>Monthly Panel</h3>
 <h2 id="date-title" style="display: inline">{{month_name}}, {{year}}</h2>

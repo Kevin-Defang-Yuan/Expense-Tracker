@@ -49,8 +49,8 @@
 
 
 {% block container-header %}
-<a href="{% url 'daily-panel' %}?date={{yst_date}}" style="display: inline">YST</a>
-<a href="{% url 'daily-panel' %}?date={{tmr_date}}" style="display: inline">TMR</a>
+<a href="{% url 'daily-panel' %}?date={{yst_date}}" style="display: inline">Previous Day</a>
+<a href="{% url 'daily-panel' %}?date={{tmr_date}}" style="display: inline">Next Day</a>
 <h3 style="display: inline">Daily Panel</h3>
 <h2 id="date-title" style="display: inline">{{month_name}} {{day}}, {{year}}</h2>
 <form action="{% url 'daily-panel' %}" method="GET" id="date-form" style="display: none">
