@@ -32,15 +32,9 @@
   <input type="submit">
 </form>
 
-
-
-<!-- <h4>Monthly Panel: {{month_name}}, {{year}}</h4>
-<form action="{% url 'monthly-panel' %}" method="GET">
-  <input type="text" placeholder="Month (int)" name="month">
-  <input type="text" placeholder="Year" name="year">
-  <input type="submit" value="Submit">
-</form> -->
 {% endblock %}
+
+
 
 {% block expense-table %}
 <h4>Recent Expenses</h4>
@@ -57,9 +51,9 @@
         {% for expense in limited_expenses %}
         <tr>
             <td>{{expense.category}}</td>
-            <td>{{expense.cost}}</td>
-            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
-            <td>{{expense.description}}...</td>
+            <td>{{expense.cost}}</td> 
+            <td><a href="{% url 'daily-panel' %}?date={{expense.date|date:'Y-m-d'}}">{{expense.date|date:"M-d"|slice:"0:"}}</a></td>
+            <td>{{expense.description|truncatechars:80}}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -90,12 +84,6 @@
 <a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
 {% endblock %}
 
-{% block subscription-table %}
-<h4>Active Subscriptions</h4>
-  {% for subscription in active_subscriptions %}
-  <h4>{{subscription.name}}</h4>
-  {% endfor %}
-{% endblock %}
 
 {% block b3 %}
 
@@ -105,8 +93,6 @@
     <h4>Average Spending per Month: ~Needs two weeks of data </h4>
   {% endif %}
 
-
-
 {% endblock %}
 
 
@@ -115,9 +101,20 @@
 {% block chart %}
 <h4>Pie Chart</h4>
 {% include 'base/pie_chart.html' %}
-
 {% endblock %}
 
 {% block bc %}
 {% include 'base/bar_graph.html' %}
 {% endblock %}
+
+{% block subscription-table %}
+<h4>Active Subscriptions</h4>
+  {% for subscription in active_subscriptions %}
+  <h4>{{subscription.name}}</h4>
+  {% endfor %}
+<h4>Was Active Subscriptions</h4>
+  {% for subscription in was_active_subscriptions %}
+  <h4>{{subscription.name}}</h4>
+  {% endfor %}
+{% endblock %}
+

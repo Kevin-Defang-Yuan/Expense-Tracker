@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from .models import Subscription
 from .forms import CreateSubscriptionForm
 from base.models import Expense
+from datetime import date
 
 # Create your views here.
 class SubscriptionCreate(LoginRequiredMixin, CreateView):
@@ -53,3 +54,15 @@ class SubscriptionDelete(LoginRequiredMixin, DeleteView):
         expenses_under_subscription = Expense.objects.filter(user=self.request.user).filter(subscription=subscription_id)
         context['expenses_under_subscription'] = expenses_under_subscription
         return context
+
+class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
+    model = Subscription
+    context_object_name = 'subscription'
+    template_name = 'subscription/subscription_terminate.html'
+    fields = ['indefinite']
+    success_url = reverse_lazy('subscription-list')
+
+    def form_valid(self, form):
+        today = date.today()
+        form.instance.end_date = today
+        return super(SubscriptionTerminate, self).form_valid(form)

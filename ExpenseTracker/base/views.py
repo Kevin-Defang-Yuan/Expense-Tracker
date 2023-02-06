@@ -23,7 +23,7 @@ import re
 
 
 # Branch
-# filter
+# dev
 LIM_NUM = 10
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 10
@@ -127,28 +127,40 @@ class PanelView(LoginRequiredMixin, TemplateView):
             selected_start_date = datetime(int(year), int(month), int(day)).date()
             selected_end_date = datetime(int(year), int(month), int(day)).date()
 
-        # selected_date = datetime(int(year), int(month), int(day)).date()
+        # Here we want to aggregate two lists:
+        # One list for active subscriptions
+        # One list for subscriptions that are not active but were active in that time period
         active_subscriptions = []
+        was_active_subscriptions = []
         for subscription in subscriptions:
-            # If the subscription is indefinite and the start date is earlier than the selected_start_date
-            if subscription.indefinite and subscription.start_date <= selected_start_date:
+            if subscription.was_active_subscription_in_range(selected_start_date, selected_end_date, day):
+                was_active_subscriptions.append(subscription)
+            if subscription.is_active_subscription_in_range(selected_start_date, selected_end_date, day):
                 active_subscriptions.append(subscription)
+            # # If subscription is active, add to active subscriptions
+            # if subscription.is_active:
+            #     active_subscriptions.append(subscription)
+
+            # # If the subscription is indefinite and the start date is earlier than the selected_start_date
+            # # Add to was_active subscriptions
+            # elif subscription.indefinite and subscription.start_date <= selected_start_date:
+            #     was_active_subscriptions.append(subscription)
             
-            # Otherwise if subscriptions is not indefinite, calculate like normally
-            elif not subscription.indefinite:
-                sub_end_date = subscription.get_end_date
-                sub_start_date = subscription.start_date
-                if day:
-                    if selected_start_date >= sub_start_date and selected_end_date <= sub_end_date:
-                        active_subscriptions.append(subscription)
-                else:
-                    if sub_end_date >= selected_start_date and sub_start_date <= selected_end_date:
-                        active_subscriptions.append(subscription)
+            # # Otherwise if subscriptions is not indefinite, calculate like normally and add to was_active subscriptions
+            # elif not subscription.indefinite:
+            #     sub_end_date = subscription.get_end_date
+            #     sub_start_date = subscription.start_date
+            #     if day:
+            #         if selected_start_date >= sub_start_date and selected_end_date <= sub_end_date:
+            #             was_active_subscriptions.append(subscription)
+            #     else:
+            #         if sub_end_date >= selected_start_date and sub_start_date <= selected_end_date:
+            #             was_active_subscriptions.append(subscription)
 
             
 
-            
-        return active_subscriptions
+        # Return both lists as a tuple            
+        return (active_subscriptions, was_active_subscriptions)
     
     def get_total_expenditure(self):
         expenses = Expense.objects.filter(user=self.request.user)
@@ -214,7 +226,7 @@ class YearlyPanel(PanelView):
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
 
-        context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
+        context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
 
         context['expenditure_per_year'] = self.get_avg_expenditure_per_year()
 
@@ -304,7 +316,7 @@ class MonthlyPanel(PanelView):
 
         context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 
-        context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month)
+        context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month)
         bar_graph = self.get_expenditure_by_month_per_day(year=year, month=month)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
@@ -409,7 +421,7 @@ class DailyPanel(PanelView):
         context['expenditure_per_day'] = self.get_expenditure_per_day()
 
         # Subscriptions
-        context['active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month, day=day)
+        context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month, day=day)
 
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month, day=day)
         context['labels'] = categories_data[0]

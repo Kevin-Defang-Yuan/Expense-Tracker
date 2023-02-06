@@ -1,0 +1,11 @@
+<h3>Subscription Terminate</h3>
+
+<a href="{% url 'category-list' %}">Go Back (BROKEN PLZ FIX)</a>
+<form method="POST" action="{% url 'subscription-terminate' subscription.pk %}">
+    {% csrf_token %}
+    <!-- By default it recognizes "form" because it's a CreateView class-->
+    <!-- The .as_p makes it look a bit prettier-->
+    <p>Are you sure you want to terminate this subscription? "{{subscription.name}}"</p>
+    {{form.as_p}}
+    <input type="submit" value="Submit">
+</form>

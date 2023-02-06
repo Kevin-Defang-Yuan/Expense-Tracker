@@ -33,7 +33,7 @@
 </div>
 
 <div class="row-sm-1">
-    <div class="col-sm-10">
+    <div class="col-sm-12">
         <div class="well">
             <table class="table table-sm table-striped table-hover">
                 <div class="w-auto">
@@ -53,7 +53,7 @@
                         <tr>
                             <td>{{expense.category}}</td>
                             <td>{{expense.cost}}</td>
-                            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
+                            <td>{{expense.date|date:"M-d-Y"|slice:"0:"}}</td>
                             <td>{{expense.description}}</td>
                             <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" >EDIT</a></td>
                             <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}">DELETE</a></td>

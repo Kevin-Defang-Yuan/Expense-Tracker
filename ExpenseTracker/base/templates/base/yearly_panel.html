@@ -34,8 +34,8 @@
         <tr>
             <td>{{expense.category}}</td>
             <td>{{expense.cost}}</td>
-            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
-            <td>{{expense.description}}...</td>
+            <td><a href="{% url 'daily-panel' %}?date={{expense.date|date:'Y-m-d'}}">{{expense.date|date:"M-d"|slice:"0:"}}</a></td>
+            <td>{{expense.description|truncatechars:80}}...</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -69,6 +69,10 @@
 {% block subscription-table %}
 <h4>Active Subscriptions</h4>
   {% for subscription in active_subscriptions %}
+  <h4>{{subscription.name}}</h4>
+  {% endfor %}
+<h4>Was Active Subscriptions</h4>
+  {% for subscription in was_active_subscriptions %}
   <h4>{{subscription.name}}</h4>
   {% endfor %}
 {% endblock %}

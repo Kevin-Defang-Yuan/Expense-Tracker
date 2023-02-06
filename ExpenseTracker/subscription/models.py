@@ -36,12 +36,6 @@ class Subscription(models.Model):
         verbose_name="Indefinite"
     )
 
-    terminated = models.BooleanField(
-        null=True,
-        blank=True,
-        default=False
-    )
-
     end_date = models.DateField(
         null=True, 
         blank=True,
@@ -125,17 +119,13 @@ class Subscription(models.Model):
         return end_date
     
     @property
-    def is_active(self):
-        if self.terminated:
-            return False
-        
-        if self.indefinite:
-            return True
-
+    def is_active(self):        
         today = datetime.today().date()
         sub_end_date = self.get_end_date
         sub_start_date = self.start_date
-        if today >= sub_start_date and today <= sub_end_date:
+        # Check if sub start date is before today and
+        #   if indefinite or sub_end-date is after today
+        if today >= sub_start_date and (not sub_end_date or today <= sub_end_date):
             return True
         else:
             return False
@@ -185,9 +175,39 @@ class Subscription(models.Model):
         existing_expense_instances = self.get_existing_expense_instances()
         for expense in existing_expense_instances:
             expense.save()
+
+    def is_active_subscription_in_range(self, selected_start_date, selected_end_date, day):
+        # Return subscriptions that are active and are relevant to time period
+        if self.is_active:
+            sub_end_date = self.get_end_date
+            sub_start_date = self.start_date
+            if day:
+                if selected_start_date >= sub_start_date and (not sub_end_date or sub_end_date >= selected_end_date):
+                    return True
+            else:
+                if sub_start_date <= selected_end_date and (not sub_end_date or sub_end_date >= selected_start_date):
+                    return True
         
+        return False
         
 
+
+
+
+    def was_active_subscription_in_range(self, selected_start_date, selected_end_date, day):
+        # Return subscriptions that are not active but are relevant to time period
+        if not self.is_active:
+            sub_end_date = self.get_end_date
+            sub_start_date = self.start_date
+            if day:
+                if selected_start_date >= sub_start_date and (not sub_end_date or sub_end_date >= selected_end_date):
+                    return True
+            else:
+                if sub_start_date <= selected_end_date and (not sub_end_date or sub_end_date >= selected_start_date):
+                    return True
+        return False
+        
+    
         # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
         # today = datetime.today().date()
         # user = self.user

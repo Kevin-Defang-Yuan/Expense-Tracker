@@ -28,35 +28,28 @@
     </div>
     <div class="col-sm-8">
         <div class="well">
-            {% block expense-table %}
-            {% endblock %}
-            {% block subscription-table %}
-            {% endblock %}
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
+            <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
+          </ul>
+          
+          <div class="tab-content">
+            <div id="expense-table" class="tab-pane fade in active">
+              {% block expense-table %}
+              {% endblock %}
+            </div>
+            <div id="subscription-table" class="tab-pane fade">
+              {% block subscription-table %}
+              {% endblock %}
+            </div>
+          </div>
         </div>
     </div>
 </div>
 
 
-<script>
-  let item = document.querySelector("#toggle");
-  item.addEventListener("click", myFunction);
 
-  function myFunction() {
-    piechart = document.getElementById('piechart');
-    barchart = document.getElementById('barchart');
-    
-    if (piechart.style.display === 'none') {
-      piechart.style.display = 'block';
-      barchart.style.display = 'none';
-    }
-    else {
-      piechart.style.display = 'none';
-      barchart.style.display = 'block';
-    }
-    
-    };
-  
-</script>
 {% include 'modal.html' %}
 {% endblock %}
 

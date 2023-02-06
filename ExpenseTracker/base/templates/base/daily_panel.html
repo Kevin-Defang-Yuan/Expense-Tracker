@@ -74,7 +74,6 @@
       <tr>
         <th scope="col">Category</th>
         <th scope="col">Cost</th>
-        <th scope="col">Date</th>
         <th scope="col">Description</th>
       </tr>
     </thead>
@@ -82,9 +81,8 @@
         {% for expense in limited_expenses %}
         <tr>
             <td>{{expense.category}}</td>
-            <td>{{expense.cost}}</td>
-            <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
-            <td>{{expense.description}}...</td>
+            <td>{{expense.cost}}</td> 
+            <td>{{expense.description}}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -108,6 +106,11 @@
   {% for subscription in active_subscriptions %}
   <h4>{{subscription.name}}</h4>
   {% endfor %}
+<h4>Was Active Subscriptions</h4>
+  {% for subscription in was_active_subscriptions %}
+  <h4>{{subscription.name}}</h4>
+  {% endfor %}
+
 {% endblock %}
 
 {% block b3 %}
