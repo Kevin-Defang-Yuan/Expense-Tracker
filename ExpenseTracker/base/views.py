@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .models import Expense, Category
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 import dateutil.relativedelta
 from .forms import CreateExpenseForm, CreateCategoryForm
 from subscription.models import Subscription
@@ -546,6 +546,12 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
         return self.request.session['previous_page']
+    
+    # Function to set initial value for date field in forms to today
+    def get_initial(self):
+        return {
+            'date': date.today()
+        }
 
 
 # Default is {expense}_form.html

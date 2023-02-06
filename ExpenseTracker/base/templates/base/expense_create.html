@@ -1,7 +1,7 @@
 <h3>Expense Form</h3>
 
 <a href="{% url 'daily-panel' %}">Go Back (BROKEN PLZ FIX)</a>
-<form method="POST" action="{% url 'expense-create' %}">
+<form method="POST" action="{% url 'expense-create' %}" id="create-expense-form">
     {% csrf_token %}
     <!-- By default it recognizes "form" because it's a CreateView class-->
     <!-- The .as_p makes it look a bit prettier-->
@@ -9,3 +9,46 @@
     <input type="submit" value="Submit">
 </form>
 
+<script>
+    // This script notifies users that the date field contains an invalid date
+    // Alerts users and changes color to red
+    // The alert will continue to show on any change.
+    // If users ignore the problem, then the submitted form will redirect to the plain expense-create HTML form
+    //  With the error message
+    $(document).on('change', function(e){
+        let year = $("#id_date_year");
+        let month = $("#id_date_month");
+        let day = $("#id_date_day");
+
+        // Check if the days of the month is lower than the inputted date
+        let max_days = new Date(year.val(), month.val(), 0).getDate();
+        if (max_days < day.val()) {
+            // Alert and change color
+            alert("Error with Date");
+            year.css({'color': 'red'});
+            month.css({'color': 'red'});
+            day.css({'color': 'red'});
+            
+        }
+        else {
+            // Change color back to black if no errors
+            year.css({'color': 'black'});
+            month.css({'color': 'black'});
+            day.css({'color': 'black'});
+        }
+    });
+</script>
+
+<!-- Invalid Handler -->
+<!-- <script>
+    $("#create-expense-form").validate({
+        invalidHandler: function(form, validator) {
+            let errors = validator.numberOfInvalids();
+            if (errors) {
+                $("#error-message").show().text("Date is invalid");
+            } else {
+                $("#error-message").hide(); 
+            }
+        }
+    })
+</script> -->
