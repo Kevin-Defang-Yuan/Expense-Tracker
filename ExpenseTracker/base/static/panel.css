@@ -24,11 +24,9 @@
     cursor: pointer
 }
 
-input#date-input[type="date"] {
-    position: relative;
-}
 
-input#date-input[type="date"]::-webkit-calendar-picker-indicator {
+
+input#date-input-day[type="date"]::-webkit-calendar-picker-indicator {
 position: absolute;
 top: 0;
 right: 0;
@@ -39,8 +37,29 @@ color: transparent;
 background: transparent;
 }
 
-#date-input {
+#date-input-day {
     border-radius:10px;
 }
 
+input#date-input-day[type="date"] {
+    position: relative;
+}
 
+input#date-input-month[type="month"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+    }
+    
+#date-input-month {
+    border-radius:10px;
+}
+
+input#date-input-month[type="month"] {
+    position: relative;
+}

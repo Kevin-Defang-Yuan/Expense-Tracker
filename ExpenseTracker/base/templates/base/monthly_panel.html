@@ -1,13 +1,50 @@
 {% extends 'base/summary_layout.html' %}
 
-{% block container-header %}
+{% block custom-script %}
+<!--Icon for Edit-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<!--Icon for Go left-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<!--Icon for Go Right-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<script>
+  $(document).ready(() => {
+    $('#change-date').click(() => {
+      let dateForm = document.querySelector('#date-form');
+      let dateTitle = document.querySelector('#date-title');
+      if (dateForm.style.display === 'none') {
+        dateForm.style.display = 'inline';
+        dateTitle.style.display = 'none';
+      }
+      else {
+        dateForm.style.display = 'none';
+        dateTitle.style.display = 'inline';
+      }
+    });
+    $('#date-input-month').change(() => {
+      $('#date-form').submit();
+    });
+  });
+  
+</script>
 
-<a href="{% url 'monthly-panel' %}?year={{prev_date_year}}&month={{prev_date_month}}" style="display: inline">Previous Month</a>
-<a href="{% url 'monthly-panel' %}?year={{next_date_year}}&month={{next_date_month}}" style="display: inline">Next Month</a>
+{% endblock %}
+
+{% block container-header %}
 <h3>Monthly Panel</h3>
+
+<a href="{% url 'monthly-panel' %}?year={{prev_date_year}}&month={{prev_date_month}}" style="display: inline"><span class="material-symbols-outlined">arrow_back_ios</span></a>
+
+
 <h2 id="date-title" style="display: inline">{{month_name}}, {{year}}</h2>
 
-<form action="{% url 'monthly-panel'%}" method="GET" id="date-form">
+<form action="{% url 'monthly-panel'%}" method="GET" id="date-form" style="display: none;">
+  <input type="month" id="date-input-month" name="date" style="width: 250px">
+</form>
+<span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span>
+
+<a href="{% url 'monthly-panel' %}?year={{next_date_year}}&month={{next_date_month}}" style="display: inline"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
+<!-- <form action="{% url 'monthly-panel'%}" method="GET" id="date-form">
   <select class="form-select" name="month">
     {% for select_month_name, month_value in month_range.items %}
       {% if select_month_name == month_name %}
@@ -30,7 +67,9 @@
   </select>
 
   <input type="submit">
-</form>
+</form> -->
+
+
 
 {% endblock %}
 

@@ -281,6 +281,13 @@ class MonthlyPanel(PanelView):
         today = datetime.today()
         year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
         month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
+
+        # If users submit a GET to change the date: yyyy-mm
+        if 'date' in self.request.GET: 
+            date_params = [int(x) for x in self.request.GET['date'].split('-')]
+            year = date_params[0]
+            month = date_params[1]
+
         context['year'] = year
         context['month'] = month
         context['month_name'] = MONTHS_NAME[month-1]

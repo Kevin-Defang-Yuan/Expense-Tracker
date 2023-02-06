@@ -1,11 +1,42 @@
 {% extends 'base/summary_layout.html' %}
 
+{% block custom-script %}
+<!--Icon for Edit-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<!--Icon for Go left-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<!--Icon for Go Right-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+<script>
+  $(document).ready(() => {
+    $('#change-date').click(() => {
+      let dateForm = document.querySelector('#date-form');
+      let dateTitle = document.querySelector('#date-title');
+      if (dateForm.style.display === 'none') {
+        dateForm.style.display = 'inline';
+        dateTitle.style.display = 'none';
+      }
+      else {
+        dateForm.style.display = 'none';
+        dateTitle.style.display = 'inline';
+      }
+    });
+    $('#date-input-year').change(() => {
+      $('#date-form').submit();
+    });
+  });
+  
+</script>
+{% endblock %}
+
 {% block container-header %}
-<a href="{% url 'yearly-panel' %}?year={{prev_date_year}}" style="display: inline">Previous Year</a>
-<a href="{% url 'yearly-panel' %}?year={{next_date_year}}" style="display: inline">Next Year</a>
-<h4>Yearly Panel: {{year}}</h4>
-<form action="{% url 'yearly-panel'%}" method="GET" id="date-form">
-  <select class="form-select" name="year">
+<h3>Yearly Panel:</h3>
+<a href="{% url 'yearly-panel' %}?year={{prev_date_year}}" style="display: inline"><span class="material-symbols-outlined">arrow_back_ios</span></a>
+
+<h2 style="display: inline" id="date-title">{{year}}</h2>
+<form action="{% url 'yearly-panel'%}" method="GET" id="date-form" style="display: none">
+  <select class="form-select" name="year" style="width: 100px;">
     {% for select_year in year_range %}
       {% if select_year == year %}
         <option value="{{select_year}}" selected>{{select_year}}</option>
@@ -14,8 +45,12 @@
       {% endif %}
     {% endfor %}
   </select>
-  <input type="submit">
 </form>
+
+
+<span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span>
+
+<a href="{% url 'yearly-panel' %}?year={{next_date_year}}" style="display: inline"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
 {% endblock %}
 
 {% block expense-table %}
