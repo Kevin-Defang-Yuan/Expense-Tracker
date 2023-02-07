@@ -1,6 +1,4 @@
 <h3>Expense Form</h3>
-
-<a href="{% url 'daily-panel' %}">Go Back (BROKEN PLZ FIX)</a>
 <form method="POST" action="{% url 'expense-update' expense.pk %}">
     {% csrf_token %}
     <!-- By default it recognizes "form" because it's a CreateView class-->

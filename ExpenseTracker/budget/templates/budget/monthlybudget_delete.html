@@ -1,7 +1,3 @@
-<a href="{% url 'category-list' %}">Back to Edit Monthly Spending Budgets</a>
-<!--
-    By default we don't need to specify action here because it will redirect to dashboard because of view.
--->
 <form method="POST" action="{% url 'monthlybudget-delete' budget.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to delete this monthly spending budget? "{{budget.year}}, {{budget.month}}: {{budget.budget}}"</p>    

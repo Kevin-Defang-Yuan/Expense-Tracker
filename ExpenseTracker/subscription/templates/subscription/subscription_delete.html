@@ -1,4 +1,3 @@
-<a href="{% url 'category-list' %}">Back to Edit Categories</a>
 <form method="POST" action="{% url 'subscription-delete' subscription.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to delete this subscription? "{{subscription.name}}"</p>
