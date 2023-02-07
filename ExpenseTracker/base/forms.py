@@ -14,11 +14,12 @@ class CreateExpenseForm(ModelForm):
     category = ModelChoiceField(queryset=Category.objects.all())
     description = TextInput()
 
-    def clean_date(self):
-        data = self.cleaned_data['date']
-        if data > datetime.date.today():
-            raise ValidationError(('Invalid date - future date'))
-        return data
+    # Function that doesn't allow future dates. I'll turn it off for now
+    # def clean_date(self):
+    #     data = self.cleaned_data['date']
+    #     if data > datetime.date.today():
+    #         raise ValidationError(('Invalid date - future date'))
+    #     return data
     
     def clean_cost(self):
         data = self.cleaned_data['cost']

@@ -27,6 +27,15 @@
 
  
   <link rel="stylesheet" href="{% static 'layout.css' %}">
+
+  <!--Icon for Edit Button-->
+  <!--Use this code: <span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span> -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  
+  <!--Icon for Delete Button-->
+  <!--Use this code: <span class="material-symbols-outlined">close</span> -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  
   {% block custom-css %}
   {% endblock %}
   {% block custom-script %}
@@ -65,7 +74,7 @@
         <li><a href="#" data-toggle="modal" data-target="#modal"><span class="material-symbols-outlined">calculate</span></a></li>
         <li><a href="#"><span class="glyphicon glyphicon-user"></span> Welcome {{user.get_username}}</a></li>
         <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-        <i class="fa-solid fa-calculator"></i>
+ 
       </ul>
   </div>
 

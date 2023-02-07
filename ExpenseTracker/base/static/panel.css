@@ -63,3 +63,4 @@ input#date-input-month[type="month"]::-webkit-calendar-picker-indicator {
 input#date-input-month[type="month"] {
     position: relative;
 }
+

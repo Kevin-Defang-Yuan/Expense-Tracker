@@ -1,8 +1,7 @@
 {% extends 'base/summary_layout.html' %}
 
 {% block custom-script %}
-<!--Icon for Edit-->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
 <!--Icon for Go left-->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <!--Icon for Go Right-->
@@ -84,6 +83,8 @@
         <th scope="col">Cost</th>
         <th scope="col">Date</th>
         <th scope="col">Description</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -93,6 +94,9 @@
             <td>{{expense.cost}}</td> 
             <td><a href="{% url 'daily-panel' %}?date={{expense.date|date:'Y-m-d'}}">{{expense.date|date:"M-d"|slice:"0:"}}</a></td>
             <td>{{expense.description|truncatechars:80}}</td>
+            <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" ><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+            <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
+            
         </tr>
         {% endfor %}
     </tbody>

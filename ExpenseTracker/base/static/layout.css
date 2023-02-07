@@ -62,4 +62,11 @@ body {
     background-color: RoyalBlue;
 }
 
+#change-icon {
+    color: green; 
+}
 
+
+#delete-icon {
+    color: red; 
+}

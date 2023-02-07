@@ -415,37 +415,6 @@ class MonthlyPanel(PanelView):
         context['bar_graph_data'] = bar_graph[1]
 
         context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
-        # # Budget Indicator
-        # # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET)
-        # # COMPLETE_UNDER, CURRENT_GOOD = Green
-        # # CURRENT_WARNING = Orange
-        # # CURRENT_BAD = Red
-
-        # # If no budget
-        # if not monthlybudget:
-        #     context['budget_indicator'] = 'NO_BUDGET'
-        # # Calculations for CURRENT (meaning the month is the current month)
-        # elif month == today.month and year == today.year:
-        #     # Get current monthly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
-        #     current_monthly_spending_rate = context['month_expenditure'] / today.day if today.day > FORGIVING_THRESHOLD else context['month_expenditure'] / 7
-            
-        #     # Get remaining monthly spending rate
-        #     remaining_days = monthrange(today.year, today.month)[1] - today.day
-        #     remaining_budget = context['monthlybudget'] - context['month_expenditure']
-        #     # Here we don't need to consider the forgiving threshold
-        #     remaining_monthly_spending_rate = remaining_budget / remaining_days
-
-        #     if current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.1):
-        #         context['budget_indicator'] = 'CURRENT_GOOD'
-        #     elif current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.3):
-        #         context['budget_indicator'] = 'CURRENT_WARNING'
-        #     else:
-        #         context['budget_indicator'] = 'CURRENT_BAD'
-
-        # # Calculations for COMPLETE (meaning month has already passed)
-        # else:
-        #     context['budget_indicator'] = 'COMPLETE_OVER' if context['surpass'] else 'COMPLETE_UNDER'
-        
     
         return context
     

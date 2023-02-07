@@ -34,8 +34,8 @@
                         {% for category in categories %}
                         <tr>
                             <td>{{category.name}}</td>
-                            <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}">EDIT</a></td>
-                            <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}">DELETE</a></td>
+                            <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                            <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
 
                         </tr>
                         {% endfor %}

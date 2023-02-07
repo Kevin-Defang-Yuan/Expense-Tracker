@@ -27,8 +27,8 @@
                     <tr>
                         <th scope="col">Year</th>
                         <th scope="col">Spending Budget</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,8 +36,8 @@
                         <tr>
                             <td>{{budget.year}}</td>
                             <td>{{budget.budget}}</td>
-                            <td><a href="{% url 'yearlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' budget.pk %}">EDIT</a></td>
-                            <td><a href="{% url 'yearlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' budget.pk %}">DELETE</a></td>
+                            <td><a href="{% url 'yearlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' budget.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                            <td><a href="{% url 'yearlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

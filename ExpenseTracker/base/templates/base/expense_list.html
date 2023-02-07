@@ -1,4 +1,5 @@
 {% extends 'base/panel_layout.html' %}
+{% load static %}
 
 {% block main-container %}
 {% load base_extras %}
@@ -43,9 +44,8 @@
                         <th scope="col">Cost</th>
                         <th scope="col">Date</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Subscription</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,10 +54,14 @@
                             <td>{{expense.category}}</td>
                             <td>{{expense.cost}}</td>
                             <td>{{expense.date|date:"M-d-Y"|slice:"0:"}}</td>
+                            <!--Description col contains desc or link to subscription-->
+                            {% if expense.subscription %}
+                            <td>{{expense.subscription.name}}*</td>
+                            {% else %}
                             <td>{{expense.description}}</td>
-                            <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" >EDIT</a></td>
-                            <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}">DELETE</a></td>
-                            <td>{{expense.subscription}}</td>
+                            {% endif %}
+                            <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" ><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                            <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
