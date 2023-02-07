@@ -21,7 +21,7 @@
         dateTitle.style.display = 'inline';
       }
     });
-    $('#date-input').change(() => {
+    $('#date-input-day').change(() => {
       $('#date-form').submit();
     });
   });
@@ -129,6 +129,8 @@
 {% block spending %}
 <h4>Spending</h4>
 <h4>Today's Spending: {{day_expenditure}}</h4>
+<p>Month: {{monthly_budget_indicator}}</p>
+<p>Year: {{yearly_budget_indicator}}</p>
 {% endblock %}
 
 {% block add-expense %}

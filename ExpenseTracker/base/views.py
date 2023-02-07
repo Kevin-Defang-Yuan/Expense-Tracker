@@ -16,6 +16,7 @@ from .forms import EARLIEST_YEAR, LATEST_YEAR
 from django_filters.views import FilterView
 from .filters import ExpenseFilter
 import re
+from calendar import monthrange, isleap
 
 # from django import template
 # register = template.Library()
@@ -30,6 +31,7 @@ EXPENSE_PAGINATION = 10
 AVG_DAYS_PER_MONTH = 30.437
 AVG_DAYS_PER_YEAR = 365
 MIN_DAYS_PASSED = 14
+FORGIVING_THRESHOLD = 7
 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -189,6 +191,86 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
             category_data.append(round(float(total)))
         return (category_labels, category_data)
+    
+    def get_monthly_budget_indicator(self, monthlybudget, month_expenditure, month, year):
+        today = datetime.today()
+        # Budget Indicator
+        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET, FUTURE_UNKNOWN)
+        # COMPLETE_UNDER, CURRENT_GOOD = Green
+        # CURRENT_WARNING = Orange
+        # CURRENT_BAD = Red
+
+        # If no budget
+        if not monthlybudget:
+            return 'NO_BUDGET'
+        # Calculations for CURRENT (meaning the month is the current month)
+        elif month == today.month and year == today.year:
+            # Get current monthly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
+            current_monthly_spending_rate = month_expenditure / today.day if today.day > FORGIVING_THRESHOLD else month_expenditure / 7
+            
+            # Get remaining monthly spending rate
+            remaining_days = monthrange(today.year, today.month)[1] - today.day
+            remaining_budget = float(monthlybudget.budget) - month_expenditure
+            # Here we don't need to consider the forgiving threshold
+            remaining_monthly_spending_rate = remaining_budget / remaining_days
+
+            if current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.1):
+                return 'CURRENT_GOOD'
+            elif current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.3):
+                return 'CURRENT_WARNING'
+            else:
+                return 'CURRENT_BAD'
+
+        # Calculations for COMPLETE (meaning month has already passed) or FUTURE_UNKNOWN
+        else:
+
+            # Check if future
+            if year > today.year or (month > today.month and year >= today.year):
+                return 'FUTURE_UNKNOWN'
+            else:
+                surpass = True if float(monthlybudget.budget) < month_expenditure else False
+                return 'COMPLETE_OVER' if surpass else 'COMPLETE_UNDER'
+    
+    def get_yearly_budget_indicator(self, yearlybudget, year_expenditure, year):
+        today = date.today()
+        # Budget Indicator
+        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET, FUTURE_UNKNOWN)
+        # COMPLETE_UNDER, CURRENT_GOOD = Green
+        # CURRENT_WARNING = Orange
+        # CURRENT_BAD = Red
+
+        # If no budget
+        if not yearlybudget:
+            return 'NO_BUDGET'
+        # Calculations for CURRENT (meaning the year is the current year)
+        elif year == today.year:
+            # Caluclate how many days has passed since Jan 1st
+            days_passed = (today - date(year, 1, 1)).days
+            # Get current yearly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
+            current_yearly_spending_rate = year_expenditure / days_passed if days_passed > FORGIVING_THRESHOLD else year_expenditure / 7
+            
+            # Get remaining yearly spending rate
+            remaining_days = (365 + calendar.isleap(year)) - days_passed
+            remaining_budget = float(yearlybudget.budget) - year_expenditure
+            # Here we don't need to consider the forgiving threshold
+            remaining_yearly_spending_rate = remaining_budget / remaining_days
+
+            if current_yearly_spending_rate <= (remaining_yearly_spending_rate * 1.1):
+                return 'CURRENT_GOOD'
+            elif current_yearly_spending_rate <= (remaining_yearly_spending_rate * 1.3):
+                return 'CURRENT_WARNING'
+            else:
+                return 'CURRENT_BAD'
+
+        # Calculations for COMPLETE (meaning month has already passed) or FUTURE_UNKNOWN
+        else:
+
+            # if in future
+            if year > today.year:
+                return 'FUTURE_UNKNOWN'
+            else:
+                surpass = True if float(yearlybudget.budget) < year_expenditure else False
+                return 'COMPLETE_OVER' if surpass else 'COMPLETE_UNDER'
 
 
 class YearlyPanel(PanelView):
@@ -233,6 +315,8 @@ class YearlyPanel(PanelView):
         bar_graph = self.get_expenditure_by_year_per_month(year=year)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
+
+        context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
 
         return context
     
@@ -309,11 +393,11 @@ class MonthlyPanel(PanelView):
         context['month_range'] = dict(zip(MONTHS_NAME, month_numbers))
 
         context['limited_expenses'] = self.query_limited_expenses(year=year, month=month)
-        context['month_expenditure'] = self.get_expenditure_by_time_range(year=year, month=month)
+        context['month_expenditure'] = float(self.get_expenditure_by_time_range(year=year, month=month))
 
         monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month).first()
         if monthlybudget:
-            context['monthlybudget'] = monthlybudget.budget
+            context['monthlybudget'] = float(monthlybudget.budget)
             context['monthlybudget_object'] = monthlybudget
             context['surpass'] = True if monthlybudget.budget < context['month_expenditure'] else False
 
@@ -328,10 +412,38 @@ class MonthlyPanel(PanelView):
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
 
-        # subs = Subscription.objects.all()
-        # for sub in subs:
-        #     print(f'Start: {sub.start_date}, quantity: {sub.quantity}, cycle: {sub.cycle}, End: {sub.get_end_date()}')
+        context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
+        # # Budget Indicator
+        # # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET)
+        # # COMPLETE_UNDER, CURRENT_GOOD = Green
+        # # CURRENT_WARNING = Orange
+        # # CURRENT_BAD = Red
 
+        # # If no budget
+        # if not monthlybudget:
+        #     context['budget_indicator'] = 'NO_BUDGET'
+        # # Calculations for CURRENT (meaning the month is the current month)
+        # elif month == today.month and year == today.year:
+        #     # Get current monthly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
+        #     current_monthly_spending_rate = context['month_expenditure'] / today.day if today.day > FORGIVING_THRESHOLD else context['month_expenditure'] / 7
+            
+        #     # Get remaining monthly spending rate
+        #     remaining_days = monthrange(today.year, today.month)[1] - today.day
+        #     remaining_budget = context['monthlybudget'] - context['month_expenditure']
+        #     # Here we don't need to consider the forgiving threshold
+        #     remaining_monthly_spending_rate = remaining_budget / remaining_days
+
+        #     if current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.1):
+        #         context['budget_indicator'] = 'CURRENT_GOOD'
+        #     elif current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.3):
+        #         context['budget_indicator'] = 'CURRENT_WARNING'
+        #     else:
+        #         context['budget_indicator'] = 'CURRENT_BAD'
+
+        # # Calculations for COMPLETE (meaning month has already passed)
+        # else:
+        #     context['budget_indicator'] = 'COMPLETE_OVER' if context['surpass'] else 'COMPLETE_UNDER'
+        
     
         return context
     
@@ -433,6 +545,18 @@ class DailyPanel(PanelView):
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month, day=day)
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
+
+        # Budget Indicator
+        # If not today, then don't pass in the indicator
+        monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month).first()
+        context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
+        if year != today.year or month != today.month or day != today.day:
+            context['monthly_budget_indicator'] = 'NO_INDICATOR'
+
+        yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
+        context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
+        if year != today.year or month != today.month or day != today.day:
+            context['yearly_budget_indicator'] = 'NO_INDICATOR'
         return context
     
     def get_expenditure_per_day(self):
