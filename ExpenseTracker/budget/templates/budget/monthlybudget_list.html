@@ -2,7 +2,7 @@
 
 {% block main-container %}
 <div class="row-sm-1">
-    <div class="col-sm-10">
+    <div class="col-sm">
       <div class="well">
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h4>Spending Budgets</h4>
@@ -11,7 +11,7 @@
   </div>
 
 <div class="row-sm-1">
-    <div class="col-sm-10">
+    <div class="col-sm">
         <div class="well">
             <a href="{% url 'monthlybudget-create' %}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}">ADD Budget</a>
         </div>
@@ -19,7 +19,7 @@
 </div>
 
 <div class="row-sm-1">
-    <div class="col-sm-10">
+    <div class="col-sm">
         <div class="well">
             <table class="table">
                 <div class="w-auto">

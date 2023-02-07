@@ -31,7 +31,9 @@ EXPENSE_PAGINATION = 10
 AVG_DAYS_PER_MONTH = 30.437
 AVG_DAYS_PER_YEAR = 365
 MIN_DAYS_PASSED = 14
-FORGIVING_THRESHOLD = 7
+DAYS_BUFFER = 4
+WARNING_THRESHOLD = 1.1
+BAD_THRESHOLD = 1.3
 
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -206,17 +208,17 @@ class PanelView(LoginRequiredMixin, TemplateView):
         # Calculations for CURRENT (meaning the month is the current month)
         elif month == today.month and year == today.year:
             # Get current monthly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
-            current_monthly_spending_rate = month_expenditure / today.day if today.day > FORGIVING_THRESHOLD else month_expenditure / 7
+            current_monthly_spending_rate = month_expenditure / today.day if today.day > DAYS_BUFFER else month_expenditure / DAYS_BUFFER
             
             # Get remaining monthly spending rate
             remaining_days = monthrange(today.year, today.month)[1] - today.day
             remaining_budget = float(monthlybudget.budget) - month_expenditure
             # Here we don't need to consider the forgiving threshold
-            remaining_monthly_spending_rate = remaining_budget / remaining_days
+            remaining_monthly_spending_rate = remaining_budget / remaining_days if today.day > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
 
-            if current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.1):
+            if current_monthly_spending_rate <= (remaining_monthly_spending_rate * WARNING_THRESHOLD):
                 return 'CURRENT_GOOD'
-            elif current_monthly_spending_rate <= (remaining_monthly_spending_rate * 1.3):
+            elif current_monthly_spending_rate <= (remaining_monthly_spending_rate * BAD_THRESHOLD):
                 return 'CURRENT_WARNING'
             else:
                 return 'CURRENT_BAD'
@@ -247,17 +249,17 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # Caluclate how many days has passed since Jan 1st
             days_passed = (today - date(year, 1, 1)).days
             # Get current yearly spending rate. If total days passed less than a week, assume a week, which is forgiving threshold
-            current_yearly_spending_rate = year_expenditure / days_passed if days_passed > FORGIVING_THRESHOLD else year_expenditure / 7
+            current_yearly_spending_rate = year_expenditure / days_passed if days_passed > DAYS_BUFFER else year_expenditure / DAYS_BUFFER
             
             # Get remaining yearly spending rate
             remaining_days = (365 + calendar.isleap(year)) - days_passed
             remaining_budget = float(yearlybudget.budget) - year_expenditure
             # Here we don't need to consider the forgiving threshold
-            remaining_yearly_spending_rate = remaining_budget / remaining_days
+            remaining_yearly_spending_rate = remaining_budget / remaining_days if days_passed > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
 
-            if current_yearly_spending_rate <= (remaining_yearly_spending_rate * 1.1):
+            if current_yearly_spending_rate <= (remaining_yearly_spending_rate * WARNING_THRESHOLD):
                 return 'CURRENT_GOOD'
-            elif current_yearly_spending_rate <= (remaining_yearly_spending_rate * 1.3):
+            elif current_yearly_spending_rate <= (remaining_yearly_spending_rate * BAD_THRESHOLD):
                 return 'CURRENT_WARNING'
             else:
                 return 'CURRENT_BAD'
