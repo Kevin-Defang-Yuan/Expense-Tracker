@@ -49,7 +49,7 @@
                             <td>{{subscription.get_end_date}}</td>
                             <td>{{subscription.quantity}}</td>
                             <td>{{subscription.is_active}}</td>
-                            <td><a href="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
+                            <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
                             <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}">EDIT</a></td>
                             <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}">DELETE</a></td>
                         </tr>

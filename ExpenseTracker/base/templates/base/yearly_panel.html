@@ -92,9 +92,9 @@
     {% if surpass %}
     <h5>Yearly expenditure has exceeded the Yearly budget</h5>
     {% endif %}
-    <a href="{% url 'yearlybudget-update' yearlybudget_object.pk %}">Edit spending budget</a>
+    <a href="{% url 'yearlybudget-update' yearlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' yearlybudget_object.pk %}">Edit spending budget</a>
   {% else %}
-  <a href="{% url 'yearlybudget-create' %}?year={{year}}">Add Spending Budget for Year</a>
+  <a href="{% url 'yearlybudget-create' %}?year={{year}}" class="open-incident" data-popup-url="{% url 'yearlybudget-create' %}?year={{year}}">Add Spending Budget for Year</a>
   {% endif %}
 {% endblock %}
 

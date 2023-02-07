@@ -4,7 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Subscription
-from .forms import CreateSubscriptionForm
+from .forms import CreateSubscriptionForm, TerminateSubscriptionForm
 from base.models import Expense
 from datetime import date
 
@@ -18,6 +18,9 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
     # We want the form to automatically know which user to submit the data
     def form_valid(self, form):
         form.instance.user = self.request.user
+
+        # Automatically set indefinite to True (cause it is a subscription)
+        form.instance.indefinite = True
         return super(SubscriptionCreate, self).form_valid(form)
     
     def get_form_kwargs(self):
@@ -59,10 +62,17 @@ class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
     model = Subscription
     context_object_name = 'subscription'
     template_name = 'subscription/subscription_terminate.html'
-    fields = ['indefinite']
     success_url = reverse_lazy('subscription-list')
+    form_class = TerminateSubscriptionForm
 
     def form_valid(self, form):
         today = date.today()
+
+        # Set the end date as the day it is terminated
         form.instance.end_date = today
+
+        # Set indefinite to False as it is terminated
+        form.instance.indefinite = False
+
+
         return super(SubscriptionTerminate, self).form_valid(form)

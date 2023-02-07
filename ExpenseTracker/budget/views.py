@@ -35,6 +35,15 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
             return {
                 'year': year,
             }
+
+     # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
     
 class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = YearlyBudget
@@ -42,6 +51,15 @@ class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     fields = ['budget']
     template_name = 'budget/yearlybudget_update.html'
     context_object_name = 'budget'
+
+     # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
 
 class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
     model = YearlyBudget
@@ -80,15 +98,16 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
                 'year': year,
                 'month': month
             }
-    
-    # def get_form(self):
-    #     form = super(MonthlyBudgetCreate, self).get_form()
-    #     if 'year' in self.request.GET and 'month' in self.request.GET:
-    #         form.fields['year'].widget.attrs.update({'value': self.request.GET['year']})
-    #         form.fields['month'].widget.attrs.update({'value': self.request.GET['month']})
-    #         print(form.fields['year'].widget.attrs)
-    #     return form
 
+     # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
+    
     
 class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = MonthlyBudget
@@ -105,6 +124,14 @@ class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
                 'year': year,
                 'month': month
             }
+     # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
 
 class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
     model = MonthlyBudget

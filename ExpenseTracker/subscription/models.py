@@ -36,6 +36,12 @@ class Subscription(models.Model):
         verbose_name="Indefinite"
     )
 
+    terminated = models.BooleanField(
+        null=True,
+        blank=True,
+        default=False
+    )
+
     end_date = models.DateField(
         null=True, 
         blank=True,
@@ -90,19 +96,20 @@ class Subscription(models.Model):
         return f'{self.name}, {self.category}, {self.cost}'
     
     # Override clean method so that either end_date is specified or quantity is specified
+    # DON"T DELETE THIS! THIS IS VALUABLE 
     # https://stackoverflow.com/questions/12021911/either-or-fields-in-django-models
-    def clean(self):
-        if self.end_date is None and self.quantity is None and self.indefinite is None:
-            raise ValidationError(('Input either end_date, quantity, or check indefinite. Only one, not all three')) 
+    # def clean(self):
+    #     if self.end_date is None and self.quantity is None and self.indefinite is None:
+    #         raise ValidationError(('Input either end_date, quantity, or check indefinite. Only one, not all three')) 
         
-        if self.end_date and self.quantity:
-            raise ValidationError(('Input either end_date or quantity')) 
+    #     if self.end_date and self.quantity:
+    #         raise ValidationError(('Input either end_date or quantity')) 
         
-        if self.end_date and self.indefinite:
-            raise ValidationError(('An indefinite subscription should not have an end date')) 
+    #     if self.end_date and self.indefinite:
+    #         raise ValidationError(('An indefinite subscription should not have an end date')) 
         
-        if self.quantity and self.indefinite:
-            raise ValidationError(('An indefinite subscription should not have a known quantity')) 
+    #     if self.quantity and self.indefinite:
+    #         raise ValidationError(('An indefinite subscription should not have a known quantity')) 
     
     @property
     def get_end_date(self):
@@ -119,7 +126,12 @@ class Subscription(models.Model):
         return end_date
     
     @property
-    def is_active(self):        
+    def is_active(self):
+        # Return false if terminated
+        if self.terminated:
+            return False
+
+        # Otherwise, resume calculations        
         today = datetime.today().date()
         sub_end_date = self.get_end_date
         sub_start_date = self.start_date

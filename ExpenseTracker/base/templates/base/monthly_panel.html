@@ -114,9 +114,9 @@
       {% if surpass %}
       <h5>Monthly expenditure has exceeded the Monthly budget</h5>
       {% endif %}
-      <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}">Edit spending budget</a>
+      <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' monthlybudget_object.pk %}">Edit spending budget</a>
   {% else %}
-    <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
+    <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
   {% endif %}
 {% endblock %}
 
