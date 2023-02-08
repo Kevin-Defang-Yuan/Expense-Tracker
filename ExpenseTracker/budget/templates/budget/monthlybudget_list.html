@@ -36,7 +36,7 @@
                         {% for budget in budgets %}
                         <tr>
                             <td>{{budget.year}}</td>
-                            <td>{{budget.month}}</td>
+                            <td>{{budget.month_name}}</td>
                             <td>{{budget.budget}}</td>
                             <td><a href="{% url 'monthlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' budget.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
                             <td><a href="{% url 'monthlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>

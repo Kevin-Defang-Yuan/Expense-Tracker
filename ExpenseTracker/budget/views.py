@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import MonthlyBudget, YearlyBudget
 from .forms import CreateYearlyBudgetForm, CreateMonthlyBudgetForm, UpdateYearlyBudgetForm, UpdateMonthlyBudgetForm
+from datetime import date
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -30,11 +31,17 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
         return super(YearlyBudgetCreate, self).form_valid(form)
     
     def get_initial(self):
+        year = None
+        month = None
         if 'year' in self.request.GET:
-            year = self.request.GET['year']
-            return {
-                'year': year,
-            }
+            year = self.request.GET['year']    
+        # Otherwise, we just populate with today
+        else:
+            today = date.today()
+            year = today.year
+        return {
+            'year': year,
+        }
 
      # We want to save the previous url into the sessions so we can redirect back after POST success. 
     def get(self, request, *args, **kwargs):
@@ -73,7 +80,12 @@ class MonthlyBudgetList(LoginRequiredMixin, ListView):
     context_object_name = 'budgets'
 
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        qs = super().get_queryset().filter(user=self.request.user)
+        for budget in qs:
+            budget.month_name = MonthlyBudget.MONTH_CHOICES[budget.month-1][1]
+        return qs
+    
+
 
 class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
     model = MonthlyBudget
@@ -91,13 +103,20 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
         return super(MonthlyBudgetCreate, self).form_valid(form)
     
     def get_initial(self):
+        year = None
+        month = None
         if 'year' in self.request.GET and 'month' in self.request.GET:
             year = self.request.GET['year']
-            month = self.request.GET['month']
-            return {
-                'year': year,
-                'month': month
-            }
+            month = self.request.GET['month']        
+        # Otherwise, we just populate with today
+        else:
+            today = date.today()
+            month = today.month
+            year = today.year
+        return {
+            'year': year,
+            'month': month
+        }
 
      # We want to save the previous url into the sessions so we can redirect back after POST success. 
     def get(self, request, *args, **kwargs):
