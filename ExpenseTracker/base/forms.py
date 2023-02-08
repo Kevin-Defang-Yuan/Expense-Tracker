@@ -1,4 +1,5 @@
-from django.forms import ModelForm, DateField, DecimalField, ModelChoiceField, TextInput, SelectDateWidget, CharField
+from django.forms import ModelForm, DateField, DecimalField, ModelChoiceField, TextInput, SelectDateWidget, CharField, DateInput
+from django.forms import Select, NumberInput, Textarea
 from .models import Expense, Category
 from django.core.exceptions import ValidationError
 import datetime
@@ -6,13 +7,27 @@ import datetime
 EARLIEST_YEAR = 2000
 LATEST_YEAR = 2099
 
+
+# Here we create a date input class so that it creates an HTML input date element
+class DateInput(DateInput):
+    input_type = 'date'
+
 class CreateExpenseForm(ModelForm):
     class Meta:
         model = Expense
         fields = ['date', 'cost', 'category', 'description']
-    date = DateField(widget=SelectDateWidget(years=range(EARLIEST_YEAR, LATEST_YEAR)))
-    category = ModelChoiceField(queryset=Category.objects.all())
-    description = TextInput()
+        widgets = {
+            'date': DateInput(attrs={'id': 'expense-date-picker', 'class': 'form-control'}),
+            'cost': NumberInput(attrs={'class': 'form-control', 'id': 'expense-cost-input'}),
+            'description': Textarea(attrs={'class': 'form-control'}),
+            
+        }
+    
+    date = DateInput()
+    # For some reason, I need to put the widget here. It doesn't work when I add it to the widgets above
+    category = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={'class': 'form-control'}))
+    description = Textarea()
+
 
     # Function that doesn't allow future dates. I'll turn it off for now
     # def clean_date(self):

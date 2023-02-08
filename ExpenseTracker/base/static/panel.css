@@ -64,3 +64,33 @@ input#date-input-month[type="month"] {
     position: relative;
 }
 
+
+
+/* input#expense-cost-input {
+    width: 50%
+} */
+
+/* .form-control {
+    width: 50%;
+} */
+
+#form-box {
+    background-color: white;
+    box-shadow: None;
+    border: None;
+}
+
+input#expense-date-picker[type="date"] {
+    position: relative;
+    /* width: 50%; */
+}
+#expense-date-picker[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
