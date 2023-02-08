@@ -659,7 +659,8 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
 # Default is {expense}_form.html
 class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     model = Expense
-    fields = ['category', 'description', 'date', 'cost']
+    # fields = ['category', 'description', 'date', 'cost']
+    form_class = CreateExpenseForm
     success_url = reverse_lazy('expense-list')
     template_name = 'base/expense_update.html'
 
@@ -671,6 +672,12 @@ class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
         return self.request.session['previous_page']
+    
+    # Need this or else will have an error, cause the form class uses the user
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 # Default template is {expense}_confirm_delete.html
 class ExpenseDelete(LoginRequiredMixin, DeleteView):

@@ -49,13 +49,15 @@ class CreateExpenseForm(ModelForm):
         user = kwargs.pop('user')
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(user=user)
-        print(self.fields['category'].queryset)
         #self.fields['category'].queryset = Category.objects.filter(id__in=Expense.objects.all().filter(user=user).values('category'))
 
 class CreateCategoryForm(ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+        widgets = {
+            'name': TextInput(attrs={'class': 'form-control', 'id': 'category-name-input'})
+        }
     
-    name = CharField(max_length=200)
+    name = TextInput()
 

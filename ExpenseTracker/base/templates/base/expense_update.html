@@ -1,9 +1,46 @@
-<h3>Expense Form</h3>
+<!-- <h3>Expense Form</h3>
 <form method="POST" action="{% url 'expense-update' expense.pk %}">
     {% csrf_token %}
-    <!-- By default it recognizes "form" because it's a CreateView class-->
-    <!-- The .as_p makes it look a bit prettier-->
     {{form.as_p}}
     <input type="submit" value="Submit">
-</form>
+</form> -->
 
+
+<div class="row">
+    <div class="col-sm p-3">
+        <form method="POST" action="{% url 'expense-update' expense.pk %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm">
+                    <div class="well" id="form-box">
+                        <h3 style="text-align: center;">Expense Form</h3>
+                        <div class="form-group">
+                            <label>Date</label>
+                            {{form.date}}  
+                            <small class="form-text text-muted">Click to change date!</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            {{form.category}}
+                        </div>
+                        <div class="form-group">
+                            <label>Cost</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-addon">
+                                    $
+                                </div>
+                                {{form.cost}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            {{form.description}}
+                            <small class="form-text text-muted">Write a description: Optional</small>
+                        </div>
+                        <input type="submit" value="Submit" style="float: right;">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
