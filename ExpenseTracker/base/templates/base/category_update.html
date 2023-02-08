@@ -1,8 +1,42 @@
-<h3>Category Form</h3>
+<!-- <h3>Category Form</h3>
 <form method="POST" action="{% url 'category-update' category.pk %}">
     {% csrf_token %}
-    <!-- By default it recognizes "form" because it's a CreateView class-->
-    <!-- The .as_p makes it look a bit prettier-->
     {{form.as_p}}
     <input type="submit" value="Submit">
-</form>
+</form> -->
+
+
+<div class="row">
+    <div class="col-sm p-3">
+        <form method="POST" action="{% url 'category-update' category.pk %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm">
+                    <div class="well" id="form-box">
+                        <h3 style="text-align: center;">Edit Category</h3>
+                        <div class="form-group">
+                            <label>Name</label>
+                            {{form.name}}  
+                            <small class="form-text text-muted">200 characters maximum</small>
+                            <span id="characters" style="float: right; padding: 3px; color: gray; font-size: small">0/200</span>
+                        </div>
+                        <input type="submit" value="Submit" style="float: right;">
+                    </div>
+
+                </div>       
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#category-name-input').keyup(updateCount);
+    $('#category-name-input').keydown(updateCount);
+
+    function updateCount() {
+        let num = $('#category-name-input').val().length;
+        console.log(num)
+        $('#characters').text(num.toString() + '/200');
+    }
+</script>

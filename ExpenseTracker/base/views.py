@@ -717,7 +717,7 @@ class CategoryCreate(LoginRequiredMixin, CreateView):
 
 class CategoryUpdate(LoginRequiredMixin, UpdateView):
     model = Category
-    fields = ['name']
+    form_class = CreateCategoryForm
     success_url = reverse_lazy('category-list')
     template_name = 'base/category_update.html'
     context_object_name = 'category'

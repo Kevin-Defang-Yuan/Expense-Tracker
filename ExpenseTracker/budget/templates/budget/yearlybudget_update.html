@@ -1,6 +1,28 @@
-<h3>Yearly Spending Budget Form</h3>
+<!-- <h3>Yearly Spending Budget Form</h3>
 <form method="POST" action="{% url 'yearlybudget-update' budget.pk %}">
     {% csrf_token %}
     {{form.as_p}}
     <input type="submit" value="Submit">
-</form>
+</form> -->
+
+<div class="row">
+    <div class="col-sm p-3">
+        <form method="POST" action="{% url 'yearlybudget-update' budget.pk %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm">
+                    <div class="well" id="form-box">
+                        <h3 style="text-align: center;">Edit Yearly Budget</h3>
+                        <div class="form-group">
+                            <label>Budget</label>
+                            {{form.budget}}  
+                        </div>
+                        <input type="submit" value="Submit" style="float: right;">
+                    </div>
+
+                </div>       
+            </div>
+            
+        </form>
+    </div>
+</div>
