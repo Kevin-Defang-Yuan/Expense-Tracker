@@ -79,6 +79,7 @@ class MonthlyBudgetList(LoginRequiredMixin, ListView):
     template_name = 'budget/monthlybudget_list.html'
     context_object_name = 'budgets'
 
+    # We want to display the month name, not the month number
     def get_queryset(self):
         qs = super().get_queryset().filter(user=self.request.user)
         for budget in qs:
@@ -157,3 +158,11 @@ class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('monthlybudget-list')
     template_name = 'budget/monthlybudget_delete.html'
     context_object_name = 'budget'
+
+    # We want to display the month name, not the month number
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['month_name'] = MonthlyBudget.MONTH_CHOICES[self.get_object().month-1][1]
+        return context
+
+    
