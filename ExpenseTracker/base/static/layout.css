@@ -70,3 +70,24 @@ body {
 #delete-icon {
     color: red; 
 }
+
+input#subscription-date-picker[type="date"] {
+    position: relative;
+    /* width: 50%; */
+}
+#subscription-date-picker[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
+
+#form-box {
+    background-color: white;
+    box-shadow: None;
+    border: None;
+}

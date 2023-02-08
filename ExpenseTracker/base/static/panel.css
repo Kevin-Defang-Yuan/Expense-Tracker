@@ -74,11 +74,7 @@ input#date-input-month[type="month"] {
     width: 50%;
 } */
 
-#form-box {
-    background-color: white;
-    box-shadow: None;
-    border: None;
-}
+
 
 input#expense-date-picker[type="date"] {
     position: relative;
@@ -94,3 +90,4 @@ input#expense-date-picker[type="date"] {
     color: transparent;
     background: transparent;
 }
+

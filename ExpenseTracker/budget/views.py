@@ -3,7 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import MonthlyBudget, YearlyBudget
-from .forms import CreateYearlyBudgetForm, CreateMonthlyBudgetForm
+from .forms import CreateYearlyBudgetForm, CreateMonthlyBudgetForm, UpdateYearlyBudgetForm, UpdateMonthlyBudgetForm
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -48,7 +48,7 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
 class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
-    fields = ['budget']
+    form_class = UpdateYearlyBudgetForm
     template_name = 'budget/yearlybudget_update.html'
     context_object_name = 'budget'
 
@@ -112,7 +112,7 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
 class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')
-    fields = ['budget']
+    form_class = UpdateMonthlyBudgetForm
     template_name = 'budget/monthlybudget_update.html'
     context_object_name = 'budget'
 

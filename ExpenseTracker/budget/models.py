@@ -36,7 +36,7 @@ class Budget(models.Model):
 
 class YearlyBudget(Budget):
     # Non editable data
-    YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT + 1)]
+    YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT)]
     year = models.IntegerField(choices=YEAR_CHOICES)
 
     class Meta:
@@ -47,7 +47,7 @@ class YearlyBudget(Budget):
 
 class MonthlyBudget(Budget):
     # Non editable data
-    YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT + 1)]
+    YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT)]
     year = models.IntegerField(choices=YEAR_CHOICES)
 
     JAN = 1

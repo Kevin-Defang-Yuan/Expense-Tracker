@@ -27,6 +27,12 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
         kwargs = super(SubscriptionCreate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+    
+    # Function to set initial value for date field in forms to today
+    def get_initial(self):
+        return {
+            'start_date': date.today()
+        }
 
 class SubscriptionList(LoginRequiredMixin, ListView):
     model = Subscription
@@ -40,9 +46,14 @@ class SubscriptionList(LoginRequiredMixin, ListView):
 class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')
-    fields = '__all__'
+    form_class = CreateSubscriptionForm
     template_name = 'subscription/subscription_update.html'
     context_object_name = 'subscription'
+
+    def get_form_kwargs(self):
+        kwargs = super(SubscriptionUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class SubscriptionDelete(LoginRequiredMixin, DeleteView):
