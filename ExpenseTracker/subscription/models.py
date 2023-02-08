@@ -84,7 +84,7 @@ class Subscription(models.Model):
     # related_names have to be unique
     category = models.ForeignKey(
         Category, 
-        on_delete=models.RESTRICT, 
+        on_delete=models.CASCADE, 
         related_name="all_subscriptions",    
     )
 

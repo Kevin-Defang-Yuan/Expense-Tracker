@@ -732,6 +732,9 @@ class CategoryDelete(LoginRequiredMixin, DeleteView):
         category_id = self.kwargs.get('pk')
         expenses_under_category = Expense.objects.filter(user=self.request.user).filter(category=category_id)
         context['expenses_under_category'] = expenses_under_category
+
+        subscriptions_under_category = Subscription.objects.filter(user=self.request.user).filter(category=category_id)
+        context['subscriptions_under_category'] = subscriptions_under_category
         return context
 
 

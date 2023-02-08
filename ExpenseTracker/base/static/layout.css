@@ -91,3 +91,7 @@ input#subscription-date-picker[type="date"] {
     box-shadow: None;
     border: None;
 }
+
+input[type=submit] {
+    float: right;
+}

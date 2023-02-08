@@ -1,7 +1,4 @@
-<!--
-    By default we don't need to specify action here because it will redirect to dashboard because of view.
--->
-<form method="POST" action="{% url 'category-delete' category.pk %}">
+<!-- <form method="POST" action="{% url 'category-delete' category.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to delete this category? "{{category.name}}"</p>
     <p>These following expenses will also be deleted if you proceed:</p>
@@ -33,4 +30,77 @@
 
     
     <input type="submit" value="Delete">
-</form>
+</form> -->
+
+<div class="row">
+  <div class="col-sm p-3">
+    <form method="POST" action="{% url 'category-delete' category.pk %}">
+          {% csrf_token %}
+          <div class="form-row">
+              <div class="col-sm">
+                  <div class="well" id="form-box">
+                    <p>Are you sure you want to delete the following category: "{{category.name}}"?</p>
+                    {% if expenses_under_category %}
+                      <p>These following expenses will also be deleted if you proceed:</p>
+                      <table class="table table-sm table-striped">
+                          <thead>
+                            <tr>
+                              <th scope="col">Category</th>
+                              <th scope="col">Cost</th>
+                              <th scope="col">Date</th>
+                              <th scope="col">Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              {% for expense in expenses_under_category %}
+                              <tr>
+                                  <td>{{expense.category}}</td>
+                                  <td>{{expense.cost}}</td>
+                                  <td>{{expense.date|date:"M-d"|slice:"0:"}}</td>
+                                  <td>{{expense.description}}</td>
+                              </tr>
+                              {% empty %}
+                              <tr>
+                                  <td>None</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                    {% endif %}
+
+                    {% if subscriptions_under_category %}
+                        <p>These following subscriptions will also be deleted if you proceed:</p>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Cost</th>
+                                <th scope="col">Cycle</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">Active</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in subscriptions_under_category %}
+                                <tr>
+                                    <td>{{subscription.name}}</td>
+                                    <td>{{subscription.category}}</td>
+                                    <td>{{subscription.cost}}</td>
+                                    <td>{{subscription.cycle}}</td>
+                                    <td>{{subscription.start_date}}</td>
+                                    <td>{{subscription.is_active}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    <input type="submit" value="Delete">
+                  </div>
+
+              </div>       
+          </div>
+          
+      </form>
+  </div>
+</div>
