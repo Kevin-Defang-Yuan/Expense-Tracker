@@ -1,66 +1,68 @@
 {% extends 'base/panel_layout.html' %}
 {% load static %}
 
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'panel.css' %}">
+{% endblock %}
+
 
 {% block main-container %}
-<div class="row-sm-1">
-    <div class="col-sm">
-      <div class="well">
+<div class="row" id="content-title">
+    <div class="col-sm" >
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h4>Subscriptions</h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <a href="{% url 'subscription-create' %}" class="open-incident" data-popup-url="{% url 'subscription-create' %}">ADD Subscription</a>
-        </div>
     </div>
 </div>
-
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <table class="table table-sm table-striped">
-                <div class="w-auto">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Cost</th>
-                        <th scope="col">Cycle</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">Active</th>
-                        <th scope="col">Terminate</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for subscription in subscriptions %}
-                        <tr>
-                            <td>{{subscription.name}}</td>
-                            <td>{{subscription.category}}</td>
-                            <td>{{subscription.cost}}</td>
-                            <td>{{subscription.cycle}}</td>
-                            <td>{{subscription.start_date}}</td>
-                            <td>{{subscription.get_end_date}}</td>
-                            <td>{{subscription.is_active}}</td>
-                            <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
-                            <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
-                            <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+ 
+<div class="container">
+    <div class="row-sm-1">
+        <div class="col-sm">
+            <div class="row" id="row-content">
+                <div class="col-sm">
+                    <div class="well banner" id="subscription-content">
+                        <a href="{% url 'subscription-create' %}" class="open-incident" data-popup-url="{% url 'subscription-create' %}">ADD Subscription</a>
+                        <table class="table table-sm table-striped">
+                            <div class="w-auto">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Cost</th>
+                                    <th scope="col">Cycle</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Active</th>
+                                    <th scope="col">Terminate</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for subscription in subscriptions %}
+                                    <tr>
+                                        <td>{{subscription.name}}</td>
+                                        <td>{{subscription.category}}</td>
+                                        <td>{{subscription.cost}}</td>
+                                        <td>{{subscription.cycle}}</td>
+                                        <td>{{subscription.start_date}}</td>
+                                        <td>{{subscription.get_end_date}}</td>
+                                        <td>{{subscription.is_active}}</td>
+                                        <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
+                                        <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                                        <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                </div>
             </div>
         </div>
-
     </div>
 </div>
+
 
 
 {% include 'modal.html' %}

@@ -1,52 +1,58 @@
 {% extends 'base/panel_layout.html' %}
+{% load static %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'panel.css' %}">
+{% endblock %}
 
 {% block main-container %}
-<div class="row-sm-1">
+
+<div class="row" id="content-title">
     <div class="col-sm">
-      <div class="well">
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h4>Spending Budgets</h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <a href="{% url 'yearlybudget-create' %}" class="open-incident" data-popup-url="{% url 'yearlybudget-create' %}">ADD Budget</a>
-        </div>
     </div>
 </div>
 
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <table class="table table-sm table-striped">
-                <div class="w-auto">
-                    <thead>
-                    <tr>
-                        <th scope="col">Year</th>
-                        <th scope="col">Spending Budget</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for budget in budgets %}
-                        <tr>
-                            <td>{{budget.year}}</td>
-                            <td>{{budget.budget}}</td>
-                            <td><a href="{% url 'yearlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' budget.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
-                            <td><a href="{% url 'yearlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+
+<div class="container">
+    <div class="row-sm-1">
+        <div class="col-sm">
+            <div class="row" id="row-content">
+                <div class="col-sm">
+                    <div class="well banner" id="category-content">
+                        <a href="{% url 'yearlybudget-create' %}" class="open-incident" data-popup-url="{% url 'yearlybudget-create' %}">ADD Budget</a>
+                        <table class="table table-sm table-striped">
+                            <div class="w-auto">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Spending Budget</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for budget in budgets %}
+                                    <tr>
+                                        <td>{{budget.year}}</td>
+                                        <td>{{budget.budget}}</td>
+                                        <td><a href="{% url 'yearlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' budget.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                                        <td><a href="{% url 'yearlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
+
 
 
 {% include 'modal.html' %}

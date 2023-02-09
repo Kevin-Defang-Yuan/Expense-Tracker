@@ -105,3 +105,8 @@ input#expense-date-picker[type="date"] {
     margin-left: 200px;
     margin-right: 200px;
 }
+
+#subscription-content {
+    margin-left: 100px;
+    margin-right: 100px;
+}
