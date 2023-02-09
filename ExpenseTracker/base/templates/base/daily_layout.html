@@ -15,38 +15,44 @@
 
   </div>
 </div>
-
-<div class="row-sm-1" id="below-content-title">
-    <div class="col-sm-4">
-        <div class="well">
-            {% block spending %}
-            {% endblock %}
-
-            {% block add-expense %}
-            {% endblock %}
+<div class="container">
+  <div class="row-sm-1">
+    <div class="col-sm">
+      <div class="row-sm-1" id="below-content-title">
+        <div class="col-sm-4">
+            <div class="well">
+                {% block spending %}
+                {% endblock %}
+    
+                {% block add-expense %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="well">
+              <!--Nav Tabs using Bootstrap -->
+              <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
+                <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
+              </ul>
+              
+              <div class="tab-content">
+                <div id="expense-table" class="tab-pane fade in active">
+                  {% block expense-table %}
+                  {% endblock %}
+                </div>
+                <div id="subscription-table" class="tab-pane fade">
+                  {% block subscription-table %}
+                  {% endblock %}
+                </div>
+              </div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div class="well">
-          <!--Nav Tabs using Bootstrap -->
-          <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
-            <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
-          </ul>
-          
-          <div class="tab-content">
-            <div id="expense-table" class="tab-pane fade in active">
-              {% block expense-table %}
-              {% endblock %}
-            </div>
-            <div id="subscription-table" class="tab-pane fade">
-              {% block subscription-table %}
-              {% endblock %}
-            </div>
-          </div>
-        </div>
     </div>
+  </div>
 </div>
+
 
 
 

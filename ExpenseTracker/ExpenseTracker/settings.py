@@ -135,3 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.request',
 ]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'base/static/')
+]

@@ -25,7 +25,7 @@ from calendar import monthrange, isleap
 
 # Branch
 # dev
-LIM_NUM = 10
+LIM_NUM = 6
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 10
 AVG_DAYS_PER_MONTH = 30.437

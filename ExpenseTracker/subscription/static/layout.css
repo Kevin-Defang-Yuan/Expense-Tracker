@@ -26,16 +26,15 @@ body {
 }
 
 #main-content {
-    background-color: white;
     
-
+    /* background-color: rgb(237,237,237); */
+    background-color: white;
     
 }
 
 #sidebar {
     padding-top: 20px;
-    background-color: white;
-    /* background-color: rgb(237, 241, 247); */
+    background-color: rgb(237,237,237);
 }
 
 /* Here we add a breakpoint cause the header automatically collapses. 
