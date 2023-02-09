@@ -74,6 +74,15 @@ class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
     template_name = 'budget/yearlybudget_delete.html'
     context_object_name = 'budget'
 
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
+
 class MonthlyBudgetList(LoginRequiredMixin, ListView):
     model = MonthlyBudget
     template_name = 'budget/monthlybudget_list.html'
@@ -164,5 +173,14 @@ class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['month_name'] = MonthlyBudget.MONTH_CHOICES[self.get_object().month-1][1]
         return context
+    
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        return self.request.session['previous_page']
 
     

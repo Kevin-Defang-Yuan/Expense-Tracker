@@ -123,17 +123,21 @@
 {% block add-expense %}
 
   {% if monthlybudget %}
+  
   <div class="row">
-    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px;">
       <span class="material-symbols-outlined" id="piggy-icon">savings</span>
     </div>
     <div class="col-xs-8" style="padding-top: 5px;">
-      <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
+      <span style="font-size: 15px; display: block; color: gray">
+        Spending Budget <a href="{% url 'monthlybudget-delete' monthlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-delete' monthlybudget_object.pk %}" style="float: right"><span id="delete-icon" class="material-symbols-outlined">close</span></a>
+      </span>
       <div style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">
         {{monthlybudget}} <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' monthlybudget_object.pk %}">
           <span style="font-size: 20px">Edit</span>
         </a> 
       </div>
+      
       
     </div>
   </div>

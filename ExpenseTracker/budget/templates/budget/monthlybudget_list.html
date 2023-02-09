@@ -11,7 +11,7 @@
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h4>Expenditure Categories</h4>
     </div>
-  </div>
+</div>
 
 <div class="container">
     <div class="row-sm-1">
@@ -39,7 +39,7 @@
                                         <td>{{budget.year}}</td>
                                         <td>{{budget.budget}}</td>
                                         <td><a href="{% url 'monthlybudget-update' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' budget.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
-                                        <td><a href="{% url 'monthlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+                                        <td><a href="{% url 'monthlybudget-delete' budget.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-delete' budget.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
