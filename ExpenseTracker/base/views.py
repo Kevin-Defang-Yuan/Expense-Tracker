@@ -24,7 +24,7 @@ from calendar import monthrange, isleap
 
 
 # Branch
-# dev
+# tracker
 LIM_NUM = 6
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 10
