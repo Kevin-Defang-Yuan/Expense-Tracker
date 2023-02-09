@@ -30,7 +30,6 @@
                 <div class="col-sm">
                     <div class="well banner">
                         <div class="filtering">
-                            <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
                             
                             <!--Advice on how to style the filter forms -->
                             <!-- https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html -->
@@ -44,6 +43,12 @@
                             </form>
                 
                         </div>
+                    
+                        <h4>Expenses
+                            <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
+                              <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
+                            </a>
+                          </h4>
                         <table class="table table-sm table-striped table-hover">
                             <div class="w-auto">
                                 <thead>
@@ -93,7 +98,6 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
             
                 </div>
             </div>

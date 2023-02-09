@@ -50,9 +50,11 @@
 
 
 {% block expense-table %}
-
-<h4 style="display: inline;">Recent Expenses</h4>
-<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}" style="float: right; display: inline;">ADD Expense</a>
+<h4>Expenses of the Month 
+  <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
+    <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
+  </a>
+</h4>
 <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>

@@ -70,6 +70,10 @@ body {
     color: green; 
 }
 
+#add-icon {
+    color: rgb(66, 135, 245);
+    font-size: 35px;
+}
 
 #delete-icon {
     color: red; 
