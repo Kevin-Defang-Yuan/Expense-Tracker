@@ -115,18 +115,43 @@
 {% endblock %}
 
 {% block add-expense %}
-<div class="row">
-  <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
-    <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+
+  {% if monthlybudget %}
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
+      <div style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">
+        {{monthlybudget}} <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' monthlybudget_object.pk %}">
+          <span style="font-size: 20px">Edit</span>
+        </a> 
+      </div>
+      
+    </div>
   </div>
-  <div class="col-xs-8" style="padding-top: 5px;">
-    <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
-    <div style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{monthlybudget}}</div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
+    </div>
+  {% else %}
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
+      <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">
+        <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Add</span>
+      </a>
+      
+    </div>
   </div>
-</div>
-  <div class="progress">
-    <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
-  </div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
+    </div>
+
+  {% endif %}
 
 
 {% endblock %}
