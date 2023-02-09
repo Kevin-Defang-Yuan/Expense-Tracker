@@ -402,6 +402,8 @@ class MonthlyPanel(PanelView):
             context['monthlybudget'] = float(monthlybudget.budget)
             context['monthlybudget_object'] = monthlybudget
             context['surpass'] = True if monthlybudget.budget < context['month_expenditure'] else False
+            #For progress bar
+            context['progress_width'] = int(context['month_expenditure'] / context['monthlybudget'] * 100)
 
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month)
         context['labels'] = categories_data[0]
@@ -415,7 +417,8 @@ class MonthlyPanel(PanelView):
         context['bar_graph_data'] = bar_graph[1]
 
         context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
-    
+
+        
         return context
     
     def get_avg_expenditure_per_month(self):

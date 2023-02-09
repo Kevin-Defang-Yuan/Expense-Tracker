@@ -75,6 +75,21 @@ body {
     color: red; 
 }
 
+#dollar-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: rgb(247, 185, 12);
+} 
+
+#piggy-icon {
+    color: rgb(253, 176, 188);
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+} 
+
 input#subscription-date-picker[type="date"] {
     position: relative;
     /* width: 50%; */

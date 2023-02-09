@@ -17,76 +17,72 @@
 </div>
 
 <div class="container">
-  <div class="row-sm-1">
-    <div class="col-sm">
+  <div class="row" id="row-content">
       <!--Banner -->
-      <div class="row" id="row-content" style="display: flex; flex-wrap: wrap">
-        <div class="col-sm-4">
-          <div class="well banner" style="background-color: rgb(180, 237, 232);">
-            {% block spending %}
-            {% endblock %}
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well banner" style="background-color: rgb(245, 203, 159);">
-            {% block budgets %}
-            {% endblock %}
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well banner" style="background-color: rgb(222, 192, 250)">
-            {% block add-expense %}
-            {% endblock %}
-          </div>
+
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px;">
+          {% block spending %}
+          {% endblock %}
         </div>
       </div>
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px; justify-content: center;">
+          {% block add-expense %}
+          {% endblock %}
+          
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px;">
+          {% block budgets %}
+          {% endblock %}
+        </div>
+      </div>
+
 
       <!--Viz-->
-      <div class="row" id="row-content" style="display: flex; flex-wrap: wrap">
-        <!--Charts -->
-        <div class="col-sm-5">
-          <div class="well banner" >
-            <!--Nav Tabs using Bootstrap -->
-            <ul class="nav nav-tabs">
-              <li class="active"><a data-toggle="tab" href="#piechart">Home</a></li>
-              <li><a data-toggle="tab" href="#barchart">Menu 1</a></li>
-            </ul>
-            <div class="tab-content">
-              <div id="piechart" class="tab-pane fade in active">
-                {% block chart %}
-                {% endblock %}
-              </div>
-              <div id="barchart" class="tab-pane fade">
-                {% block bc %}
-                {% endblock %}
-              </div>
+      <!--Charts -->
+      <div class="col-sm-5">
+        <div class="well banner" style="height: 540px;">
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#piechart">Home</a></li>
+            <li><a data-toggle="tab" href="#barchart">Menu 1</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="piechart" class="tab-pane fade in active">
+              {% block chart %}
+              {% endblock %}
             </div>
-          </div>
-        </div>
-
-        <!--Table-->
-        <div class="col-sm-7">
-          <div class="well banner">
-            <!--Nav Tabs using Bootstrap -->
-            <ul class="nav nav-tabs">
-              <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
-              <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
-            </ul>
-            <div class="tab-content">
-              <div id="expense-table" class="tab-pane fade in active">
-                {% block expense-table %}
-                {% endblock %}
-              </div>
-              <div id="subscription-table" class="tab-pane fade">
-                {% block subscription-table %}
-                {% endblock %}
-              </div>
+            <div id="barchart" class="tab-pane fade">
+              {% block bc %}
+              {% endblock %}
             </div>
           </div>
         </div>
       </div>
-      <div class="row" id="row-content"></div>
-    </div>
+
+      <!--Table-->
+      <div class="col-sm-7">
+        <div class="well banner" style="height: 540px;">
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
+            <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="expense-table" class="tab-pane fade in active">
+              {% block expense-table %}
+              {% endblock %}
+            </div>
+            <div id="subscription-table" class="tab-pane fade">
+              {% block subscription-table %}
+              {% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 

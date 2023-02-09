@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <!--Icon for Go Right-->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+
 <script>
   $(document).ready(() => {
     $('#change-date').click(() => {
@@ -43,39 +45,14 @@
 <span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span>
 
 <a href="{% url 'monthly-panel' %}?year={{next_date_year}}&month={{next_date_month}}" style="display: inline"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
-<!-- <form action="{% url 'monthly-panel'%}" method="GET" id="date-form">
-  <select class="form-select" name="month">
-    {% for select_month_name, month_value in month_range.items %}
-      {% if select_month_name == month_name %}
-        <option value="{{month_value}}" selected>{{select_month_name}}</option>
-      {% else %}
-        <option value="{{month_value}}">{{select_month_name}}</option>
-      {% endif %}
-    {% endfor %}
-    
-  </select>
-
-  <select class="form-select" name="year">
-    {% for select_year in year_range %}
-      {% if select_year == year %}
-        <option value="{{select_year}}" selected>{{select_year}}</option>
-      {% else %}
-        <option value="{{select_year}}">{{select_year}}</option>
-      {% endif %}
-    {% endfor %}
-  </select>
-
-  <input type="submit">
-</form> -->
-
-
-
 {% endblock %}
 
 
 
 {% block expense-table %}
-<h4>Recent Expenses</h4>
+
+<h4 style="display: inline;">Recent Expenses</h4>
+<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}" style="float: right; display: inline;">ADD Expense</a>
 <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
@@ -106,15 +83,27 @@
 
 
 {% block spending %}
-<h4>Spending</h4>
-<h4>This Month's Spending: {{month_expenditure}}</h4>
-<p>{{monthly_budget_indicator}}</p>
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Spending</span>
+      <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{month_expenditure}}</div>
+    </div>
+  </div>
+  
+
+  
+
+
+
 {% endblock %}
 
 {% block budgets %}
   {% if monthlybudget %}
     <h4>Monthly Spending Budget: {{monthlybudget}}</h4>
-    <progress max="{{monthlybudget}}" value="{{month_expenditure}}"></progress>
+    
       {% if surpass %}
       <h5>Monthly expenditure has exceeded the Monthly budget</h5>
       {% endif %}
@@ -122,10 +111,24 @@
   {% else %}
     <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
   {% endif %}
+  <p>{{monthly_budget_indicator}}</p>
 {% endblock %}
 
 {% block add-expense %}
-<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+<div class="row">
+  <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+    <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+  </div>
+  <div class="col-xs-8" style="padding-top: 5px;">
+    <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
+    <div style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{monthlybudget}}</div>
+  </div>
+</div>
+  <div class="progress">
+    <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
+  </div>
+
+
 {% endblock %}
 
 
