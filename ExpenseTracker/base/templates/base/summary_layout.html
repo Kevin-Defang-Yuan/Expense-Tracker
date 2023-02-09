@@ -28,7 +28,7 @@
       </div>
       <div class="col-sm-4">
         <div class="well banner" style="height: 140px;">
-          {% block add-expense %}
+          {% block progress-bar %}
           {% endblock %}
           
         </div>
@@ -47,15 +47,15 @@
         <div class="well banner" style="height: 540px;">
           <!--Nav Tabs using Bootstrap -->
           <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#piechart">Home</a></li>
-            <li><a data-toggle="tab" href="#barchart">Menu 1</a></li>
+            <li class="active"><a data-toggle="tab" href="#piechart">Spending By Category</a></li>
+            <li><a data-toggle="tab" href="#barchart">Spending By Time</a></li>
           </ul>
           <div class="tab-content">
-            <div id="piechart" class="tab-pane fade in active">
+            <div id="piechart" class="tab-pane fade in active" style="padding-top: 20px;">
               {% block chart %}
               {% endblock %}
             </div>
-            <div id="barchart" class="tab-pane fade">
+            <div id="barchart" class="tab-pane fade" style="padding-top: 80px;">
               {% block bc %}
               {% endblock %}
             </div>
@@ -68,11 +68,11 @@
         <div class="well banner" style="height: 540px;">
           <!--Nav Tabs using Bootstrap -->
           <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
-            <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
+            <li class="active"><a data-toggle="tab" href="#expense-table">Expenses</a></li>
+            <li><a data-toggle="tab" href="#subscription-table">Subscriptions</a></li>
           </ul>
           <div class="tab-content">
-            <div id="expense-table" class="tab-pane fade in active">
+            <div id="expense-table" class="tab-pane fade in active" style="padding-top: 10px;">
               {% block expense-table %}
               {% endblock %}
             </div>

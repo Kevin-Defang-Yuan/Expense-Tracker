@@ -314,6 +314,7 @@ class YearlyPanel(PanelView):
             context['yearlybudget'] = yearlybudget.budget
             context['yearlybudget_object'] = yearlybudget
             context['surpass'] = True if yearlybudget.budget < context['year_expenditure'] else False
+            context['progress_width'] = int(context['year_expenditure'] / context['yearlybudget'] * 100)
 
         categories_data = self.get_categories_expenditure_by_time_range(year=year)
         context['labels'] = categories_data[0]

@@ -53,6 +53,7 @@
 
 {% block expense-table %}
 <h4>Recent Expenses</h4>
+<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
 <table class="table table-sm table-striped table-hover">
     <thead>
       <tr>
@@ -82,26 +83,84 @@
 
 
 {% block spending %}
-<h4>Spending</h4>
-<h4>This Year's Spending: {{year_expenditure}}</h4>
-<p>{{yearly_budget_indicator}}</p>
+<div class="row">
+  <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+    <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+  </div>
+  <div class="col-xs-8" style="padding-top: 5px;">
+    <span style="font-size: 15px; display: block; color: gray">Spending</span>
+    <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{year_expenditure}}</div>
+  </div>
+</div>
 {% endblock %}
 
 {% block budgets %}
-  {% if yearlybudget %}
-  <h4>Yearly Spending Budget: {{yearlybudget}}</h4>
-  <progress max="{{yearlybudget}}" value="{{year_expenditure}}"></progress>
-    {% if surpass %}
-    <h5>Yearly expenditure has exceeded the Yearly budget</h5>
-    {% endif %}
-    <a href="{% url 'yearlybudget-update' yearlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' yearlybudget_object.pk %}">Edit spending budget</a>
+  {% if yearly_budget_indicator == "NO_BUDGET" %}
+  <!--No Monthly Budget, display neutral icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="neutral-icon">mood</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Track Budget Progress</span>
+      <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">No Budget</span>
+    </div>
+  </div>
+  {% elif yearly_budget_indicator == 'CURRENT_GOOD' %}
+  <!--Curreunt: Good status, display satisfied icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="satisfied-icon">sentiment_very_satisfied</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">You're on track to staying within the budget!</span>
+    </div>
+  </div>
   {% else %}
-  <a href="{% url 'yearlybudget-create' %}?year={{year}}" class="open-incident" data-popup-url="{% url 'yearlybudget-create' %}?year={{year}}">Add Spending Budget for Year</a>
+  <div>{{yearly_budget_indicator}}</div>
   {% endif %}
 {% endblock %}
 
-{% block add-expense %}
-<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+{% block progress-bar %}
+  {% if yearlybudget %}
+    
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px;">
+      <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">
+        Spending Budget <a href="{% url 'yearlybudget-delete' yearlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-delete' yearlybudget_object.pk %}" style="float: right"><span id="delete-icon" class="material-symbols-outlined">close</span></a>
+      </span>
+      <div style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">
+        {{yearlybudget}} <a href="{% url 'yearlybudget-update' yearlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'yearlybudget-update' yearlybudget_object.pk %}">
+          <span style="font-size: 20px">Edit</span>
+        </a> 
+      </div>
+    </div>
+  </div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
+    </div>
+  {% else %}
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="piggy-icon">savings</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Spending Budget</span>
+      <a href="{% url 'yearlybudget-create' %}?year={{year}}" class="open-incident" data-popup-url="{% url 'yearlybudget-create' %}?year={{year}}">
+        <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Add</span>
+      </a>
+      
+    </div>
+  </div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress_width}}%; background-color: rgb(242, 128, 121) !important;">{{progress_width}}%</div>
+    </div>
+
+  {% endif %}
 {% endblock %}
 
 {% block subscription-table %}
@@ -131,9 +190,7 @@
 
 
 {% block chart %}
-<h4>Pie Chart</h4>
 {% include 'base/pie_chart.html' %}
-
 {% endblock %}
 
 {% block bc %}
