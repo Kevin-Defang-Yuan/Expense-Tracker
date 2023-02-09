@@ -1,93 +1,106 @@
 {% extends 'base/panel_layout.html' %}
+{% load static %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'panel.css' %}">
+{% endblock %}
 
 {% block main-container %}
 {% load base_extras %}
 
-<div class="row-sm-1">
+<!-- <div class="row-sm-1">
     <div class="col-sm">
       <div class="well">
-        <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
-        <h4>Expenses for {{month}}-{{day}}-{{year}}</h4>
+        
       </div>
     </div>
-  </div>
+  </div> -->
 
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
-            
-            <!--Advice on how to style the filter forms -->
-            <!-- https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html -->
-
-            <form action="{% url 'expense-list' %}?year={{year}}&month={{month}}&day={{day}}" method="GET">
-                <input type="text" name="year" value="{{year}}" hidden>
-                <input type="text" name="month" value="{{month_num}}" hidden>
-                <input type="text" name="day" value="{{day}}" hidden>
-                {{ filter.form.as_p }}
-                <input type="submit" value="Submit"/>
-            </form>
-
-        </div>
+<div class="row" id="content-title">
+    <div class="col-sm" >
+        <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
+        <h4>Expenses for {{month}}-{{day}}-{{year}}</h4>
     </div>
 </div>
 
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <table class="table table-sm table-striped table-hover">
-                <div class="w-auto">
-                    <thead>
-                    <tr>
-                        <th scope="col">Category</th>
-                        <th scope="col">Cost</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Description</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for expense in object_list %}
-                        <tr>
-                            <td>{{expense.category}}</td>
-                            <td>{{expense.cost}}</td>
-                            <td>{{expense.date|date:"M-d-Y"|slice:"0:"}}</td>
-                            <!--Description col contains desc or link to subscription-->
-                            {% if expense.subscription %}
-                            <td>{{expense.subscription.name}}*</td>
-                            {% else %}
-                            <td>{{expense.description}}</td>
-                            {% endif %}
-                            <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" ><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
-                            <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj.has_previous %}
-                            <a href="?{{ request.GET|remove_obsolete_pages }}&page=1">&laquo; first</a>
-                            <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.previous_page_number }}">previous</a>
-                        {% endif %}
+<div class="container">
+    <div class="row-sm-1">
+        <div class="col-sm">            
+            <div class="row" id="row-content">
+                <div class="col-sm">
+                    <div class="well banner">
+                        <div class="filtering">
+                            <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+                            
+                            <!--Advice on how to style the filter forms -->
+                            <!-- https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html -->
                 
-                        <span class="current">
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                        </span>
+                            <form action="{% url 'expense-list' %}?year={{year}}&month={{month}}&day={{day}}" method="GET">
+                                <input type="text" name="year" value="{{year}}" hidden>
+                                <input type="text" name="month" value="{{month_num}}" hidden>
+                                <input type="text" name="day" value="{{day}}" hidden>
+                                {{ filter.form.as_p }}
+                                <input type="submit" value="Submit"/>
+                            </form>
                 
-                        {% if page_obj.has_next %}
-                            <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.next_page_number }}">next</a>
-                            <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                        {% endif %}
-                    </span>
+                        </div>
+                        <table class="table table-sm table-striped table-hover">
+                            <div class="w-auto">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Cost</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for expense in object_list %}
+                                    <tr>
+                                        <td>{{expense.category}}</td>
+                                        <td>{{expense.cost}}</td>
+                                        <td>{{expense.date|date:"M-d-Y"|slice:"0:"}}</td>
+                                        <!--Description col contains desc or link to subscription-->
+                                        {% if expense.subscription %}
+                                        <td>{{expense.subscription.name}}*</td>
+                                        {% else %}
+                                        <td>{{expense.description}}</td>
+                                        {% endif %}
+                                        <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" ><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                                        <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+            
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if page_obj.has_previous %}
+                                        <a href="?{{ request.GET|remove_obsolete_pages }}&page=1">&laquo; first</a>
+                                        <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.previous_page_number }}">previous</a>
+                                    {% endif %}
+                            
+                                    <span class="current">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    </span>
+                            
+                                    {% if page_obj.has_next %}
+                                        <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.next_page_number }}">next</a>
+                                        <a href="?{{ request.GET|remove_obsolete_pages }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+            
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
 
 
 {% include 'modal.html' %}

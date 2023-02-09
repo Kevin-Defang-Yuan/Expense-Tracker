@@ -1,51 +1,56 @@
 {% extends 'base/panel_layout.html' %}
+{% load static %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'panel.css' %}">
+{% endblock %}
 
 {% block main-container %}
-<div class="row-sm-1">
-    <div class="col-sm">
-      <div class="well">
+<div class="row" id="content-title">
+    <div class="col-sm" >
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h4>Expenditure Categories</h4>
-      </div>
     </div>
 </div>
 
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <a href="{% url 'category-create' %}" class="open-incident" data-popup-url="{% url 'category-create' %}">ADD Category</a>
-        </div>
-    </div>
-</div>
 
-<div class="row-sm-1">
-    <div class="col-sm">
-        <div class="well">
-            <table class="table table-sm table-striped table-hover">
-                <div class="w-auto">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {% for category in categories %}
-                        <tr>
-                            <td>{{category.name}}</td>
-                            <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
-                            <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
-
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+<div class="container">
+    <div class="row-sm-1">
+        <div class="col-sm">
+            <div class="row" id="row-content">
+                <div class="col-sm">
+                    <div class="well banner" id="category-content">
+                        <a href="{% url 'category-create' %}" class="open-incident" data-popup-url="{% url 'category-create' %}">ADD Category</a>
+                        <table class="table table-sm table-striped table-hover">
+                            <div class="w-auto">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for category in categories %}
+                                    <tr>
+                                        <td>{{category.name}}</td>
+                                        <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                                        <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+            
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+                </div>
             </div>
         </div>
-
     </div>
 </div>
+
+
 
 
 

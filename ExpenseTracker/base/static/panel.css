@@ -100,3 +100,8 @@ input#expense-date-picker[type="date"] {
 .banner-col {
     height: 100%
 }
+
+#category-content {
+    margin-left: 200px;
+    margin-right: 200px;
+}
