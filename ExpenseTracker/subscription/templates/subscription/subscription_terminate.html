@@ -1,7 +1,30 @@
-<h3>Subscription Terminate</h3>
+<!-- <h3>Subscription Terminate</h3>
 <form method="POST" action="{% url 'subscription-terminate' subscription.pk %}">
     {% csrf_token %}
     <p>Are you sure you want to terminate this subscription? "{{subscription.name}}"</p>
     {{form.as_p}}
     <input type="submit" value="Submit">
-</form>
+</form> -->
+{% load static %}
+<div class="row">
+    <div class="col-sm p-3">
+        <form method="POST" action="{% url 'subscription-terminate' subscription.pk %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm">
+                    
+                    <div class="well" id="form-box">
+                        <h3 style="text-align: center;">Terminate Subscription</h3>
+                        <p>Are you sure you want to terminate this subscription? "{{subscription.name}}"</p>
+                        <div class="form-group">
+                            {{form.terminated}}  
+                        </div>
+                        <input type="submit" value="Submit" style="float: right;">
+                    </div>
+
+                </div>       
+            </div>
+            
+        </form>
+    </div>
+</div>

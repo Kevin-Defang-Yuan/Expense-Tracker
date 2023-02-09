@@ -110,3 +110,8 @@ input#expense-date-picker[type="date"] {
     margin-left: 100px;
     margin-right: 100px;
 }
+
+#daily-content {
+    margin-left: 100px;
+    margin-right: 100px;
+}

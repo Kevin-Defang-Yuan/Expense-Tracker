@@ -15,45 +15,67 @@
 
   </div>
 </div>
+
 <div class="container">
-  <div class="row-sm-1">
-    <div class="col-sm">
-      <div class="row" id="row-content">
-        <div class="col-sm-4">
-            <div class="well">
-                {% block spending %}
-                {% endblock %}
-    
-                {% block add-expense %}
-                {% endblock %}
-            </div>
+  <div class="row-sm-1" id="row-content">
+    <div class="col-sm-8" id="daily-content">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="well banner" style="height: 140px;">
+            {% block spending %}
+            {% endblock %}
+          </div>
         </div>
-        <div class="col-sm-8">
-            <div class="well">
-              <!--Nav Tabs using Bootstrap -->
-              <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#expense-table">Home</a></li>
-                <li><a data-toggle="tab" href="#subscription-table">Menu 1</a></li>
-              </ul>
-              
-              <div class="tab-content">
-                <div id="expense-table" class="tab-pane fade in active">
-                  {% block expense-table %}
-                  {% endblock %}
-                </div>
-                <div id="subscription-table" class="tab-pane fade">
-                  {% block subscription-table %}
-                  {% endblock %}
-                </div>
-              </div>
-            </div>
+        <div class="col-sm-6">
+          <div class="well banner" style="height: 140px; text-align: center; padding-top: 40px;">
+            {% block add_expense %}
+            {% endblock %}
+          </div>
         </div>
+      </div>
     </div>
+    <div class="col-sm-8" id="daily-content">
+      <div class="well">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#expense-table">Expenses</a></li>
+          <li><a data-toggle="tab" href="#subscription-table">Subscriptions</a></li>
+        </ul>
+        
+        <div class="tab-content">
+          <div id="expense-table" class="tab-pane fade in active">
+            {% block expense-table %}
+            {% endblock %}
+          </div>
+          <div id="subscription-table" class="tab-pane fade">
+            {% block subscription-table %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 
+<!-- <div class="container">
+  <div class="row-sm-1" id="row-content">
+    <div class="col-sm-4">
+      <div class="well">
+        
+      </div>
+      <div class="well">
+        
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+      <div class="well">
+        
+      </div>
+
+    </div>
+  </div>
+</div> -->
 
 
 {% include 'modal.html' %}

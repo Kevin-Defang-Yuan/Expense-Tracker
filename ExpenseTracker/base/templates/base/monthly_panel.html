@@ -92,12 +92,6 @@
       <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{month_expenditure}}</div>
     </div>
   </div>
-  
-
-  
-
-
-
 {% endblock %}
 
 {% block budgets %}
@@ -109,15 +103,24 @@
     </div>
     <div class="col-xs-8" style="padding-top: 5px;">
       <span style="font-size: 15px; display: block; color: gray">Track Budget Progress</span>
-      <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">
-        <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Add</span>
-      </a>
+      <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">No Budget</span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'CURRENT_GOOD' %}
+  <!--Curreunt: Good status, display satisfied icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="satisfied-icon">sentiment_very_satisfied</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">You're on track to staying within the budget!</span>
     </div>
   </div>
   {% else %}
   <div>Hello WOrld</div>
   {% endif %}
-  <p>{{monthly_budget_indicator}}</p>
+  
 {% endblock %}
 
 {% block add-expense %}

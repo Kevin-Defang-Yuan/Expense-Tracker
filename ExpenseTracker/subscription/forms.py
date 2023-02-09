@@ -70,6 +70,6 @@ class TerminateSubscriptionForm(ModelForm):
         (False, 'No')
     ]
     terminated = ChoiceField(
-        widget=RadioSelect,
+        widget=RadioSelect(attrs={'id': 'radio-select'}),
         choices=CHOICES
     )

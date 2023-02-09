@@ -92,9 +92,17 @@ body {
 
 #neutral-icon {
     color: green;
+    font-size: 65px;
+    float: right; 
+    border-radius: 40px;
+} 
+
+#satisfied-icon {
+    color: white;
     font-size: 60px;
     float: right; 
     border-radius: 40px;
+    background-color: green;
 } 
 
 input#subscription-date-picker[type="date"] {
@@ -120,4 +128,15 @@ input#subscription-date-picker[type="date"] {
 
 input[type=submit] {
     float: right;
+}
+
+input[type=radio] {
+    width: 20px;
+    height: 20px;
+}
+
+h4 {
+    font-size: 30px; 
+    font-family: 'Sofia Sans Extra Condensed', sans-serif;
+
 }

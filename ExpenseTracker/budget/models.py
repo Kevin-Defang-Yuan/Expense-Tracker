@@ -30,6 +30,10 @@ class Budget(models.Model):
         verbose_name="Spending budget"
     )
 
+    track = models.BooleanField(
+        default=True
+    )
+
     class Meta:
         abstract = True
         

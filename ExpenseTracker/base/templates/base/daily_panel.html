@@ -129,15 +129,21 @@
 
 
 {% block spending %}
-<h4>Spending</h4>
-<h4>Today's Spending: {{day_expenditure}}</h4>
-<p>Month: {{monthly_budget_indicator}}</p>
-<p>Year: {{yearly_budget_indicator}}</p>
+<div class="row">
+  <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+    <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+  </div>
+  <div class="col-xs-8" style="padding-top: 5px;">
+    <span style="font-size: 15px; display: block; color: gray">Spending</span>
+    <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{day_expenditure}}</div>
+  </div>
+</div>
 {% endblock %}
 
-{% block add-expense %}
-<a href="{% url 'expense-create' %}" class="open-incident btn btn-info" data-popup-url="{% url 'expense-create' %}">ADD Expense</a>
+{% block add_expense %}
+<a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">Add Expense</a>
 {% endblock %}
+
 
 {% block subscription-table %}
 <h4>Active Subscriptions</h4>
