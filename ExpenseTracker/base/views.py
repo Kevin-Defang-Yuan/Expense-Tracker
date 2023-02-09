@@ -197,7 +197,7 @@ class PanelView(LoginRequiredMixin, TemplateView):
     def get_monthly_budget_indicator(self, monthlybudget, month_expenditure, month, year):
         today = datetime.today()
         # Budget Indicator
-        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET, FUTURE_UNKNOWN)
+        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, CURRENT_OVER, NO_BUDGET, FUTURE_UNKNOWN)
         # COMPLETE_UNDER, CURRENT_GOOD = Green
         # CURRENT_WARNING = Orange
         # CURRENT_BAD = Red
@@ -213,6 +213,10 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # Get remaining monthly spending rate
             remaining_days = monthrange(today.year, today.month)[1] - today.day
             remaining_budget = float(monthlybudget.budget) - month_expenditure
+
+            # If we surpass, then set to CURRENT_OVER
+            if remaining_budget < 0:
+                return 'CURRENT_OVER'
             # Here we don't need to consider the forgiving threshold
             remaining_monthly_spending_rate = remaining_budget / remaining_days if today.day > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
 
@@ -254,6 +258,11 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # Get remaining yearly spending rate
             remaining_days = (365 + calendar.isleap(year)) - days_passed
             remaining_budget = float(yearlybudget.budget) - year_expenditure
+            
+            # If we surpass, then set to CURRENT_OVER
+            if remaining_budget < 0:
+                return 'CURRENT_OVER'
+
             # Here we don't need to consider the forgiving threshold
             remaining_yearly_spending_rate = remaining_budget / remaining_days if days_passed > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
 

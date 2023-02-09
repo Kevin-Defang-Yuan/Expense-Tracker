@@ -101,15 +101,21 @@
 {% endblock %}
 
 {% block budgets %}
-  {% if monthlybudget %}
-    <h4>Monthly Spending Budget: {{monthlybudget}}</h4>
-    
-      {% if surpass %}
-      <h5>Monthly expenditure has exceeded the Monthly budget</h5>
-      {% endif %}
-      <a href="{% url 'monthlybudget-update' monthlybudget_object.pk %}" class="open-incident" data-popup-url="{% url 'monthlybudget-update' monthlybudget_object.pk %}">Edit spending budget</a>
+  {% if monthly_budget_indicator == "NO_BUDGET" %}
+  <!--No Monthly Budget, display neutral icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="neutral-icon">mood</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px;">
+      <span style="font-size: 15px; display: block; color: gray">Track Budget Progress</span>
+      <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">
+        <span style="font-size: 40px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Add</span>
+      </a>
+    </div>
+  </div>
   {% else %}
-    <a href="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}?year={{year}}&month={{month}}">Add Spending Budget for Month</a>
+  <div>Hello WOrld</div>
   {% endif %}
   <p>{{monthly_budget_indicator}}</p>
 {% endblock %}

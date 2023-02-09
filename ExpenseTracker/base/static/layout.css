@@ -90,6 +90,13 @@ body {
     border-radius: 40px;
 } 
 
+#neutral-icon {
+    color: green;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+} 
+
 input#subscription-date-picker[type="date"] {
     position: relative;
     /* width: 50%; */
