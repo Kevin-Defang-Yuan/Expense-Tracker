@@ -109,6 +109,10 @@ body {
     background-color: green;
 } 
 
+#terminate-icon {
+    color: gray;
+}
+
 input#subscription-date-picker[type="date"] {
     position: relative;
     /* width: 50%; */

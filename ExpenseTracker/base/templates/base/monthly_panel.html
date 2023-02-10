@@ -215,7 +215,7 @@
           <th scope="col">Name</th>
           <th scope="col">Cost</th>
           <th scope="col">Cycle</th>
-          <th scope="col">Terminate</th>
+          <th scope="col">Cancel</th>
           <th scope="col"></th>
           <th scope="col"></th>
       </tr>
@@ -226,7 +226,7 @@
               <td>{{subscription.name}}</td>
               <td>{{subscription.cost}}</td>
               <td>{{subscription.cycle}}</td>
-              <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
+              <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}"><span class="material-symbols-outlined" id="terminate-icon">indeterminate_check_box</span></a></td>
               <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
               <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
           </tr>
@@ -260,5 +260,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="{% url 'subscription-list' %}">View All</a>
 {% endblock %}
 
