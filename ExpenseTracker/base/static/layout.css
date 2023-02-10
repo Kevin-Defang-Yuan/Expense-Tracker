@@ -130,8 +130,25 @@ input#subscription-date-picker[type="date"] {
     border: None;
 }
 
+input[type=submit]:hover {
+	background: #B9DFFF;
+	color: #fff;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #eee;
+	text-shadow: none;
+}
+
 input[type=submit] {
     float: right;
+	background: #016ABC;
+	color: #fff;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #eee;
+	text-shadow: none;
+    width: 80px;
+    height: 40px;
 }
 
 input[type=radio] {
@@ -144,3 +161,4 @@ h4 {
     font-family: 'Sofia Sans Extra Condensed', sans-serif;
 
 }
+
