@@ -41,7 +41,7 @@ class Payment(models.Model):
         max_length=300
         )
     cost = models.DecimalField(
-        max_digits=8, 
+        max_digits=10, 
         decimal_places=2,
         verbose_name="Cost in USD"
     )

@@ -32,6 +32,7 @@
                                 {{form.cost}}
                             </div>
                             <small id="negative-err-msg" class="form-text text-muted" style="color: red;" hidden>ERROR: Negative number</small>
+                            <small id="overflow-err-msg" class="form-text text-muted" style="color: red;" hidden>ERROR: Input too large</small>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
@@ -94,9 +95,9 @@
         $('#characters').text(num.toString() + '/300');
     }
 
-    $('#expense-cost-input').keyup(negativeCostValidation);
+    $('#expense-cost-input').keyup(costValidation);
 
-    function negativeCostValidation() {
+    function costValidation() {
         let num = $('#expense-cost-input').val();
         console.log(num);
         if (num && num < 0) {
@@ -104,12 +105,20 @@
             $('#negative-err-msg').css({'display': 'block'});
             $('#expense-submit').prop('disabled', true);
         }
+
+        else if (num > 99999999) {
+            $('#expense-cost-input').css({'color': 'red'});
+            $('#overflow-err-msg').css({'display': 'block'});
+            $('#expense-submit').prop('disabled', true);
+        }
         else {
             $('#expense-cost-input').css({'color': 'black'});
             $('#negative-err-msg').css({'display': 'none'});
+            $('#overflow-err-msg').css({'display': 'none'});
             $('#expense-submit').prop('disabled', false);
         }
     }
+
 </script>
 
 <!-- Invalid Handler -->
