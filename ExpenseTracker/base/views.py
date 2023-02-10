@@ -529,10 +529,10 @@ class DailyPanel(PanelView):
         context['expenditure_per_day'] = self.get_expenditure_per_day()
 
         # Calculate Percent Diff
-        percent_diff = context['day_expenditure'] / context['expenditure_per_day']
-        if percent_diff > 1:
+        percent_diff = None if not context['expenditure_per_day'] else context['day_expenditure'] / context['expenditure_per_day']
+        if percent_diff and percent_diff > 1:
             context['red_percent_diff'] = int((percent_diff - 1)*100)
-        else:
+        if percent_diff and percent_diff <= 1:
             context['green_percent_diff'] = int((1 - percent_diff)*100)
 
         # Subscriptions
@@ -558,18 +558,28 @@ class DailyPanel(PanelView):
         return context
     
     def get_expenditure_per_day(self):
+        today = datetime.today().date()
         total = self.get_total_expenditure()
         expenses = Expense.objects.filter(user=self.request.user)
         earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        # Subtract today's expenditure
+        today_expenditure = self.get_expenditure_by_time_range(year=today.year, month=today.month, day=today.day)
+        previous_expenditure = total - today_expenditure
+
+        # If there is no previous expenditure, return None
+        if previous_expenditure <= 0:
+            return None
 
         if not earliest_expense:
             return None
 
         earliest_date = earliest_expense.date
-        today = datetime.today().date()
+        
         delta = today - earliest_date
-        days_passed = delta.days + 1 # Add extra day for difference
-        return round(total / days_passed, 2)
+        days_passed = delta.days # We don't add one anymore because we don't include current day
+        # days_passed = delta.days + 1 # Add extra day for difference
+        return round(previous_expenditure / days_passed, 2)
 
     
   
