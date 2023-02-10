@@ -182,13 +182,58 @@
 
 {% block subscription-table %}
 <h4>Active Subscriptions</h4>
-  {% for subscription in active_subscriptions %}
-  <h4>{{subscription.name}}</h4>
-  {% endfor %}
-<h4>Was Active Subscriptions</h4>
-  {% for subscription in was_active_subscriptions %}
-  <h4>{{subscription.name}}</h4>
-  {% endfor %}
+<table class="table table-sm table-striped">
+  <div class="w-auto">
+      <thead>
+      <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Cycle</th>
+          <th scope="col">Terminate</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+          {% for subscription in active_subscriptions %}
+          <tr>
+              <td>{{subscription.name}}</td>
+              <td>{{subscription.cost}}</td>
+              <td>{{subscription.cycle}}</td>
+              <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}">TERMINATE</a></td>
+              <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+              <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <h4>Was Active Subscriptions</h4>
+  <table class="table table-sm table-striped">
+    <div class="w-auto">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Cost</th>
+            <th scope="col">Cycle</th>
+            <th scope="col">End Date</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for subscription in was_active_subscriptions %}
+            <tr>
+                <td>{{subscription.name}}</td>
+                <td>{{subscription.cost}}</td>
+                <td>{{subscription.cycle}}</td>
+                <td>{{subscription.get_end_date}}</td>
+                <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
+                <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block b3 %}
