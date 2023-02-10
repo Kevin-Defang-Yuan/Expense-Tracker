@@ -528,6 +528,13 @@ class DailyPanel(PanelView):
         # Expenditure Per Day
         context['expenditure_per_day'] = self.get_expenditure_per_day()
 
+        # Calculate Percent Diff
+        percent_diff = context['day_expenditure'] / context['expenditure_per_day']
+        if percent_diff > 1:
+            context['red_percent_diff'] = int((percent_diff - 1)*100)
+        else:
+            context['green_percent_diff'] = int((1 - percent_diff)*100)
+
         # Subscriptions
         context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month, day=day)
 

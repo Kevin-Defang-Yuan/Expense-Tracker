@@ -153,7 +153,17 @@
   </div>
   <div class="col-xs-8" style="padding-top: 5px;">
     <span style="font-size: 15px; display: block; color: gray">Spending</span>
-    <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{day_expenditure}}</div>
+    <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">
+      {{day_expenditure}}
+      {% if red_percent_diff %}
+        <span style="font-size: 20px; color: red;">up {{red_percent_diff}}%</span> 
+      {% endif %}
+
+      {% if green_percent_diff %}
+        <span style="font-size: 20px; color: green;">down {{green_percent_diff}}%</span> 
+      {% endif %}
+      
+    </div>
   </div>
 </div>
 {% endblock %}

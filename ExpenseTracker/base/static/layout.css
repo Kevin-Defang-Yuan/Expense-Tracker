@@ -162,6 +162,11 @@ body {
     color: gray;
 }
 
+#arrow-up-icon {
+    color: red;
+    font-size: 30px;
+}
+
 input#subscription-date-picker[type="date"] {
     position: relative;
     /* width: 50%; */
