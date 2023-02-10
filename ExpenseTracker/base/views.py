@@ -67,7 +67,7 @@ class ExpenseList(LoginRequiredMixin, FilterView):
         if day:
             queryset = queryset.filter(date__day=day)
         
-        return queryset
+        return queryset.order_by('-date')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -529,7 +529,7 @@ class DailyPanel(PanelView):
         context['expenditure_per_day'] = self.get_expenditure_per_day()
 
         # Calculate Percent Diff
-        percent_diff = None if not context['expenditure_per_day'] else context['day_expenditure'] / context['expenditure_per_day']
+        percent_diff = None if (not context['expenditure_per_day'] or context['expenditure_per_day'] == 0) else context['day_expenditure'] / context['expenditure_per_day']
         if percent_diff and percent_diff > 1:
             context['red_percent_diff'] = int((percent_diff - 1)*100)
         if percent_diff and percent_diff <= 1:
@@ -689,6 +689,10 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
     
     # Function to set initial value for date field in forms to today
     def get_initial(self):
+        if 'day' in self.request.GET:
+            return {
+                'date': datetime(int(self.request.GET['year']), int(self.request.GET['month']), int(self.request.GET['day']))
+            }
         return {
             'date': date.today()
         }

@@ -169,7 +169,7 @@
 {% endblock %}
 
 {% block add_expense %}
-<a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">Add Expense</a>
+<a href="{% url 'expense-create' %}?year={{year}}&month={{month}}&day={{day}}" class="open-incident" data-popup-url="{% url 'expense-create' %}?year={{year}}&month={{month}}&day={{day}}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">Add Expense!</a>
 {% endblock %}
 
 

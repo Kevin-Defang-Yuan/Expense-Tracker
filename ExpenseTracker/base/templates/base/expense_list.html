@@ -56,7 +56,6 @@
     <div class="row-sm-1" id="row-content">
         <div class="col-sm">
             <div class="well banner">
-
                             
                     <!--Advice on how to style the filter forms -->
                     <!-- https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html -->
@@ -90,6 +89,9 @@
         </div>
         <div class="col-sm">
             <div class="well banner">
+                {% if day or month_name or year %}
+                    <a href="{% url 'expense-list' %}">View All</a>
+                {% endif %}
                 <h4>Expenses
                     <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
                       <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
