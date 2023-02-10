@@ -37,7 +37,8 @@ class Payment(models.Model):
     description = models.TextField(
         null=True, 
         blank=True,
-        verbose_name="Description: Optional"
+        verbose_name="Description: Optional",
+        max_length=300
         )
     cost = models.DecimalField(
         max_digits=8, 

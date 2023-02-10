@@ -19,7 +19,7 @@ class CreateExpenseForm(ModelForm):
         widgets = {
             'date': DateInput(attrs={'id': 'expense-date-picker', 'class': 'form-control'}),
             'cost': NumberInput(attrs={'class': 'form-control', 'id': 'expense-cost-input'}),
-            'description': Textarea(attrs={'class': 'form-control'}),
+            'description': Textarea(attrs={'class': 'form-control', 'rows': 4, 'cols': 40, 'id': 'description-input'}),
             
         }
     

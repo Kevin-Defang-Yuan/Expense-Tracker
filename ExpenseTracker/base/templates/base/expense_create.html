@@ -1,3 +1,4 @@
+{% load static %}
 <div class="row">
     <div class="col-sm p-3">
         <form method="POST" action="{% url 'expense-create' %}" id="create-expense-form">
@@ -24,13 +25,15 @@
                                 </div>
                                 {{form.cost}}
                             </div>
+                            <small id="negative-err-msg" class="form-text text-muted" style="color: red;" hidden>ERROR: Negative number</small>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
                             {{form.description}}
-                            <small class="form-text text-muted">Write a description: Optional</small>
+                            <small class="form-text text-muted">Write a description: optional</small>
+                            <span id="characters" style="float: right; padding: 3px; color: gray; font-size: small">0/300</span>
                         </div>
-                        <input type="submit" value="Submit" style="float: right;">
+                        <input id="expense-submit" type="submit" value="Submit" style="float: right;">
                     </div>
 
                 </div>       
@@ -46,28 +49,61 @@
     // The alert will continue to show on any change.
     // If users ignore the problem, then the submitted form will redirect to the plain expense-create HTML form
     //  With the error message
-    $(document).on('change', function(e){
-        let year = $("#id_date_year");
-        let month = $("#id_date_month");
-        let day = $("#id_date_day");
+    // $(document).on('change', function(e){
+    //     let year = $("#id_date_year");
+    //     let month = $("#id_date_month");
+    //     let day = $("#id_date_day");
 
-        // Check if the days of the month is lower than the inputted date
-        let max_days = new Date(year.val(), month.val(), 0).getDate();
-        if (max_days < day.val()) {
-            // Alert and change color
-            alert("Error with Date");
-            year.css({'color': 'red'});
-            month.css({'color': 'red'});
-            day.css({'color': 'red'});
+    //     // Check if the days of the month is lower than the inputted date
+    //     let max_days = new Date(year.val(), month.val(), 0).getDate();
+    //     if (max_days < day.val()) {
+    //         // Alert and change color
+    //         alert("Error with Date");
+    //         year.css({'color': 'red'});
+    //         month.css({'color': 'red'});
+    //         day.css({'color': 'red'});
             
+    //     }
+    //     else {
+    //         // Change color back to black if no errors
+    //         year.css({'color': 'black'});
+    //         month.css({'color': 'black'});
+    //         day.css({'color': 'black'});
+    //     }
+    // });
+    // $(document).on('change', negativeCostValidation);
+    // function negativeCostValidation() {
+    //     let num = $('#expense-cost-input').val();
+    //     console.log(num);
+    // }
+</script>
+
+<script>
+    $('#description-input').keyup(updateCount);
+    $('#description-input').keydown(updateCount);
+
+    function updateCount() {
+        let num = $('#description-input').val().length;
+        console.log(num)
+        $('#characters').text(num.toString() + '/300');
+    }
+
+    $('#expense-cost-input').keyup(negativeCostValidation);
+
+    function negativeCostValidation() {
+        let num = $('#expense-cost-input').val();
+        console.log(num);
+        if (num && num < 0) {
+            $('#expense-cost-input').css({'color': 'red'});
+            $('#negative-err-msg').css({'display': 'block'});
+            $('#expense-submit').prop('disabled', true);
         }
         else {
-            // Change color back to black if no errors
-            year.css({'color': 'black'});
-            month.css({'color': 'black'});
-            day.css({'color': 'black'});
+            $('#expense-cost-input').css({'color': 'black'});
+            $('#negative-err-msg').css({'display': 'none'});
+            $('#expense-submit').prop('disabled', false);
         }
-    });
+    }
 </script>
 
 <!-- Invalid Handler -->

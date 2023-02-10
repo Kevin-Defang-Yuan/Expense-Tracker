@@ -36,6 +36,7 @@
                             <label>Description</label>
                             {{form.description}}
                             <small class="form-text text-muted">Write a description: Optional</small>
+                            <span id="characters" style="float: right; padding: 3px; color: gray; font-size: small">0/300</span>
                         </div>
                         <input type="submit" value="Submit" style="float: right;">
                     </div>
@@ -44,3 +45,16 @@
         </form>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(updateCount);
+    $('#description-input').keyup(updateCount);
+    $('#description-input').keydown(updateCount);
+
+    function updateCount() {
+        let num = $('#description-input').val().length;
+        console.log(num)
+        $('#characters').text(num.toString() + '/300');
+    }
+</script>
