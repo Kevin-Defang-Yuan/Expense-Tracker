@@ -6,6 +6,7 @@ from .models import MonthlyBudget, YearlyBudget
 from .forms import CreateYearlyBudgetForm, CreateMonthlyBudgetForm, UpdateYearlyBudgetForm, UpdateMonthlyBudgetForm
 from datetime import date
 from django.urls import reverse_lazy
+from django.contrib import messages
 # Create your views here.
 
 class YearlyBudgetList(LoginRequiredMixin, ListView):
@@ -50,6 +51,7 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully created!')
         return self.request.session['previous_page']
     
 class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
@@ -66,6 +68,7 @@ class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully edited!')
         return self.request.session['previous_page']
 
 class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
@@ -81,6 +84,7 @@ class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully deleted!')
         return self.request.session['previous_page']
 
 class MonthlyBudgetList(LoginRequiredMixin, ListView):
@@ -135,6 +139,7 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully created!')
         return self.request.session['previous_page']
     
     
@@ -160,6 +165,7 @@ class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully edited!')
         return self.request.session['previous_page']
 
 class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
@@ -181,6 +187,7 @@ class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Budget successfully deleted!')
         return self.request.session['previous_page']
 
     

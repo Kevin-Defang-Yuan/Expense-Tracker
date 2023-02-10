@@ -17,6 +17,7 @@ from django_filters.views import FilterView
 from .filters import ExpenseFilter
 import re
 from calendar import monthrange, isleap
+from django.contrib import messages
 
 # from django import template
 # register = template.Library()
@@ -541,6 +542,8 @@ class DailyPanel(PanelView):
         context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
         if year != today.year or month != today.month or day != today.day:
             context['yearly_budget_indicator'] = 'NO_INDICATOR'
+        
+        context['messages'] = messages.get_messages(self.request)
         return context
     
     def get_expenditure_per_day(self):
@@ -660,6 +663,7 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Expense successfully created!')
         return self.request.session['previous_page']
     
     # Function to set initial value for date field in forms to today
@@ -684,6 +688,7 @@ class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Expense successfully edited!')
         return self.request.session['previous_page']
     
     # Need this or else will have an error, cause the form class uses the user
@@ -706,6 +711,7 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
     
     # We change the success url depending on what is saved in the session (based on the get function)
     def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Expense successfully deleted!')
         return self.request.session['previous_page']
 
 
@@ -727,6 +733,10 @@ class CategoryCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(CategoryCreate, self).form_valid(form)
     
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Category successfully created!')
+        return reverse_lazy('category-list')
+    
 
 class CategoryUpdate(LoginRequiredMixin, UpdateView):
     model = Category
@@ -734,6 +744,10 @@ class CategoryUpdate(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('category-list')
     template_name = 'base/category_update.html'
     context_object_name = 'category'
+
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Category successfully updated!')
+        return reverse_lazy('category-list')
 
 class CategoryDelete(LoginRequiredMixin, DeleteView):
     model = Category
@@ -749,6 +763,10 @@ class CategoryDelete(LoginRequiredMixin, DeleteView):
         subscriptions_under_category = Subscription.objects.filter(user=self.request.user).filter(category=category_id)
         context['subscriptions_under_category'] = subscriptions_under_category
         return context
+    
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Category successfully deleted!')
+        return reverse_lazy('category-list')
 
 
 

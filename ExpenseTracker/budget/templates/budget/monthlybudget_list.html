@@ -5,9 +5,28 @@
 <link rel="stylesheet" href="{% static 'panel.css' %}">
 {% endblock %}
 
+{% block custom-script %}
+<script>
+    // This fades out a success alert if there is one
+  $(function() {
+    setTimeout(function() {
+      $('#success-alert').fadeOut('slow');
+    }, 2500);
+  });
+</script>
+
+{% endblock %}
+
 {% block main-container %}
 <div class="row" id="content-title">
     <div class="col-sm">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }} alert-box success"{% endif %} id="success-alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
         <h2>Monthly Budgets</h2>
     </div>

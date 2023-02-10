@@ -7,6 +7,7 @@ from .models import Subscription
 from .forms import CreateSubscriptionForm, TerminateSubscriptionForm
 from base.models import Expense
 from datetime import date
+from django.contrib import messages
 
 # Create your views here.
 class SubscriptionCreate(LoginRequiredMixin, CreateView):
@@ -33,6 +34,16 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
         return {
             'start_date': date.today()
         }
+    
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Subscription successfully created!')
+        return self.request.session['previous_page']
 
 class SubscriptionList(LoginRequiredMixin, ListView):
     model = Subscription
@@ -55,6 +66,15 @@ class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Subscription successfully updated!')
+        return self.request.session['previous_page']
 
 class SubscriptionDelete(LoginRequiredMixin, DeleteView):
     model = Subscription
@@ -68,6 +88,16 @@ class SubscriptionDelete(LoginRequiredMixin, DeleteView):
         expenses_under_subscription = Expense.objects.filter(user=self.request.user).filter(subscription=subscription_id)
         context['expenses_under_subscription'] = expenses_under_subscription
         return context
+    
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Subscription successfully deleted!')
+        return self.request.session['previous_page']
 
 class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
     model = Subscription
@@ -87,3 +117,13 @@ class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
 
 
         return super(SubscriptionTerminate, self).form_valid(form)
+    
+    # We want to save the previous url into the sessions so we can redirect back after POST success. 
+    def get(self, request, *args, **kwargs):
+        request.session['previous_page'] = request.META.get('HTTP_REFERER')
+        return super().get(request, *args, **kwargs)
+    
+    # We change the success url depending on what is saved in the session (based on the get function)
+    def get_success_url(self, **kwargs):
+        messages.add_message(self.request, messages.INFO, 'Subscription successfully terminated!')
+        return self.request.session['previous_page']
