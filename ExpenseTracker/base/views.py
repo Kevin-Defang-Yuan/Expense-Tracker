@@ -259,6 +259,8 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # Get remaining yearly spending rate
             remaining_days = (365 + calendar.isleap(year)) - days_passed
             remaining_budget = float(yearlybudget.budget) - year_expenditure
+
+            
             
             # If we surpass, then set to CURRENT_OVER
             if remaining_budget < 0:
@@ -266,6 +268,8 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
             # Here we don't need to consider the forgiving threshold
             remaining_yearly_spending_rate = remaining_budget / remaining_days if days_passed > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
+
+            print(f'Current: {current_yearly_spending_rate}, Remaining: {remaining_yearly_spending_rate}')
 
             if current_yearly_spending_rate <= (remaining_yearly_spending_rate * WARNING_THRESHOLD):
                 return 'CURRENT_GOOD'
