@@ -9,7 +9,7 @@
 <div class="row" id="content-title">
     <div class="col-sm">
         <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a>
-        <h4>Expenditure Categories</h4>
+        <h2>Monthly Budgets</h2>
     </div>
 </div>
 
@@ -19,7 +19,11 @@
             <div class="row" id="row-content">
                 <div class="col-sm">
                     <div class="well banner" id="category-content">
-                        <a href="{% url 'monthlybudget-create' %}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}">ADD Budget</a>
+                        <h4>Budgets
+                            <a href="{% url 'monthlybudget-create' %}" class="open-incident" data-popup-url="{% url 'monthlybudget-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
+                              <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
+                            </a>
+                        </h4>
                         <table class="table table-sm table-striped">
                             <div class="w-auto">
                                 <thead>
