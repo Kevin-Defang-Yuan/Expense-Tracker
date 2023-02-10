@@ -109,6 +109,55 @@ body {
     background-color: green;
 } 
 
+#warning-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: gray;
+} 
+
+#stressed-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: orange;
+} 
+
+#sad-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: red;
+} 
+
+#content-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: green;
+} 
+
+#dead-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: red;
+} 
+
+#calm-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: lightskyblue;
+} 
+
+
 #terminate-icon {
     color: gray;
 }

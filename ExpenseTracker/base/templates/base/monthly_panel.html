@@ -122,18 +122,82 @@
     </div>
   </div>
   {% elif monthly_budget_indicator == 'CURRENT_GOOD' %}
-  <!--Curreunt: Good status, display satisfied icon-->
+  <!--Current: Good status, display satisfied icon-->
   <div class="row">
     <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
       <span class="material-symbols-outlined" id="satisfied-icon">sentiment_very_satisfied</span>
     </div>
     <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
       <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
-      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">You're on track to staying within the budget!</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">You're on track to staying within the budget! <span style="color: green;">Good!</span> </span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'CURRENT_WARNING' %}
+  <!--Current: Warning status, display warning icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="warning-icon">sentiment_neutral</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">You need to slow down your spending a bit... <span style="color: gray;">Warning!</span></span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'CURRENT_BAD' %}
+  <!--Current: bad status, display stressed icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="stressed-icon">sentiment_stressed</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">It's time to be worried: tread slowly. <span style="color: orange;">Bad!</span></span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'CURRENT_OVER' %}
+  <!--Current: over status, display sad icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="sad-icon">sentiment_sad</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Aww Shucks! Let's do better next time! <span style="color: red;">Exceeded!</span></span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'COMPLETE_UNDER' %}
+  <!--Complete: under status, display content icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="content-icon">sentiment_excited</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Nice! You were under the budget this month! <span style="color: green;">Success!</span></span>
+    </div>
+  </div>
+  {% elif monthly_budget_indicator == 'COMPLETE_OVER' %}
+  <!--Complete: over status, display dead icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="dead-icon">sentiment_very_dissatisfied</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">This month was hard! But it's ok. Let's move on! <span style="color: red;">Defeat!</span></span>
     </div>
   </div>
   {% else %}
-  <div>{{monthly_budget_indicator}}</div>
+  <!--Future unknown; display calm icon-->
+  <div class="row">
+    <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+      <span class="material-symbols-outlined" id="calm-icon">sentiment_calm</span>
+    </div>
+    <div class="col-xs-8" style="padding-top: 5px; padding-right: 50px;">
+      <span style="font-size: 15px; display: block; color: gray">Budget Progress</span>
+      <span style="font-size: 20px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">Oh! Planning ahead! I have a good feeling... <span style="color: lightskyblue;">We will see!</span></span>
+    </div>
+  </div>
   {% endif %}
   
 {% endblock %}
