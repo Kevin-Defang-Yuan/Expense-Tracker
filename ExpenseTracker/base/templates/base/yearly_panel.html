@@ -48,7 +48,7 @@
 
 <h2 style="display: inline" id="date-title">{{year}}</h2>
 <form action="{% url 'yearly-panel'%}" method="GET" id="date-form" style="display: none">
-  <select class="form-select" name="year" style="width: 100px;">
+  <select class="form-select" name="year" style="width: 100px;" id="date-input-year">
     {% for select_year in year_range %}
       {% if select_year == year %}
         <option value="{{select_year}}" selected>{{select_year}}</option>
