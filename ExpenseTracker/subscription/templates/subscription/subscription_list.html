@@ -67,9 +67,23 @@
                                         <td>{{subscription.cost}}</td>
                                         <td>{{subscription.cycle}}</td>
                                         <td>{{subscription.start_date}}</td>
+                                        {% if not subscription.get_end_date %}
+                                        <td>-</td>
+                                        {% else %}
                                         <td>{{subscription.get_end_date}}</td>
-                                        <td>{{subscription.is_active}}</td>
+                                        {% endif %}
+                                        
+                                        {% if subscription.is_active %}
+                                        <td>Yes</td>
+                                        {% else %}
+                                        <td>No</td>
+                                        {% endif %}
+
+                                        {% if subscription.is_active%}
                                         <td><a href="{% url 'subscription-terminate' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-terminate' subscription.pk %}"><span class="material-symbols-outlined" id="terminate-icon">indeterminate_check_box</span></a></td>
+                                        {% else %}
+                                        <td></td>
+                                        {% endif %}
                                         <td><a href="{% url 'subscription-update' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-update' subscription.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
                                         <td><a href="{% url 'subscription-delete' subscription.pk %}" class="open-incident" data-popup-url="{% url 'subscription-delete' subscription.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
                                     </tr>
