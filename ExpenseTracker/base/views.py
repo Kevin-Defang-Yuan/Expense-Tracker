@@ -19,6 +19,7 @@ import re
 from calendar import monthrange, isleap
 from django.contrib import messages
 import seaborn as sns
+import colorcet as cc
 
 
 # from django import template
@@ -327,6 +328,9 @@ class YearlyPanel(PanelView):
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
 
+        context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
+
+
         context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
 
         context['expenditure_per_year'] = self.get_avg_expenditure_per_year()
@@ -337,8 +341,7 @@ class YearlyPanel(PanelView):
 
         context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
 
-        context['background_colors'] = sns.color_palette("Spectral", 10).as_hex()
-        print(context['background_colors'])
+        
         return context
     
     def get_expenditure_by_year_per_month(self, year):
@@ -427,6 +430,7 @@ class MonthlyPanel(PanelView):
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month)
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
+        context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
 
         context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 

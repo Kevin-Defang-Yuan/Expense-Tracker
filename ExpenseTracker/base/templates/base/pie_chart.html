@@ -11,10 +11,7 @@
       data: {
         datasets: [{
           data: {{ data|safe }},
-          backgroundColor: [
-            '#70161E', '#E6AF2E', '#FF0035', '#214F4B', '#17C3B2', '#7261A3', '#A67DB8', '#EEE0CB', '#776871', '#074F57', '#077187', '#E4C5AF', '#EAC5D8',
-            '#212227', '#637074', '#DBD8F0'
-          ],
+          backgroundColor: {{background_colors|safe}},
           label: 'Population'
         }],
         labels: {{ labels|safe }}
