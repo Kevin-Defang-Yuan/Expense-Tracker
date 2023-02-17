@@ -18,6 +18,7 @@ from .filters import ExpenseFilter
 import re
 from calendar import monthrange, isleap
 from django.contrib import messages
+import seaborn as sns
 
 
 # from django import template
@@ -336,7 +337,8 @@ class YearlyPanel(PanelView):
 
         context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
 
-        # context['background_colors'] = sns.color_palette("Spectral", 10).as_hex()
+        context['background_colors'] = sns.color_palette("Spectral", 10).as_hex()
+        print(context['background_colors'])
         return context
     
     def get_expenditure_by_year_per_month(self, year):
