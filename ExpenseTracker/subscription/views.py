@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from .models import Subscription
 from .forms import CreateSubscriptionForm, TerminateSubscriptionForm
 from base.models import Expense
-from datetime import date
+from datetime import date, datetime
 from django.contrib import messages
 
 # Create your views here.
@@ -31,6 +31,20 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
     
     # Function to set initial value for date field in forms to today
     def get_initial(self):
+        if 'day' in self.request.GET:
+            return {
+                'start_date': datetime(int(self.request.GET['year']), int(self.request.GET['month']), int(self.request.GET['day']))
+            }
+        
+        if 'month' in self.request.GET:
+            return {
+                'start_date': datetime(int(self.request.GET['year']), int(self.request.GET['month']), 1)
+            }
+        
+        if 'year' in self.request.GET:
+            return {
+                'start_date': datetime(int(self.request.GET['year']), 1, 1)
+            }
         return {
             'start_date': date.today()
         }

@@ -64,7 +64,7 @@
 
 {% block expense-table %}
 <h4>Expenses of the Month 
-  <a href="{% url 'expense-create' %}" class="open-incident" data-popup-url="{% url 'expense-create' %}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
+  <a href="{% url 'expense-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'expense-create' %}?year={{year}}&month={{month}}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
     <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
   </a>
 </h4>
@@ -271,7 +271,11 @@
 {% endblock %}
 
 {% block subscription-table %}
-<h4>Active Subscriptions</h4>
+<h4>Active Subscriptions 
+  <a href="{% url 'subscription-create' %}?year={{year}}&month={{month}}" class="open-incident" data-popup-url="{% url 'subscription-create' %}?year={{year}}&month={{month}}" style="font-size: 45px; font-family: 'Sofia Sans Extra Condensed', sans-serif;">
+    <span class="material-symbols-outlined" style="float: right" id="add-icon">add_circle</span>
+  </a>
+</h4>
 <table class="table table-sm table-striped">
   <div class="w-auto">
       <thead>
@@ -298,7 +302,7 @@
       </tbody>
   </table>
 
-  <h4>Was Active Subscriptions</h4>
+  <h4>Cancelled Subscriptions</h4>
   <table class="table table-sm table-striped">
     <div class="w-auto">
         <thead>

@@ -19,6 +19,7 @@ import re
 from calendar import monthrange, isleap
 from django.contrib import messages
 
+
 # from django import template
 # register = template.Library()
 
@@ -335,6 +336,7 @@ class YearlyPanel(PanelView):
 
         context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
 
+        # context['background_colors'] = sns.color_palette("Spectral", 10).as_hex()
         return context
     
     def get_expenditure_by_year_per_month(self, year):
@@ -692,6 +694,16 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
         if 'day' in self.request.GET:
             return {
                 'date': datetime(int(self.request.GET['year']), int(self.request.GET['month']), int(self.request.GET['day']))
+            }
+        
+        if 'month' in self.request.GET:
+            return {
+                'date': datetime(int(self.request.GET['year']), int(self.request.GET['month']), 1)
+            }
+        
+        if 'year' in self.request.GET:
+            return {
+                'date': datetime(int(self.request.GET['year']), 1, 1)
             }
         return {
             'date': date.today()
