@@ -40,9 +40,9 @@
         {% endif %}
         <!-- <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a> -->
         {% if day %}
-            <h2>Expenses for {{month_name}}-{{day}}-{{year}}</h2>
+            <h2>Expenses for {{month}} {{day}}, {{year}}</h2>
         {% elif month_name %}
-            <h2>Expenses for {{month_name}}--{{year}}</h2>
+            <h2>Expenses for {{month}} {{year}}</h2>
         {% elif year %}
             <h2>Expenses for {{year}}</h2>
         {% else %}

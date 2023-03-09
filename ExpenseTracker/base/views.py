@@ -428,9 +428,16 @@ class MonthlyPanel(PanelView):
             context['progress_width'] = int(context['month_expenditure'] / context['monthlybudget'] * 100)
 
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month)
-        context['labels'] = categories_data[0]
-        context['data'] = categories_data[1]
-        context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
+        categories_data_sum = sum(categories_data[1])
+        if categories_data_sum == 0:
+
+            context['labels'] = ['None']
+            context['data'] = [1]
+            context['background_colors'] = ['LightGray']
+        else:
+            context['labels'] = categories_data[0]
+            context['data'] = categories_data[1]
+            context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
 
         context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 
