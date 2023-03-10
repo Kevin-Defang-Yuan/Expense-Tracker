@@ -22,13 +22,6 @@ import seaborn as sns
 import colorcet as cc
 
 
-# from django import template
-# register = template.Library()
-
-
-
-# Branch
-# filtering
 LIM_NUM = 6
 MONTHS_NAME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 EXPENSE_PAGINATION = 10
@@ -42,21 +35,19 @@ BAD_THRESHOLD = 1.3
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-# Here is a filter view based on django-filter
+"""
+View for expenses as a list (filtered by time parameters and other user input). Uses FilterView. 
+"""
 class ExpenseList(LoginRequiredMixin, FilterView):
     model = Expense
-
-    # Context object is actually changed to filter.qs
     context_object_name = 'expenses'
     paginate_by = EXPENSE_PAGINATION
-
     template_name = 'base/expense_list.html'
-
-    # We need to add this
     filterset_class = ExpenseFilter
 
-
+    """
+    Returns a filtered list of expenses (based on time parameters) and order by date descending. 
+    """
     def get_queryset(self):
         queryset = super().get_queryset().filter(user=self.request.user)
         year = int(self.request.GET['year']) if 'year' in self.request.GET and self.request.GET['year'] else None
@@ -95,14 +86,23 @@ class ExpenseList(LoginRequiredMixin, FilterView):
 
 
   
-
+"""
+Base class for DailyView, MonthlyView, and YearlyView
+Contains some functions that all three views utilize
+"""
 class PanelView(LoginRequiredMixin, TemplateView):
     model = Expense
 
+    """
+    Filters only the first X number of expenses for the expense table. 
+    """
     def query_limited_expenses(self, year=None, month=None, day=None):
         expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
         return expense_list.order_by('-date')[:LIM_NUM]
     
+    """
+    Returns a filtered list of expenses based on time parameters. 
+    """
     def get_expenses_by_time_range(self, year=None, month=None, day=None):
         expense_list = Expense.objects.all().filter(user=self.request.user)
         if year:
@@ -113,6 +113,10 @@ class PanelView(LoginRequiredMixin, TemplateView):
             expense_list = expense_list.filter(date__day=day)
         return expense_list
     
+
+    """
+    Calculates total expenditure based on time parameters
+    """
     def get_expenditure_by_time_range(self, year=None, month=None, day=None):
         expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
         total = 0
@@ -120,9 +124,13 @@ class PanelView(LoginRequiredMixin, TemplateView):
             total += expense.cost
         return total
     
+    """
+    Returns a tuple of active subscriptions and was active subscriptions based on time parameters. 
+    """
     def get_subscriptions_by_time_range(self, year=None, month=None, day=None):
         subscriptions = Subscription.objects.filter(user=self.request.user)
 
+        # Determine start and end dates to filer for subscriptions
         # start by assuming year
         selected_start_date = datetime(int(year), 1, 1).date()
         selected_end_date = datetime(int(year), 12, 31).date()
@@ -145,31 +153,14 @@ class PanelView(LoginRequiredMixin, TemplateView):
                 was_active_subscriptions.append(subscription)
             if subscription.is_active_subscription_in_range(selected_start_date, selected_end_date, day):
                 active_subscriptions.append(subscription)
-            # # If subscription is active, add to active subscriptions
-            # if subscription.is_active:
-            #     active_subscriptions.append(subscription)
-
-            # # If the subscription is indefinite and the start date is earlier than the selected_start_date
-            # # Add to was_active subscriptions
-            # elif subscription.indefinite and subscription.start_date <= selected_start_date:
-            #     was_active_subscriptions.append(subscription)
-            
-            # # Otherwise if subscriptions is not indefinite, calculate like normally and add to was_active subscriptions
-            # elif not subscription.indefinite:
-            #     sub_end_date = subscription.get_end_date
-            #     sub_start_date = subscription.start_date
-            #     if day:
-            #         if selected_start_date >= sub_start_date and selected_end_date <= sub_end_date:
-            #             was_active_subscriptions.append(subscription)
-            #     else:
-            #         if sub_end_date >= selected_start_date and sub_start_date <= selected_end_date:
-            #             was_active_subscriptions.append(subscription)
-
             
 
         # Return both lists as a tuple            
         return (active_subscriptions, was_active_subscriptions)
     
+    """
+    Returns total user expenditure. Useful for calculating some aggregating user statistics
+    """
     def get_total_expenditure(self):
         expenses = Expense.objects.filter(user=self.request.user)
         total = 0
@@ -177,6 +168,10 @@ class PanelView(LoginRequiredMixin, TemplateView):
             total += expense.cost
         return total
     
+
+    """
+    Returns a tuple (labels, data values) that consists of spending based on categories and filtered by time parameters. 
+    """
     def get_categories_expenditure_by_time_range(self, year=None, month=None, day=None):
         categories = Category.objects.filter(user=self.request.user)
         category_labels = []
@@ -198,6 +193,10 @@ class PanelView(LoginRequiredMixin, TemplateView):
             category_data.append(round(float(total)))
         return (category_labels, category_data)
     
+
+    """
+    Returns the appropriate budget indicator based on user's current month spending rate compared to remaining month spending rate to reach budget
+    """
     def get_monthly_budget_indicator(self, monthlybudget, month_expenditure, month, year):
         today = datetime.today()
         # Budget Indicator
@@ -221,7 +220,8 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # If we surpass, then set to CURRENT_OVER
             if remaining_budget < 0:
                 return 'CURRENT_OVER'
-            # Here we don't need to consider the forgiving threshold
+            
+            # Calculations for remaining spending rate. Buffered if there is limited user data.
             remaining_monthly_spending_rate = remaining_budget / remaining_days if today.day > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
 
             if current_monthly_spending_rate <= (remaining_monthly_spending_rate * WARNING_THRESHOLD):
@@ -241,6 +241,9 @@ class PanelView(LoginRequiredMixin, TemplateView):
                 surpass = True if float(monthlybudget.budget) < month_expenditure else False
                 return 'COMPLETE_OVER' if surpass else 'COMPLETE_UNDER'
     
+    """
+    Returns the appropriate budget indicator based on user's current year spending rate compared to remaining year spending rate to reach budget
+    """
     def get_yearly_budget_indicator(self, yearlybudget, year_expenditure, year):
         today = date.today()
         # Budget Indicator
@@ -262,17 +265,13 @@ class PanelView(LoginRequiredMixin, TemplateView):
             # Get remaining yearly spending rate
             remaining_days = (365 + calendar.isleap(year)) - days_passed
             remaining_budget = float(yearlybudget.budget) - year_expenditure
-
-            
             
             # If we surpass, then set to CURRENT_OVER
             if remaining_budget < 0:
                 return 'CURRENT_OVER'
 
-            # Here we don't need to consider the forgiving threshold
+            # Calculations of remaining spending rate. Buffered if there is little data. 
             remaining_yearly_spending_rate = remaining_budget / remaining_days if days_passed > DAYS_BUFFER else remaining_budget / (remaining_days - DAYS_BUFFER)
-
-            print(f'Current: {current_yearly_spending_rate}, Remaining: {remaining_yearly_spending_rate}')
 
             if current_yearly_spending_rate <= (remaining_yearly_spending_rate * WARNING_THRESHOLD):
                 return 'CURRENT_GOOD'
@@ -291,7 +290,9 @@ class PanelView(LoginRequiredMixin, TemplateView):
                 surpass = True if float(yearlybudget.budget) < year_expenditure else False
                 return 'COMPLETE_OVER' if surpass else 'COMPLETE_UNDER'
 
-
+"""
+View for a yearly summary of expenditure
+"""
 class YearlyPanel(PanelView):
     model = Expense
     template_name = 'base/yearly_panel.html'
@@ -310,13 +311,13 @@ class YearlyPanel(PanelView):
         # Context for view for the previous month
         context['prev_date_year'] = year - 1
 
-        # COntexxt for view for the next month
-
+        # Context for view for the next month
         context['next_date_year'] = year + 1
 
         # Pass in year range for the year select form
         context['year_range'] = [i for i in range(EARLIEST_YEAR, LATEST_YEAR)]
 
+        # Only pass in context for yearlybudget information if there is a yearlybudget
         yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
         if yearlybudget:
             context['yearlybudget'] = yearlybudget.budget
@@ -324,26 +325,36 @@ class YearlyPanel(PanelView):
             context['surpass'] = True if yearlybudget.budget < context['year_expenditure'] else False
             context['progress_width'] = int(context['year_expenditure'] / context['yearlybudget'] * 100)
 
+        # Pie Chart Stuff
         categories_data = self.get_categories_expenditure_by_time_range(year=year)
-        context['labels'] = categories_data[0]
-        context['data'] = categories_data[1]
-
-        context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
+        categories_data_sum = sum(categories_data[1])
+        if categories_data_sum == 0:
+            context['labels'] = ['None']
+            context['data'] = [1]
+            context['background_colors'] = ['LightGray']
+        else:
+            context['labels'] = categories_data[0]
+            context['data'] = categories_data[1]
+            # Use of glasbey to generate distinct colors
+            context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
 
 
         context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
 
         context['expenditure_per_year'] = self.get_avg_expenditure_per_year()
 
+        # Bar Graph Stuff
         bar_graph = self.get_expenditure_by_year_per_month(year=year)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
 
         context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
 
-        
         return context
     
+    """
+    Returns a tuple for spending per month across a year for bar graph
+    """
     def get_expenditure_by_year_per_month(self, year):
         expenses = Expense.objects.filter(user=self.request.user).filter(date__year=year)
         month_list = [i for i in range(1, 12+1)]
@@ -356,6 +367,10 @@ class YearlyPanel(PanelView):
             month_expenses.append(round(float(total)))
         return (month_list, month_expenses)
     
+    """
+    Returns the average expenditure per year for a user. 
+    An approximation based on calculating average expenditure per day, and then multiplying by average days per year. 
+    """
     def get_avg_expenditure_per_year(self):
         total = self.get_total_expenditure()
         expenses = Expense.objects.filter(user=self.request.user)
@@ -365,8 +380,6 @@ class YearlyPanel(PanelView):
             return None
         earliest_date = earliest_expense.date
 
-        # We query all expenses except those in current month
-        # The approach here is a bit backhanded, essentially we calculate previous month, get last day of previous month, and then grab all expenses using that date
         today = datetime.today().date()
         delta = today - earliest_date
         days_passed = delta.days + 1 # Add extra day for difference
@@ -375,11 +388,13 @@ class YearlyPanel(PanelView):
         if days_passed < MIN_DAYS_PASSED:
             return None # Give message that returns WE NEED MORE DAYS
         
-
         expenditure_per_day = total / days_passed
         expenditure_per_year = float(expenditure_per_day) * AVG_DAYS_PER_YEAR
         return round(expenditure_per_year, 2)
 
+"""
+View for summary statistics of a particular month
+"""
 class MonthlyPanel(PanelView):
     model = Expense
     template_name = 'base/monthly_panel.html'
@@ -390,7 +405,7 @@ class MonthlyPanel(PanelView):
         year = int(self.request.GET['year']) if 'year' in self.request.GET else today.year
         month = int(self.request.GET['month']) if 'month' in self.request.GET else today.month
 
-        # If users submit a GET to change the date: yyyy-mm
+        # If users submit a GET request to change the date: yyyy-mm
         if 'date' in self.request.GET: 
             date_params = [int(x) for x in self.request.GET['date'].split('-')]
             year = date_params[0]
@@ -405,13 +420,14 @@ class MonthlyPanel(PanelView):
         context['prev_date_month'] = month - 1 if month != 1 else 12
         context['prev_date_year'] = year if month != 1 else year - 1
 
-        # COntexxt for view for the next month
+        # context for view for the next month
         context['next_date_month'] = month + 1 if month != 12 else 1
         context['next_date_year'] = year if month != 12 else year + 1
 
 
         # Pass in year range for the year select form
         context['year_range'] = [i for i in range(EARLIEST_YEAR, LATEST_YEAR)]
+
         # Here I create a dictionary associating month number with month name for the month select form
         month_numbers = [i for i in range(1, 13)] 
         context['month_range'] = dict(zip(MONTHS_NAME, month_numbers))
@@ -427,10 +443,10 @@ class MonthlyPanel(PanelView):
             #For progress bar
             context['progress_width'] = int(context['month_expenditure'] / context['monthlybudget'] * 100)
 
+        # Pie chart stuff
         categories_data = self.get_categories_expenditure_by_time_range(year=year, month=month)
         categories_data_sum = sum(categories_data[1])
         if categories_data_sum == 0:
-
             context['labels'] = ['None']
             context['data'] = [1]
             context['background_colors'] = ['LightGray']
@@ -442,15 +458,20 @@ class MonthlyPanel(PanelView):
         context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 
         context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year, month=month)
+        
+        # Bar graph stuff
         bar_graph = self.get_expenditure_by_month_per_day(year=year, month=month)
         context['bar_graph_labels'] = bar_graph[0]
         context['bar_graph_data'] = bar_graph[1]
 
         context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
 
-        
         return context
     
+    """
+    Returns the average expenditure per month for a user
+    Approximated by multiplying average expenditure per day by average days per month
+    """
     def get_avg_expenditure_per_month(self):
         total = self.get_total_expenditure()
         expenses = Expense.objects.filter(user=self.request.user)
@@ -460,8 +481,6 @@ class MonthlyPanel(PanelView):
             return None
         earliest_date = earliest_expense.date
 
-        # We query all expenses except those in current month
-        # The approach here is a bit backhanded, essentially we calculate previous month, get last day of previous month, and then grab all expenses using that date
         today = datetime.today().date()
         delta = today - earliest_date
         days_passed = delta.days + 1 # Add extra day for difference
@@ -469,12 +488,14 @@ class MonthlyPanel(PanelView):
         print("Days passed, ", days_passed)
         if days_passed < MIN_DAYS_PASSED:
             return None # Give message that returns WE NEED MORE DAYS
-        
 
         expenditure_per_day = total / days_passed
         expenditure_per_month = float(expenditure_per_day) * AVG_DAYS_PER_MONTH
         return round(expenditure_per_month, 2)
     
+    """
+    Returns data (as a tuple) for the bar graph that displays spending per day for a month
+    """
     def get_expenditure_by_month_per_day(self, year, month):
         expenses = Expense.objects.filter(user=self.request.user)
         expenses = expenses.filter(date__year=year).filter(date__month=month)
@@ -492,18 +513,15 @@ class MonthlyPanel(PanelView):
 
 
 
-
-
-
-
+"""
+View for summary statistics for a single day
+"""
 class DailyPanel(PanelView):
     model = Expense
     template_name = 'base/daily_panel.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # subscriptions = Subscription.objects.all()[0]
         
         # Determine Day (from GET params or assume Today Otherwise)
         today = datetime.today()
@@ -557,21 +575,23 @@ class DailyPanel(PanelView):
         context['labels'] = categories_data[0]
         context['data'] = categories_data[1]
 
-        # Budget Indicator
+        # Budget Indicator code (May be implemented in a future date)
         # If not today, then don't pass in the indicator
-        monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month).first()
-        context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
-        if year != today.year or month != today.month or day != today.day:
-            context['monthly_budget_indicator'] = 'NO_INDICATOR'
+        # monthlybudget = MonthlyBudget.objects.filter(user=self.request.user).filter(year=year).filter(month=month).first()
+        # context['monthly_budget_indicator'] = self.get_monthly_budget_indicator(monthlybudget, float(self.get_expenditure_by_time_range(year=year, month=month)), month, year)
+        # if year != today.year or month != today.month or day != today.day:
+        #     context['monthly_budget_indicator'] = 'NO_INDICATOR'
 
-        yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
-        context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
-        if year != today.year or month != today.month or day != today.day:
-            context['yearly_budget_indicator'] = 'NO_INDICATOR'
+        # yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year).first()
+        # context['yearly_budget_indicator'] = self.get_yearly_budget_indicator(yearlybudget, float(self.get_expenditure_by_time_range(year=year)), year)
+        # if year != today.year or month != today.month or day != today.day:
+        #     context['yearly_budget_indicator'] = 'NO_INDICATOR'
         
-        context['messages'] = messages.get_messages(self.request)
         return context
     
+    """
+    Get the average spending per day for a user. 
+    """
     def get_expenditure_per_day(self):
         today = datetime.today().date()
         total = self.get_total_expenditure()
@@ -593,12 +613,13 @@ class DailyPanel(PanelView):
         
         delta = today - earliest_date
         days_passed = delta.days # We don't add one anymore because we don't include current day
-        # days_passed = delta.days + 1 # Add extra day for difference
         return round(previous_expenditure / days_passed, 2)
 
     
-  
     
+    """
+    Get the expenditure for current day
+    """
     def get_this_day_expenditure(self, year, month, day):
         expense_list = Expense.objects.all().filter(user=self.request.user).filter(date__year=year).filter(date__month=month).filter(date__day=day)
         total = 0
@@ -606,6 +627,9 @@ class DailyPanel(PanelView):
             total += expense.cost
         return total
     
+    """
+    Get the expenditure for current month
+    """
     def get_this_month_expenditure(self):
         today = datetime.today()
         this_month = today.month
@@ -616,6 +640,9 @@ class DailyPanel(PanelView):
             total += expense.cost
         return total
     
+    """
+    Get the expenditure for current year
+    """
     def get_this_year_expenditure(self):
         today = datetime.today()
         this_year = today.year
@@ -629,45 +656,10 @@ class DailyPanel(PanelView):
 
 
 
-# ORDER MATTERS, adding LoginRequiredMixin BEFORE ListView and all the other views as well. 
-class Dashboard(LoginRequiredMixin, ListView):
-    model = Expense
 
-    # Overrides the default queryset name of 'object_list' into something that we choose.
-    # This affects that the html file looks for
-    context_object_name = 'expenses'
-
-    # Default is expense_list.html
-    template_name = 'base/dashboard.html'
-
-    # manipulate the context before returning it
-    def get_context_data(self, **kwargs):
-        # context is a dictionary that contains the data
-        # for instance, we can do context['color'] = 'red'
-        # Here we grab the context
-        context = super().get_context_data(**kwargs)
-
-        # Then we filter out expenses pertaining to specific user
-        context['expenses'] = context['expenses'].filter(user=self.request.user)
-
-        # Next we calculate total expenses and save that into the context dictionary
-        total_expense = 0
-        for item in context['expenses']:
-            total_expense += item.cost
-        context['total_expense'] = total_expense
-
-        # Logic for searching
-        search_input = self.request.GET.get('search-area') or ''
-        if search_input:
-            context['expenses'] = context['expenses'].filter(category__startswith=search_input)
-
-        # Pass the search_input back to context
-        context['search_input'] = search_input
-
-        # Here is some other code that the video showed to filter based on completed or not, i think? 
-        # context['count'] = context['expenses'].filter(complete=False)
-        return context
-
+"""
+View for Expense detail. Not being used currently.
+"""
 class ExpenseDetail(LoginRequiredMixin, DetailView):
     model = Expense
     context_object_name = 'expense'
@@ -675,7 +667,9 @@ class ExpenseDetail(LoginRequiredMixin, DetailView):
     # Default is {expense}_detail.html
     template_name = 'base/expense.html'
 
-# Default template is {expense}_form.html
+"""
+View for Creating an Expense
+"""
 class ExpenseCreate(LoginRequiredMixin, CreateView):
     model = Expense
     form_class = CreateExpenseForm
@@ -687,6 +681,7 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(ExpenseCreate, self).form_valid(form)
     
+    # Save user information for the form to use
     def get_form_kwargs(self):
         kwargs = super(ExpenseCreate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -703,6 +698,7 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
         return self.request.session['previous_page']
     
     # Function to set initial value for date field in forms to today
+    # The initial day changes depending on whether it is a call from daily, monthly, or yearly. 
     def get_initial(self):
         if 'day' in self.request.GET:
             return {
@@ -723,10 +719,11 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
         }
 
 
-# Default is {expense}_form.html
+"""
+View for editing an expense. 
+"""
 class ExpenseUpdate(LoginRequiredMixin, UpdateView):
     model = Expense
-    # fields = ['category', 'description', 'date', 'cost']
     form_class = CreateExpenseForm
     success_url = reverse_lazy('expense-list')
     template_name = 'base/expense_update.html'
@@ -747,7 +744,9 @@ class ExpenseUpdate(LoginRequiredMixin, UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-# Default template is {expense}_confirm_delete.html
+"""
+View for deleting an expense
+"""
 class ExpenseDelete(LoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
@@ -764,15 +763,22 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
         messages.add_message(self.request, messages.INFO, 'Expense successfully deleted!')
         return self.request.session['previous_page']
 
-
+"""
+View for listing all the user categories
+"""
 class CategoryList(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'base/category_list.html'
     context_object_name = 'categories'
 
+    # Here we have to filter by user. 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+
+"""
+View for creating a new category
+"""
 class CategoryCreate(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CreateCategoryForm
@@ -787,7 +793,9 @@ class CategoryCreate(LoginRequiredMixin, CreateView):
         messages.add_message(self.request, messages.INFO, 'Category successfully created!')
         return reverse_lazy('category-list')
     
-
+"""
+View for editing a category
+"""
 class CategoryUpdate(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CreateCategoryForm
@@ -799,11 +807,15 @@ class CategoryUpdate(LoginRequiredMixin, UpdateView):
         messages.add_message(self.request, messages.INFO, 'Category successfully updated!')
         return reverse_lazy('category-list')
 
+"""
+View for deleting a category
+"""
 class CategoryDelete(LoginRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy('category-list')
     template_name = 'base/category_delete.html'
 
+    # Need to display all relevant expenses and subscriptions that are linked to the deleted category
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category_id = self.kwargs.get('pk')
