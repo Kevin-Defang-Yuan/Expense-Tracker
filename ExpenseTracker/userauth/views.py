@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.contrib.auth.views import LoginView
 
 # Use these to handle registering
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
@@ -29,7 +30,7 @@ class CustomLoginView(LoginView):
 # Registration
 class RegisterPage(FormView):
     template_name = 'userauth/register.html'
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('daily-panel')
 
