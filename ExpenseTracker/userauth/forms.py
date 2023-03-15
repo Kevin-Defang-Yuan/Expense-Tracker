@@ -3,7 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 
 from django import forms
 
-
+"""
+Login Form with bootstrap styling (only created so that I can style with Bootstrap)
+"""
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
@@ -18,6 +20,9 @@ class UserLoginForm(AuthenticationForm):
         }
     ))
 
+"""
+Registration Form (only created so that I can style with Bootstrap)
+"""
 class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)

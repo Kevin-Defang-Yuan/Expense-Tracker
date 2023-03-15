@@ -95,6 +95,12 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     """
     Filters only the first X number of expenses for the expense table. 
+
+    Args: 
+        year (Int), month (Int), day (Int)
+    
+    Returns:
+        expense_list: A list of expenses belonging to the date params truncated to LIM_NUM expenses
     """
     def query_limited_expenses(self, year=None, month=None, day=None):
         expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
@@ -102,6 +108,13 @@ class PanelView(LoginRequiredMixin, TemplateView):
     
     """
     Returns a filtered list of expenses based on time parameters. 
+
+    Args: 
+        year (Int), month (Int), day (Int)
+    
+    Returns:
+        expense_list: A list of expenses belong to the date params
+
     """
     def get_expenses_by_time_range(self, year=None, month=None, day=None):
         expense_list = Expense.objects.all().filter(user=self.request.user)
@@ -116,6 +129,12 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     """
     Calculates total expenditure based on time parameters
+
+    Args: 
+        year (Int), month (Int), day (Int)
+    
+    Returns:
+        total: the total expenditure
     """
     def get_expenditure_by_time_range(self, year=None, month=None, day=None):
         expense_list = self.get_expenses_by_time_range(year=year, month=month, day=day)
@@ -126,6 +145,12 @@ class PanelView(LoginRequiredMixin, TemplateView):
     
     """
     Returns a tuple of active subscriptions and was active subscriptions based on time parameters. 
+
+    Args: 
+        year (Int), month (Int), day (Int)
+    
+    Returns:
+        tuple: active_subscriptions as first index and was_active_subscriptions as second index
     """
     def get_subscriptions_by_time_range(self, year=None, month=None, day=None):
         subscriptions = Subscription.objects.filter(user=self.request.user)
@@ -160,6 +185,11 @@ class PanelView(LoginRequiredMixin, TemplateView):
     
     """
     Returns total user expenditure. Useful for calculating some aggregating user statistics
+
+    Args:
+
+    Returns:
+        total: total expenditure
     """
     def get_total_expenditure(self):
         expenses = Expense.objects.filter(user=self.request.user)
@@ -171,6 +201,12 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     """
     Returns a tuple (labels, data values) that consists of spending based on categories and filtered by time parameters. 
+
+    Args: 
+        year (Int), month (Int), day (Int)
+    
+    Returns:
+        tuple: category_label as first index and category_data as second index
     """
     def get_categories_expenditure_by_time_range(self, year=None, month=None, day=None):
         categories = Category.objects.filter(user=self.request.user)
@@ -196,14 +232,25 @@ class PanelView(LoginRequiredMixin, TemplateView):
 
     """
     Returns the appropriate budget indicator based on user's current month spending rate compared to remaining month spending rate to reach budget
+    
+    Args:
+        monthlybudget (MonthlyBudget): the monthlybudget for the month
+        month_expenditure (float): the total user spent for the month
+        month (int): month
+        year (int): year
+    
+    Returns
+        str: 'COMPLETE_UNDER' for a previous month where user was under budget
+                or 'COMPLETE_OVER' for a previous month where the user was over budget
+                or 'CURRENT_GOOD' for the current month where the user is on pace to meeting budget
+                or 'CURRENT_WARNING' for the current month where is user is slightly off pace to meeting budget
+                or 'CURRNT_BAD' for the current month where the user is very off pace to meeting budget
+                or 'CURRNT_OVER' for the current month if the user if over the budget
+                or 'NO_BUDGET' if the user does not have a budget for the month
+                or 'FUTURE_UNKNOWN' if the user created a budget for a month in the future
     """
     def get_monthly_budget_indicator(self, monthlybudget, month_expenditure, month, year):
         today = datetime.today()
-        # Budget Indicator
-        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, CURRENT_OVER, NO_BUDGET, FUTURE_UNKNOWN)
-        # COMPLETE_UNDER, CURRENT_GOOD = Green
-        # CURRENT_WARNING = Orange
-        # CURRENT_BAD = Red
 
         # If no budget
         if not monthlybudget:
@@ -243,14 +290,25 @@ class PanelView(LoginRequiredMixin, TemplateView):
     
     """
     Returns the appropriate budget indicator based on user's current year spending rate compared to remaining year spending rate to reach budget
+    
+    Args: 
+        yearlybudget (YearlyBudget): the yearlybudget
+        year_expenditure (float): the total spent for the year
+        year (int): year
+    
+    Returns
+        str: 'COMPLETE_UNDER' for a previous month where user was under budget
+                or 'COMPLETE_OVER' for a previous month where the user was over budget
+                or 'CURRENT_GOOD' for the current month where the user is on pace to meeting budget
+                or 'CURRENT_WARNING' for the current month where is user is slightly off pace to meeting budget
+                or 'CURRNT_BAD' for the current month where the user is very off pace to meeting budget
+                or 'CURRNT_OVER' for the current month if the user if over the budget
+                or 'NO_BUDGET' if the user does not have a budget for the month
+                or 'FUTURE_UNKNOWN' if the user created a budget for a month in the future
+    
     """
     def get_yearly_budget_indicator(self, yearlybudget, year_expenditure, year):
         today = date.today()
-        # Budget Indicator
-        # (COMPLETE_UNDER, COMPLETE_OVER, CURRENT_GOOD, CURRENT_WARNING, CURRENT_BAD, NO_BUDGET, FUTURE_UNKNOWN)
-        # COMPLETE_UNDER, CURRENT_GOOD = Green
-        # CURRENT_WARNING = Orange
-        # CURRENT_BAD = Red
 
         # If no budget
         if not yearlybudget:
@@ -354,6 +412,13 @@ class YearlyPanel(PanelView):
     
     """
     Returns a tuple for spending per month across a year for bar graph
+
+    Args:
+        year (int): year
+    
+    Returns:
+        tuple: a list of months in integer form as the first index
+                and a list comprised of expenditure for each month
     """
     def get_expenditure_by_year_per_month(self, year):
         expenses = Expense.objects.filter(user=self.request.user).filter(date__year=year)
@@ -370,6 +435,11 @@ class YearlyPanel(PanelView):
     """
     Returns the average expenditure per year for a user. 
     An approximation based on calculating average expenditure per day, and then multiplying by average days per year. 
+
+    Args:
+
+    Returns:
+        expenditure_per_year (float): average yearly spending
     """
     def get_avg_expenditure_per_year(self):
         total = self.get_total_expenditure()
@@ -471,6 +541,11 @@ class MonthlyPanel(PanelView):
     """
     Returns the average expenditure per month for a user
     Approximated by multiplying average expenditure per day by average days per month
+
+    Args:
+
+    Returns:
+        expenditure_per_month (float): average spending per month
     """
     def get_avg_expenditure_per_month(self):
         total = self.get_total_expenditure()
@@ -495,6 +570,14 @@ class MonthlyPanel(PanelView):
     
     """
     Returns data (as a tuple) for the bar graph that displays spending per day for a month
+
+    Args:
+        year (int): year
+        month (int): month
+    
+    Returns:
+        tuple: day_list as an integer representation of the days of the month
+                and day_expenses as the spending for each day of that month
     """
     def get_expenditure_by_month_per_day(self, year, month):
         expenses = Expense.objects.filter(user=self.request.user)
@@ -590,7 +673,12 @@ class DailyPanel(PanelView):
         return context
     
     """
-    Get the average spending per day for a user. 
+    Get the average spending per day for a user (not incluidng the present day) 
+
+    Args:
+
+    Returns:
+        float: average expenditure per day 
     """
     def get_expenditure_per_day(self):
         today = datetime.today().date()
@@ -619,6 +707,12 @@ class DailyPanel(PanelView):
     
     """
     Get the expenditure for current day
+
+    Args: 
+        year (Int), month (Int), day (Int)
+
+    Returns:
+        total (float): total expenditure for a specific day
     """
     def get_this_day_expenditure(self, year, month, day):
         expense_list = Expense.objects.all().filter(user=self.request.user).filter(date__year=year).filter(date__month=month).filter(date__day=day)
@@ -629,6 +723,11 @@ class DailyPanel(PanelView):
     
     """
     Get the expenditure for current month
+
+    Args:
+
+    Returns: 
+        total (float): total spent in the current month
     """
     def get_this_month_expenditure(self):
         today = datetime.today()
@@ -642,6 +741,11 @@ class DailyPanel(PanelView):
     
     """
     Get the expenditure for current year
+
+    Args:
+
+    Returns:
+        total (float): total spent in the current year
     """
     def get_this_year_expenditure(self):
         today = datetime.today()

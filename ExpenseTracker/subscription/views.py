@@ -9,7 +9,9 @@ from base.models import Expense
 from datetime import date, datetime
 from django.contrib import messages
 
-# Create your views here.
+"""
+Subscription Create View
+"""
 class SubscriptionCreate(LoginRequiredMixin, CreateView):
     model = Subscription
     template_name = 'subscription/subscription_create.html'
@@ -59,6 +61,9 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
         messages.add_message(self.request, messages.INFO, 'Subscription successfully created!')
         return self.request.session['previous_page']
 
+"""
+SubscriptionList view for all subscriptions
+"""
 class SubscriptionList(LoginRequiredMixin, ListView):
     model = Subscription
     template_name = 'subscription/subscription_list.html'
@@ -67,7 +72,9 @@ class SubscriptionList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
-
+"""
+Edit subscription view
+"""
 class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')
@@ -90,6 +97,9 @@ class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
         messages.add_message(self.request, messages.INFO, 'Subscription successfully updated!')
         return self.request.session['previous_page']
 
+"""
+Delete Subscription View
+"""
 class SubscriptionDelete(LoginRequiredMixin, DeleteView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')
@@ -99,6 +109,8 @@ class SubscriptionDelete(LoginRequiredMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         subscription_id = self.kwargs.get('pk')
+
+        # Find all related expenses
         expenses_under_subscription = Expense.objects.filter(user=self.request.user).filter(subscription=subscription_id)
         context['expenses_under_subscription'] = expenses_under_subscription
         return context
@@ -112,7 +124,9 @@ class SubscriptionDelete(LoginRequiredMixin, DeleteView):
     def get_success_url(self, **kwargs):
         messages.add_message(self.request, messages.INFO, 'Subscription successfully deleted!')
         return self.request.session['previous_page']
-
+"""
+Cancel Subsription View
+"""
 class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
     model = Subscription
     context_object_name = 'subscription'

@@ -2,11 +2,7 @@
 <div class="row">
     <div class="col-sm p-3">
         <!--Code to check for errors-->
-        <!-- {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-        {% endif %} -->
+
         <form method="POST" action="{% url 'expense-create' %}" id="create-expense-form">
             {% csrf_token %}
             <div class="form-row">
@@ -51,41 +47,7 @@
 </div>
 
 <script>
-    // This script notifies users that the date field contains an invalid date
-    // Alerts users and changes color to red
-    // The alert will continue to show on any change.
-    // If users ignore the problem, then the submitted form will redirect to the plain expense-create HTML form
-    //  With the error message
-    // $(document).on('change', function(e){
-    //     let year = $("#id_date_year");
-    //     let month = $("#id_date_month");
-    //     let day = $("#id_date_day");
-
-    //     // Check if the days of the month is lower than the inputted date
-    //     let max_days = new Date(year.val(), month.val(), 0).getDate();
-    //     if (max_days < day.val()) {
-    //         // Alert and change color
-    //         alert("Error with Date");
-    //         year.css({'color': 'red'});
-    //         month.css({'color': 'red'});
-    //         day.css({'color': 'red'});
-            
-    //     }
-    //     else {
-    //         // Change color back to black if no errors
-    //         year.css({'color': 'black'});
-    //         month.css({'color': 'black'});
-    //         day.css({'color': 'black'});
-    //     }
-    // });
-    // $(document).on('change', negativeCostValidation);
-    // function negativeCostValidation() {
-    //     let num = $('#expense-cost-input').val();
-    //     console.log(num);
-    // }
-</script>
-
-<script>
+    // Counter to display input length
     $('#description-input').keyup(updateCount);
     $('#description-input').keydown(updateCount);
 
@@ -97,6 +59,7 @@
 
     $('#expense-cost-input').keyup(costValidation);
 
+    // Some basic error validation
     function costValidation() {
         let num = $('#expense-cost-input').val();
         console.log(num);
@@ -120,17 +83,3 @@
     }
 
 </script>
-
-<!-- Invalid Handler -->
-<!-- <script>
-    $("#create-expense-form").validate({
-        invalidHandler: function(form, validator) {
-            let errors = validator.numberOfInvalids();
-            if (errors) {
-                $("#error-message").show().text("Date is invalid");
-            } else {
-                $("#error-message").hide(); 
-            }
-        }
-    })
-</script> -->

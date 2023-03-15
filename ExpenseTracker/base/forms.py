@@ -12,6 +12,9 @@ LATEST_YEAR = 2099
 class DateInput(DateInput):
     input_type = 'date'
 
+"""
+The form for creating an expense. This is needed in order to add styling to the widgets
+"""
 class CreateExpenseForm(ModelForm):
     class Meta:
         model = Expense
@@ -36,6 +39,7 @@ class CreateExpenseForm(ModelForm):
     #         raise ValidationError(('Invalid date - future date'))
     #     return data
     
+    # Basic validation
     def clean_cost(self):
         data = self.cleaned_data['cost']
         if data < 0:
@@ -49,8 +53,10 @@ class CreateExpenseForm(ModelForm):
         user = kwargs.pop('user')
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(user=user)
-        #self.fields['category'].queryset = Category.objects.filter(id__in=Expense.objects.all().filter(user=user).values('category'))
 
+"""
+Form for creating a category
+"""
 class CreateCategoryForm(ModelForm):
     class Meta:
         model = Category

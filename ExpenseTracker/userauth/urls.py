@@ -4,6 +4,7 @@ from django.contrib.auth.views import LogoutView
 from .forms import UserLoginForm
 
 urlpatterns = [
+    # Login
     path('login/', CustomLoginView.as_view(authentication_form = UserLoginForm), name='login'),
 
     # Instead of customzing our logout view, we just use it directly here after importing it

@@ -3,7 +3,9 @@ from datetime import datetime, timedelta
 from dateutil import relativedelta
 import os
 
-
+"""
+Some class to check for subscription updates once the development server is activated
+"""
 class SubscriptionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'subscription'
@@ -18,7 +20,7 @@ class SubscriptionConfig(AppConfig):
             from .models import Subscription
             from base.models import Expense
 
-            # Here we want to perform calculations for ALL users
+            # Here we want to perform calculations for ALL users and initialize expenses that are created today based on a sub
             subscriptions = Subscription.objects.all() 
             for subscription in subscriptions:
                 if subscription.is_active:

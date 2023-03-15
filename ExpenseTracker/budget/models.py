@@ -1,21 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
-# Create your models here.
-# FIRST IDEA
-# Users will only have access to an "Edit Button"
-# The Edit Buttons sends them to a Normal View, which checks if year (or month) exists
-# Done using the BudgetYearly.objects.filter(order_date__year = 2000)
-# If year doesn't exist, create new object and save and then redirect to edit page. 
-# If year exists, redirect to edit page.
-
-# SECOND IDEA
-# Template should have an ADD if Budget doesn't exist
-# And EDIT if Budget does exist
 
 EARLIEST_YEAR = 1950
+
+# How many years users can create an expense in the future
 YEARS_AFTER_CURRENT = 5
 
+"""
+Budget Class
+    user (User): user
+    budget (Decimal): amount
+    track (Bool): should the budget also show an indicator for progress? 
+"""
 class Budget(models.Model):
     user = models.ForeignKey(
         User, 
@@ -37,7 +34,13 @@ class Budget(models.Model):
     class Meta:
         abstract = True
         
-
+"""
+YearlyBudget Class
+    user (User): user
+    budget (Decimal): amount
+    track (Bool): should the budget also show an indicator for progress? 
+    year (Int): year
+"""
 class YearlyBudget(Budget):
     # Non editable data
     YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT)]
@@ -49,6 +52,14 @@ class YearlyBudget(Budget):
     def __str__(self):
         return f'{self.year}: {self.budget}'
 
+"""
+MonthlyBudget Class
+    user (User): user
+    budget (Decimal): amount
+    track (Bool): should the budget also show an indicator for progress? 
+    year (Int): year
+    month (Int): month
+"""
 class MonthlyBudget(Budget):
     # Non editable data
     YEAR_CHOICES = [(y,y) for y in range(1950, datetime.date.today().year + YEARS_AFTER_CURRENT)]

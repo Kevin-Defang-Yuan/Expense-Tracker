@@ -10,7 +10,9 @@ from base.forms import EARLIEST_YEAR, LATEST_YEAR
 class DateInput(DateInput):
     input_type = 'date'
 
-
+"""
+Create Subscription Form with Bootstrap styling
+"""
 class CreateSubscriptionForm(ModelForm):
     class Meta:
         model = Subscription
@@ -29,6 +31,7 @@ class CreateSubscriptionForm(ModelForm):
 
     start_date = DateInput()
 
+    # Hidden fields, may be incorporated at a later date
     # indefinite = BooleanField(widget=CheckboxInput, required=False)
     # end_date = DateField(widget=SelectDateWidget(years=range(EARLIEST_YEAR, LATEST_YEAR)), required=False)
     # quantity = IntegerField(required=False)
@@ -54,12 +57,15 @@ class CreateSubscriptionForm(ModelForm):
 
     cycle = CharField(widget=Select(choices=CYCLE_CHOICES, attrs={'class': 'form-control'}))
     
+    # Use request to determine the category queryset. 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(CreateSubscriptionForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(user=user)
 
-
+"""
+Form for terminating a subscription
+"""
 class TerminateSubscriptionForm(ModelForm):
     class Meta:
         model = Subscription

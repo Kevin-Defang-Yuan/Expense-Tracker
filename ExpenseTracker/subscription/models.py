@@ -6,7 +6,9 @@ from dateutil import relativedelta
 from django.contrib.auth.models import User
 
 
-# Create your models here.
+"""
+Subscription model
+"""
 class Subscription(models.Model):
     user = models.ForeignKey(
         User, 
@@ -30,12 +32,14 @@ class Subscription(models.Model):
         verbose_name="Start Date of Recurring Expense"
     )
 
+    # Determines if object is a subscription or a recurring expense
     indefinite = models.BooleanField(
         null=True,
         blank=True,
         verbose_name="Indefinite"
     )
 
+    # Determines if the subscription has been cancelled or not
     terminated = models.BooleanField(
         null=True,
         blank=True,
@@ -111,6 +115,7 @@ class Subscription(models.Model):
     #     if self.quantity and self.indefinite:
     #         raise ValidationError(('An indefinite subscription should not have a known quantity')) 
     
+    # Adds a get_end_date attribute, mostly for recurring expenses. 
     @property
     def get_end_date(self):
         if self.end_date:
@@ -125,6 +130,7 @@ class Subscription(models.Model):
             end_date += self.progress_cycle()            
         return end_date
     
+    # Determines if a subscription is currently active. 
     @property
     def is_active(self):
         # Return false if terminated
@@ -142,6 +148,7 @@ class Subscription(models.Model):
         else:
             return False
     
+    # Function that iterates a subscription cycle, used to calculate possible enddate. 
     def progress_cycle(self):
         if self.cycle == self.DAILY:
             return timedelta(days=1)
@@ -159,6 +166,8 @@ class Subscription(models.Model):
             return relativedelta.relativedelta(months=12)
         print(self, self.cycle)
     
+    # Function that gets all expenses instances of a subscription. Valuable when displaying all expenses that
+    #   would get deleted as a result of deleting a subscription
     def get_existing_expense_instances(self):
         today = datetime.today().date()
         user = self.user
@@ -168,6 +177,8 @@ class Subscription(models.Model):
         date = self.start_date
 
         ret = []
+        # Find all expenses that matches the following attributes
+        # This could be simplified later to just query based on subscription. 
         while((self.indefinite and date <= today) or (date <= today and date <= self.get_end_date)):
             expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self)
             ret.append(expense)
@@ -175,6 +186,10 @@ class Subscription(models.Model):
         return ret
 
     
+    """
+    Function for saving a subscription. 
+    Once a subscription is saved, check if there are any old expense instances that should be created automatically. 
+    """
     def save(self, *args, **kwargs):
         super(Subscription, self).save(*args, **kwargs)
 
@@ -188,14 +203,29 @@ class Subscription(models.Model):
         for expense in existing_expense_instances:
             expense.save()
 
+    """
+    Determine if a subscription is active in a specific time range. 
+
+    Args:
+        selected_start_date (Date): a date
+        selected_end_date (Date): a date
+        day (Date): a date. This is only passed in if the range is a single day, because the calculation changes
+            Otherwise, it is a time range and would use different calculation
+
+    Returns:
+        Bool 
+    """
     def is_active_subscription_in_range(self, selected_start_date, selected_end_date, day):
         # Return subscriptions that are active and are relevant to time period
         if self.is_active:
             sub_end_date = self.get_end_date
             sub_start_date = self.start_date
+
+            # If a single day, then sub needs to start before the day and end after
             if day:
                 if selected_start_date >= sub_start_date and (not sub_end_date or sub_end_date >= selected_end_date):
                     return True
+            # IF a range, then sub needs to be active before the range ends. 
             else:
                 if sub_start_date <= selected_end_date and (not sub_end_date or sub_end_date >= selected_start_date):
                     return True
@@ -205,7 +235,18 @@ class Subscription(models.Model):
 
 
 
+    """
+    Determine if a subscription was active in a specific time range. 
 
+    Args:
+        selected_start_date (Date): a date
+        selected_end_date (Date): a date
+        day (Date): a date. This is only passed in if the range is a single day, because the calculation changes
+            Otherwise, it is a time range and would use different calculation
+
+    Returns:
+        Bool 
+    """
     def was_active_subscription_in_range(self, selected_start_date, selected_end_date, day):
         # Return subscriptions that are not active but are relevant to time period
         if not self.is_active:
@@ -219,20 +260,6 @@ class Subscription(models.Model):
                     return True
         return False
         
-    
-        # Whenever we save a subscription, we want to instantiate all Expense objects that are created by subscription
-        # today = datetime.today().date()
-        # user = self.user
-        # category = self.category
-        # cost = self.cost
-        # description = self.name
-
-        # date = self.start_date
-
-        # while((self.indefinite and date <= today) or (date <= today and date <= self.get_end_date)):
-        #     expense = Expense(user=user, category=category, cost=cost, description=description, date=date, subscription=self)
-        #     expense.save()
-        #     date += self.progress_cycle()
 
 
         

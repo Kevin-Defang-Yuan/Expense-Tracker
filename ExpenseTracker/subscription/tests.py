@@ -5,7 +5,7 @@ import datetime
 
 
 
-# Create your tests here.
+# Some test cases for the subscriptions
 class SubscriptionTestCase(TestCase):
     def setUp(self):
         user = User.objects.create_user(username='testuser', password='12345')

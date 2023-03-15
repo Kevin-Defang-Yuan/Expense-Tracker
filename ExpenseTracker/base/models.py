@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-# from dateutil.relativedelta import relativedelta
 
-# Create your models here.
-
+"""
+Category Class
+    user (User): user
+    name (Char): name of category
+"""
 class Category(models.Model):
     user = models.ForeignKey(
         User, 
@@ -26,6 +28,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+"""
+Payment Class
+    user (User): user
+    description (Text): an optional description of expense
+    cost (Decimal): the cost
+"""
 class Payment(models.Model):
     user = models.ForeignKey(
         User, 
@@ -49,6 +57,15 @@ class Payment(models.Model):
     class Meta:
         abstract = True
 
+"""
+Expense Class
+    date (Date): date incurred
+    category (Category): category
+    subscription (Subscription): related subscription (if there is one)
+    user (User): user
+    description (Text): an optional description of expense
+    cost (Decimal): the cost
+"""
 class Expense(Payment):
     date = models.DateField(
         verbose_name="Date of Expense"
@@ -107,7 +124,10 @@ BLS_2021_DATA = {
 }
 
 
-
+"""
+Function that runs when a users first creates an account
+Automatically creates the default categories for the user
+"""
 @receiver(post_save, sender=User)
 def init_new_user(instance, created, raw, **kwargs):
     if created and not raw:

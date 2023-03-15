@@ -17,9 +17,17 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
 
+"""
+Main URL mapper of application
+"""
 urlpatterns = [
+    # Admin page
     path('admin/', admin.site.urls),
+
+    # Base application
     path('base/', include('base.urls')),
     path('', RedirectView.as_view(url='base/', permanent=True)),
+
+    # Authorization application
     path('auth/', include('userauth.urls'))
 ]

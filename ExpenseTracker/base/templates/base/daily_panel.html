@@ -35,29 +35,6 @@
 
 {% endblock %}
 
-<!-- <script>
-  let item = document.querySelector("#toggle");
-  item.addEventListener("click", myFunction);
-
-  function myFunction() {
-    piechart = document.getElementById('piechart');
-    barchart = document.getElementById('barchart');
-    
-    if (piechart.style.display === 'none') {
-      piechart.style.display = 'block';
-      barchart.style.display = 'none';
-    }
-    else {
-      piechart.style.display = 'none';
-      barchart.style.display = 'block';
-    }
-    
-    };
-  
-</script> -->
-
-
-
 {% block container-header %}
 {% if messages %}
 <div class="messages">
@@ -76,40 +53,6 @@
 </form>
 <span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span>
 <a href="{% url 'daily-panel' %}?date={{tmr_date}}" style="display: inline"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
-
-
-<!-- <div class="row-sm-1">
-  <div class="col">
-    <h3>Daily Panel</h3>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-1">
-    <a href="{% url 'daily-panel' %}?date={{yst_date}}" style="display: inline"><span class="material-symbols-outlined">arrow_back_ios</span></a>
-
-
-
-    
-   
-  </div>
-  <div class="col-sm-3">
-    <h2 id="date-title" style="display: inline">{{month_name}} {{day}}, {{year}}</h2>
-
-    <form action="{% url 'daily-panel' %}" method="GET" id="date-form" style="display: none; margin: 0px; padding: 0px;">
-      <div class="w-25" style="display: inline;">
-          <input type="date" name="date" id="date-input" >
-      </div>
-    </form>
-    <span id="change-date" class="material-symbols-outlined" style="display: inline">edit</span>
-  </div>
-  <div class="col-sm-1">
-    <a href="{% url 'daily-panel' %}?date={{tmr_date}}" style="display: inline"><span class="material-symbols-outlined">arrow_forward_ios</span></a>
-  </div>
-</div> -->
-
-
-
 
 {% endblock %}
 

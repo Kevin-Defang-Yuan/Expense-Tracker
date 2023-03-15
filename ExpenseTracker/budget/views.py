@@ -9,20 +9,28 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 # Create your views here.
 
+"""
+View for displaying a list of yearly budgets
+"""
 class YearlyBudgetList(LoginRequiredMixin, ListView):
     model = YearlyBudget
     template_name = 'budget/yearlybudget_list.html'
     context_object_name = 'budgets'
 
+    # Only get user's specific data
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+"""
+View for creating yearly budgets
+"""
 class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
     model = YearlyBudget
     template_name = 'budget/yearlybudget_create.html'
     success_url = reverse_lazy('yearlybudget-list')
     form_class = CreateYearlyBudgetForm
 
+    # If users are creating a yearly budget that already exists, delete that one so that only one instance exists. 
     def form_valid(self, form):
         year = form.instance.year
         yearlybudget = YearlyBudget.objects.filter(user=self.request.user).filter(year=year)
@@ -31,6 +39,7 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(YearlyBudgetCreate, self).form_valid(form)
     
+    # Populates the initial fields depending on the request
     def get_initial(self):
         year = None
         month = None
@@ -53,7 +62,10 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
     def get_success_url(self, **kwargs):
         messages.add_message(self.request, messages.INFO, 'Budget successfully created!')
         return self.request.session['previous_page']
-    
+
+"""
+View for editing a yearly budget
+"""
 class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
@@ -71,6 +83,9 @@ class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
         messages.add_message(self.request, messages.INFO, 'Budget successfully edited!')
         return self.request.session['previous_page']
 
+"""
+View for deleting a yearly budget
+"""
 class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
@@ -87,12 +102,15 @@ class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
         messages.add_message(self.request, messages.INFO, 'Budget successfully deleted!')
         return self.request.session['previous_page']
 
+"""
+View for displaying list of monthly budgets
+"""
 class MonthlyBudgetList(LoginRequiredMixin, ListView):
     model = MonthlyBudget
     template_name = 'budget/monthlybudget_list.html'
     context_object_name = 'budgets'
 
-    # We want to display the month name, not the month number
+    # We want to display the month name, not the month number. So we create a new attribute 'month_name'
     def get_queryset(self):
         qs = super().get_queryset().filter(user=self.request.user)
         for budget in qs:
@@ -100,13 +118,16 @@ class MonthlyBudgetList(LoginRequiredMixin, ListView):
         return qs
     
 
-
+"""
+View for creating a new monthly budget
+"""
 class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
     model = MonthlyBudget
     template_name = 'budget/monthlybudget_create.html'
     success_url = reverse_lazy('monthlybudget-list')
     form_class = CreateMonthlyBudgetForm
 
+    # If the monthly budget exists, delete existing one so only one instance exists
     def form_valid(self, form):
         year = form.instance.year
         month = form.instance.month
@@ -116,6 +137,7 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super(MonthlyBudgetCreate, self).form_valid(form)
     
+    # Populate form fields depending on the request information
     def get_initial(self):
         year = None
         month = None
@@ -142,7 +164,9 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
         messages.add_message(self.request, messages.INFO, 'Budget successfully created!')
         return self.request.session['previous_page']
     
-    
+"""
+View for Editing a monthly budget
+"""
 class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')
@@ -150,6 +174,7 @@ class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'budget/monthlybudget_update.html'
     context_object_name = 'budget'
 
+    # Populate the initial form fields
     def get_initial(self):
         if 'year' in self.request.GET and 'month' in self.request.GET:
             year = self.request.GET['year']
@@ -168,6 +193,9 @@ class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
         messages.add_message(self.request, messages.INFO, 'Budget successfully edited!')
         return self.request.session['previous_page']
 
+"""
+View for deleting a monthly budget
+"""
 class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')

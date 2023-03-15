@@ -1,7 +1,9 @@
 from django.forms import ModelForm, NumberInput, Select
 from .models import YearlyBudget, MonthlyBudget
 
-
+"""
+Form for creating yearlybudgets
+"""
 class CreateYearlyBudgetForm(ModelForm):
     class Meta:
         model = YearlyBudget
@@ -11,6 +13,9 @@ class CreateYearlyBudgetForm(ModelForm):
             'year': Select(attrs={'class': 'form-control'}),
         }
 
+"""
+Form class for editing yearly budgets
+"""
 class UpdateYearlyBudgetForm(ModelForm):
     class Meta:
         model = YearlyBudget
@@ -20,8 +25,9 @@ class UpdateYearlyBudgetForm(ModelForm):
         }
     
     
-    
-
+"""
+Form class for creating monthly budgets
+"""
 class CreateMonthlyBudgetForm(ModelForm):
     class Meta:
         model = MonthlyBudget
@@ -32,7 +38,9 @@ class CreateMonthlyBudgetForm(ModelForm):
             'month': Select(attrs={'class': 'form-control'}),
         }
     
-    
+"""
+Form class for editing monthly budgets
+"""
 class UpdateMonthlyBudgetForm(ModelForm):
     class Meta:
         model = MonthlyBudget

@@ -2,10 +2,13 @@ import django_filters
 from .models import Expense, Category
 from django.forms import TextInput
 
-# 
+# Necessary function to filter categories (displayed in filter widget) so that they are user specific
 def categories(request):
     return Category.objects.filter(user=request.user)
 
+"""
+The filter form for filtering and ordering expenses
+"""
 class ExpenseFilter(django_filters.FilterSet):
     description = django_filters.CharFilter(lookup_expr='icontains', label="Description Contains:")
     category = django_filters.ModelChoiceFilter(queryset=categories, label="Category:")
@@ -23,11 +26,6 @@ class ExpenseFilter(django_filters.FilterSet):
             'description': TextInput(attrs={'class': 'form-control'})
         }
         
-        # fields = {
-        #     'cost': ['lt', 'gt'],
-        #     'date': ['exact', 'lt', 'gt'],
-        #     'category': [],
-        # }
     
     # Code that filters by request object (so categories only include user-specific)
     @property

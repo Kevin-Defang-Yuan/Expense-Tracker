@@ -21,14 +21,6 @@
 {% block main-container %}
 {% load base_extras %}
 
-<!-- <div class="row-sm-1">
-    <div class="col-sm">
-      <div class="well">
-        
-      </div>
-    </div>
-  </div> -->
-
 <div class="row" id="content-title">
     <div class="col-sm" >
         {% if messages %}
@@ -38,7 +30,7 @@
             {% endfor %}
         </div>
         {% endif %}
-        <!-- <a href="{{request.META.HTTP_REFERER}}">Go back (NOT WORKING)</a> -->
+
         {% if day %}
             <h2>Expenses for {{month}} {{day}}, {{year}}</h2>
         {% elif month_name %}
