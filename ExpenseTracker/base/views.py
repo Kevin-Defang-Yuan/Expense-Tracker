@@ -560,7 +560,6 @@ class MonthlyPanel(PanelView):
         delta = today - earliest_date
         days_passed = delta.days + 1 # Add extra day for difference
 
-        print("Days passed, ", days_passed)
         if days_passed < MIN_DAYS_PASSED:
             return None # Give message that returns WE NEED MORE DAYS
 

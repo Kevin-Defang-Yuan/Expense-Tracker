@@ -86,7 +86,7 @@
             <td>{{expense.category}}</td>
             <td>{{expense.cost}}</td> 
             <td><a href="{% url 'daily-panel' %}?date={{expense.date|date:'Y-m-d'}}">{{expense.date|date:"M-d"|slice:"0:"}}</a></td>
-            <td>{{expense.description|truncatechars:80}}</td>
+            <td>{{expense.description|truncatechars:25}}</td>
             <td><a href="{% url 'expense-update' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-update' expense.pk %}" ><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
             <td><a href="{% url 'expense-delete' expense.pk %}" class="open-incident" data-popup-url="{% url 'expense-delete' expense.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></td>
             
