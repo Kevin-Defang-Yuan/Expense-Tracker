@@ -35,3 +35,6 @@ And finally, the application employs basic authentication. Below is a screenshot
 ![image info](./images/login.png)
 
 ## Project Setup
+
+1. Clone the repository
+2. Create a 
