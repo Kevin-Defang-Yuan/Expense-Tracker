@@ -11,6 +11,9 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
 
+from subscription.models import Subscription
+from base.models import Expense
+
 """
 LoginView
 """
@@ -25,6 +28,17 @@ class CustomLoginView(LoginView):
 
     # When users successfully login, we want to send them to daily panel. 
     def get_success_url(self):
+
+        # Here we want to perform calculations for authenticated user and initialize expenses that are created today based on a sub
+        subscriptions = Subscription.objects.all().filter(user=self.request.user)
+        for subscription in subscriptions:
+            if subscription.is_active:
+                existing_expense_instances = subscription.get_existing_expense_instances()
+                for expense in existing_expense_instances:
+                    existing_expense = Expense.objects.filter(subscription=expense.subscription, date=expense.date, user=self.request.user).first()
+                    if not existing_expense:
+                        expense.save()
+
         return reverse_lazy('daily-panel')
 
 
