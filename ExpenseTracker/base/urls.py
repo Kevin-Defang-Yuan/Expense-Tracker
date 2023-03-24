@@ -1,6 +1,6 @@
 from django .urls import path, include
 from .views import ExpenseDetail, ExpenseCreate, ExpenseUpdate, ExpenseDelete
-from .views import DailyPanel, MonthlyPanel, YearlyPanel
+from .views import DailyPanel, MonthlyPanel, YearlyPanel, OverviewPanel
 from .views import ExpenseList, CategoryList, CategoryCreate, CategoryUpdate, CategoryDelete
 
 urlpatterns = [
@@ -15,6 +15,9 @@ urlpatterns = [
 
     # Yearly panel
     path('yearly-panel/', YearlyPanel.as_view(), name="yearly-panel"),
+
+    # Overview panel
+    path('overview-panel/', OverviewPanel.as_view(), name="overview-panel"),
 
     # List of expenses
     path('expense-list/', ExpenseList.as_view(), name="expense-list"),

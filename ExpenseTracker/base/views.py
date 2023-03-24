@@ -756,7 +756,11 @@ class DailyPanel(PanelView):
         return total
         
 
+class OverviewPanel(PanelView):
+    model = Expense
+    template_name = 'base/overview_panel.html'
 
+    
 
 
 
