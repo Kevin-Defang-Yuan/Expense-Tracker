@@ -1,18 +1,20 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.urls import reverse_lazy
 from .models import Subscription
 from .forms import CreateSubscriptionForm, TerminateSubscriptionForm
 from base.models import Expense
 from datetime import date, datetime
 from django.contrib import messages
+from base.views import CustomLoginRequiredMixin
+
 
 """
 Subscription Create View
 """
-class SubscriptionCreate(LoginRequiredMixin, CreateView):
+class SubscriptionCreate(CustomLoginRequiredMixin, CreateView):
     model = Subscription
     template_name = 'subscription/subscription_create.html'
     success_url = reverse_lazy('subscription-list')
@@ -64,7 +66,7 @@ class SubscriptionCreate(LoginRequiredMixin, CreateView):
 """
 SubscriptionList view for all subscriptions
 """
-class SubscriptionList(LoginRequiredMixin, ListView):
+class SubscriptionList(CustomLoginRequiredMixin, ListView):
     model = Subscription
     template_name = 'subscription/subscription_list.html'
     context_object_name = 'subscriptions'
@@ -75,7 +77,7 @@ class SubscriptionList(LoginRequiredMixin, ListView):
 """
 Edit subscription view
 """
-class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
+class SubscriptionUpdate(CustomLoginRequiredMixin, UpdateView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')
     form_class = CreateSubscriptionForm
@@ -100,7 +102,7 @@ class SubscriptionUpdate(LoginRequiredMixin, UpdateView):
 """
 Delete Subscription View
 """
-class SubscriptionDelete(LoginRequiredMixin, DeleteView):
+class SubscriptionDelete(CustomLoginRequiredMixin, DeleteView):
     model = Subscription
     success_url = reverse_lazy('subscription-list')
     template_name = 'subscription/subscription_delete.html'
@@ -127,7 +129,7 @@ class SubscriptionDelete(LoginRequiredMixin, DeleteView):
 """
 Cancel Subsription View
 """
-class SubscriptionTerminate(LoginRequiredMixin, UpdateView):
+class SubscriptionTerminate(CustomLoginRequiredMixin, UpdateView):
     model = Subscription
     context_object_name = 'subscription'
     template_name = 'subscription/subscription_terminate.html'

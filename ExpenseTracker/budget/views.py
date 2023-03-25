@@ -1,18 +1,20 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import MonthlyBudget, YearlyBudget
 from .forms import CreateYearlyBudgetForm, CreateMonthlyBudgetForm, UpdateYearlyBudgetForm, UpdateMonthlyBudgetForm
 from datetime import date
 from django.urls import reverse_lazy
 from django.contrib import messages
+
+from base.views import CustomLoginRequiredMixin
 # Create your views here.
 
 """
 View for displaying a list of yearly budgets
 """
-class YearlyBudgetList(LoginRequiredMixin, ListView):
+class YearlyBudgetList(CustomLoginRequiredMixin, ListView):
     model = YearlyBudget
     template_name = 'budget/yearlybudget_list.html'
     context_object_name = 'budgets'
@@ -24,7 +26,7 @@ class YearlyBudgetList(LoginRequiredMixin, ListView):
 """
 View for creating yearly budgets
 """
-class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
+class YearlyBudgetCreate(CustomLoginRequiredMixin, CreateView):
     model = YearlyBudget
     template_name = 'budget/yearlybudget_create.html'
     success_url = reverse_lazy('yearlybudget-list')
@@ -66,7 +68,7 @@ class YearlyBudgetCreate(LoginRequiredMixin, CreateView):
 """
 View for editing a yearly budget
 """
-class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
+class YearlyBudgetUpdate(CustomLoginRequiredMixin, UpdateView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
     form_class = UpdateYearlyBudgetForm
@@ -86,7 +88,7 @@ class YearlyBudgetUpdate(LoginRequiredMixin, UpdateView):
 """
 View for deleting a yearly budget
 """
-class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
+class YearlyBudgetDelete(CustomLoginRequiredMixin, DeleteView):
     model = YearlyBudget
     success_url = reverse_lazy('yearlybudget-list')
     template_name = 'budget/yearlybudget_delete.html'
@@ -105,7 +107,7 @@ class YearlyBudgetDelete(LoginRequiredMixin, DeleteView):
 """
 View for displaying list of monthly budgets
 """
-class MonthlyBudgetList(LoginRequiredMixin, ListView):
+class MonthlyBudgetList(CustomLoginRequiredMixin, ListView):
     model = MonthlyBudget
     template_name = 'budget/monthlybudget_list.html'
     context_object_name = 'budgets'
@@ -121,7 +123,7 @@ class MonthlyBudgetList(LoginRequiredMixin, ListView):
 """
 View for creating a new monthly budget
 """
-class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
+class MonthlyBudgetCreate(CustomLoginRequiredMixin, CreateView):
     model = MonthlyBudget
     template_name = 'budget/monthlybudget_create.html'
     success_url = reverse_lazy('monthlybudget-list')
@@ -167,7 +169,7 @@ class MonthlyBudgetCreate(LoginRequiredMixin, CreateView):
 """
 View for Editing a monthly budget
 """
-class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
+class MonthlyBudgetUpdate(CustomLoginRequiredMixin, UpdateView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')
     form_class = UpdateMonthlyBudgetForm
@@ -196,7 +198,7 @@ class MonthlyBudgetUpdate(LoginRequiredMixin, UpdateView):
 """
 View for deleting a monthly budget
 """
-class MonthlyBudgetDelete(LoginRequiredMixin, DeleteView):
+class MonthlyBudgetDelete(CustomLoginRequiredMixin, DeleteView):
     model = MonthlyBudget
     success_url = reverse_lazy('monthlybudget-list')
     template_name = 'budget/monthlybudget_delete.html'

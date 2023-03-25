@@ -33,12 +33,30 @@ WARNING_THRESHOLD = 1.1
 BAD_THRESHOLD = 1.3
 
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
+
+class CustomLoginRequiredMixin(AccessMixin):
+    """Verify that the current user is authenticated."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        # Here we want to perform calculations for authenticated user and initialize expenses that are created today based on a sub
+        subscriptions = Subscription.objects.all().filter(user=self.request.user)
+        print(subscriptions)
+        for subscription in subscriptions:
+            if subscription.is_active:
+                existing_expense_instances = subscription.get_existing_expense_instances()
+                for expense in existing_expense_instances:
+                    existing_expense = Expense.objects.filter(subscription=expense.subscription, date=expense.date, user=self.request.user).first()
+                    if not existing_expense:
+                        expense.save()
+        return super().dispatch(request, *args, **kwargs)
 
 """
 View for expenses as a list (filtered by time parameters and other user input). Uses FilterView. 
 """
-class ExpenseList(LoginRequiredMixin, FilterView):
+class ExpenseList(CustomLoginRequiredMixin, FilterView):
     model = Expense
     context_object_name = 'expenses'
     paginate_by = EXPENSE_PAGINATION
@@ -90,7 +108,7 @@ class ExpenseList(LoginRequiredMixin, FilterView):
 Base class for DailyView, MonthlyView, and YearlyView
 Contains some functions that all three views utilize
 """
-class PanelView(LoginRequiredMixin, TemplateView):
+class PanelView(CustomLoginRequiredMixin, TemplateView):
     model = Expense
 
     """
@@ -763,7 +781,7 @@ class DailyPanel(PanelView):
 """
 View for Expense detail. Not being used currently.
 """
-class ExpenseDetail(LoginRequiredMixin, DetailView):
+class ExpenseDetail(CustomLoginRequiredMixin, DetailView):
     model = Expense
     context_object_name = 'expense'
 
@@ -773,7 +791,7 @@ class ExpenseDetail(LoginRequiredMixin, DetailView):
 """
 View for Creating an Expense
 """
-class ExpenseCreate(LoginRequiredMixin, CreateView):
+class ExpenseCreate(CustomLoginRequiredMixin, CreateView):
     model = Expense
     form_class = CreateExpenseForm
     success_url = reverse_lazy('expense-list')
@@ -825,7 +843,7 @@ class ExpenseCreate(LoginRequiredMixin, CreateView):
 """
 View for editing an expense. 
 """
-class ExpenseUpdate(LoginRequiredMixin, UpdateView):
+class ExpenseUpdate(CustomLoginRequiredMixin, UpdateView):
     model = Expense
     form_class = CreateExpenseForm
     success_url = reverse_lazy('expense-list')
@@ -850,7 +868,7 @@ class ExpenseUpdate(LoginRequiredMixin, UpdateView):
 """
 View for deleting an expense
 """
-class ExpenseDelete(LoginRequiredMixin, DeleteView):
+class ExpenseDelete(CustomLoginRequiredMixin, DeleteView):
     model = Expense
     context_object_name = 'expense'
     success_url = reverse_lazy('expense-list')
@@ -869,7 +887,7 @@ class ExpenseDelete(LoginRequiredMixin, DeleteView):
 """
 View for listing all the user categories
 """
-class CategoryList(LoginRequiredMixin, ListView):
+class CategoryList(CustomLoginRequiredMixin, ListView):
     model = Category
     template_name = 'base/category_list.html'
     context_object_name = 'categories'
@@ -882,7 +900,7 @@ class CategoryList(LoginRequiredMixin, ListView):
 """
 View for creating a new category
 """
-class CategoryCreate(LoginRequiredMixin, CreateView):
+class CategoryCreate(CustomLoginRequiredMixin, CreateView):
     model = Category
     form_class = CreateCategoryForm
     template_name = 'base/category_create.html'
@@ -899,7 +917,7 @@ class CategoryCreate(LoginRequiredMixin, CreateView):
 """
 View for editing a category
 """
-class CategoryUpdate(LoginRequiredMixin, UpdateView):
+class CategoryUpdate(CustomLoginRequiredMixin, UpdateView):
     model = Category
     form_class = CreateCategoryForm
     success_url = reverse_lazy('category-list')
@@ -913,7 +931,7 @@ class CategoryUpdate(LoginRequiredMixin, UpdateView):
 """
 View for deleting a category
 """
-class CategoryDelete(LoginRequiredMixin, DeleteView):
+class CategoryDelete(CustomLoginRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy('category-list')
     template_name = 'base/category_delete.html'
