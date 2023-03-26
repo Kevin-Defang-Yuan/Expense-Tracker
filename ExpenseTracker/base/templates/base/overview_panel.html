@@ -1,0 +1,109 @@
+{% extends 'base/panel_layout.html' %}
+{% load static %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'panel.css' %}">
+{% endblock %}
+
+{% block main-container %}
+
+<div class="row" id="content-title">
+  <div class="col-sm" >
+
+      <h3>Overview Expenditure Profile</h3>
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" id="row-content">
+      <!--Banner -->
+
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px;">
+            <div class="row">
+                <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+                  <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+                </div>
+                <div class="col-xs-8" style="padding-top: 5px;">
+                  <span style="font-size: 15px; display: block; color: gray">Avg Daily Spending</span>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">99</div>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px;">
+            <div class="row">
+                <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+                  <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+                </div>
+                <div class="col-xs-8" style="padding-top: 5px;">
+                  <span style="font-size: 15px; display: block; color: gray">Avg Monthly Spending</span>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">999</div>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="well banner" style="height: 140px;">
+            <div class="row">
+                <div class="col-xs-4" style="padding-top: 15px; padding-right: 0px">
+                  <span class="material-symbols-outlined" id="dollar-icon">monetization_on</span>
+                </div>
+                <div class="col-xs-8" style="padding-top: 5px;">
+                  <span style="font-size: 15px; display: block; color: gray">Avg Yearly Spending</span>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">9999</div>
+                </div>
+              </div>
+        </div>
+      </div>
+
+
+      <!--Viz-->
+      <!--Charts -->
+      <div class="col-sm-6">
+        <div class="well banner" style="height: 540px;">
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#piechart">Category Pie Chart</a></li>
+            <li><a data-toggle="tab" href="#categorytable">Category Table</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="piechart" class="tab-pane fade in active" style="padding-top: 20px;">
+              <small class="form-text text-muted" style="align-items: center;">Hover to see details</small>
+              Example
+            </div>
+            <div id="categorytable" class="tab-pane fade" style="padding-top: 80px;">
+              Example2
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Viz-->
+      <!--Charts -->
+      <div class="col-sm-6">
+        <div class="well banner" style="height: 540px;">
+          <!--Nav Tabs using Bootstrap -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#piechartamerican">Category Pie Chart</a></li>
+            <li><a data-toggle="tab" href="#categorytableamerican">Category Table</a></li>
+          </ul>
+          <div class="tab-content">
+            <div id="piechartamerican" class="tab-pane fade in active" style="padding-top: 20px;">
+              <small class="form-text text-muted" style="align-items: center;">Hover to see details</small>
+              Example American
+            </div>
+            <div id="categorytableamerican" class="tab-pane fade" style="padding-top: 80px;">
+              Example2 America 
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+{% include 'modal.html' %}
+{% endblock %}
+
