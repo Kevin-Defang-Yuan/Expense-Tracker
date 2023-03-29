@@ -35,6 +35,13 @@ BAD_THRESHOLD = 1.3
 
 from django.contrib.auth.mixins import AccessMixin
 
+class CategoryData():
+    def __init__(self, name, expenditure):
+        self.name = name
+        self.expenditure = expenditure
+        self.percent = 0
+
+
 class CustomLoginRequiredMixin(AccessMixin):
     """Verify that the current user is authenticated."""
 
@@ -111,6 +118,64 @@ Contains some functions that all three views utilize
 class PanelView(CustomLoginRequiredMixin, TemplateView):
     model = Expense
 
+    def get_days_passed(self):
+        today = datetime.today().date()
+        expenses = Expense.objects.filter(user=self.request.user)
+        earliest_expense = None if not expenses else expenses.order_by('date')[0]
+        if not earliest_expense:
+            return 0
+        earliest_date = earliest_expense.date
+        delta = today - earliest_date
+        return delta.days + 1 # We add one anymore because we want to include the current day
+
+
+    def get_expenditure_per_day_including_today(self):
+        today = datetime.today().date()
+        total = self.get_total_expenditure()
+        expenses = Expense.objects.filter(user=self.request.user)
+        earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        if not earliest_expense:
+            return None
+
+        earliest_date = earliest_expense.date
+        
+        delta = today - earliest_date
+        days_passed = delta.days + 1 # We add one anymore because we want to include the current day
+        return round(total / days_passed, 2)
+        
+    
+    """
+    Get the average spending per day for a user (not incluidng the present day) 
+
+    Args:
+
+    Returns:
+        float: average expenditure per day 
+    """
+    def get_expenditure_per_day(self):
+        today = datetime.today().date()
+        total = self.get_total_expenditure()
+        expenses = Expense.objects.filter(user=self.request.user)
+        earliest_expense = None if not expenses else expenses.order_by('date')[0]
+
+        # Subtract today's expenditure
+        today_expenditure = self.get_expenditure_by_time_range(year=today.year, month=today.month, day=today.day)
+        previous_expenditure = total - today_expenditure
+
+        # If there is no previous expenditure, return None
+        if previous_expenditure <= 0:
+            return None
+
+        if not earliest_expense:
+            return None
+
+        earliest_date = earliest_expense.date
+        
+        delta = today - earliest_date
+        days_passed = delta.days # We don't add one anymore because we don't include current day
+        return round(previous_expenditure / days_passed, 2)
+    
     """
     Filters only the first X number of expenses for the expense table. 
 
@@ -231,8 +296,7 @@ class PanelView(CustomLoginRequiredMixin, TemplateView):
         category_labels = []
         category_data = []
         for category in categories:
-            expenses = category.all_expenses.filter(user=self.request.user)
-            
+            expenses = category.all_expenses.filter(user=self.request.user)            
             if year:
                 expenses = expenses.filter(date__year=year)
             if month:
@@ -689,36 +753,7 @@ class DailyPanel(PanelView):
         
         return context
     
-    """
-    Get the average spending per day for a user (not incluidng the present day) 
-
-    Args:
-
-    Returns:
-        float: average expenditure per day 
-    """
-    def get_expenditure_per_day(self):
-        today = datetime.today().date()
-        total = self.get_total_expenditure()
-        expenses = Expense.objects.filter(user=self.request.user)
-        earliest_expense = None if not expenses else expenses.order_by('date')[0]
-
-        # Subtract today's expenditure
-        today_expenditure = self.get_expenditure_by_time_range(year=today.year, month=today.month, day=today.day)
-        previous_expenditure = total - today_expenditure
-
-        # If there is no previous expenditure, return None
-        if previous_expenditure <= 0:
-            return None
-
-        if not earliest_expense:
-            return None
-
-        earliest_date = earliest_expense.date
-        
-        delta = today - earliest_date
-        days_passed = delta.days # We don't add one anymore because we don't include current day
-        return round(previous_expenditure / days_passed, 2)
+    
 
     
     
@@ -773,10 +808,66 @@ class DailyPanel(PanelView):
             total += expense.cost
         return total
         
-
+from .models import HOUSEHOLD_SIZE, BLS_2021_DATA
+MONTHS_IN_YEAR = 12
 class OverviewPanel(PanelView):
     model = Expense
     template_name = 'base/overview_panel.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['avg_daily'] = float(self.get_expenditure_per_day_including_today()) if self.get_expenditure_per_day_including_today() else 0
+
+        context['zero_flag'] = False if context['avg_daily'] else True
+
+        context['avg_monthly'] = round(context['avg_daily'] * AVG_DAYS_PER_MONTH, 2)
+        context['avg_yearly'] = round(context['avg_daily'] * AVG_DAYS_PER_YEAR, 2)
+
+        category_names, category_expenditure = self.get_categories_expenditure_by_time_range()
+        category_dict = dict(zip(category_names, category_expenditure))
+        sorted_category_list = sorted(category_dict.items(), key=lambda x: x[1], reverse=True)
+        total = 0
+        category_data = []
+        days_passed = self.get_days_passed()
+        for i in range(len(sorted_category_list)):
+            if days_passed < AVG_DAYS_PER_MONTH:
+                expenditure = round(float(sorted_category_list[i][1]), 2)
+            else:
+                expenditure = round(float(sorted_category_list[i][1]) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+            category = CategoryData(sorted_category_list[i][0], expenditure)
+            total += float(expenditure)
+            category_data.append(category)
+        
+        for category in category_data:
+            if total == 0:
+                category.percent = 0
+            else:
+                category.percent = round(category.expenditure / total * 100, 1)
+        
+        context['categories_data'] = category_data
+
+        us_category_list = sorted(BLS_2021_DATA.items(), key=lambda x: x[1], reverse=True)
+        us_total = 0
+        us_category_data = []
+ 
+        for category in us_category_list:
+            expenditure = round((category[1] / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2)
+            category = CategoryData(category[0], expenditure)
+            us_total += float(expenditure)
+            us_category_data.append(category)
+        
+        for category in us_category_data:
+            category.percent = round(category.expenditure / us_total * 100, 1)
+
+        context['us_categories_data'] = us_category_data
+
+        return context
+
+    
+
+
+
+
 
     
 

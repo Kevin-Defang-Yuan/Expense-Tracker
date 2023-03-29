@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-xs-8" style="padding-top: 5px;">
                   <span style="font-size: 15px; display: block; color: gray">Avg Daily Spending</span>
-                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">99</div>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{avg_daily}}</div>
                 </div>
               </div>
         </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-xs-8" style="padding-top: 5px;">
                   <span style="font-size: 15px; display: block; color: gray">Avg Monthly Spending</span>
-                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">999</div>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{avg_monthly}}</div>
                 </div>
               </div>
         </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-xs-8" style="padding-top: 5px;">
                   <span style="font-size: 15px; display: block; color: gray">Avg Yearly Spending</span>
-                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">9999</div>
+                  <div style="font-size: 55px; font-family: 'Sofia Sans Extra Condensed', sans-serif; display: inline;">{{avg_yearly}}</div>
                 </div>
               </div>
         </div>
@@ -63,42 +63,79 @@
       <!--Viz-->
       <!--Charts -->
       <div class="col-sm-6">
-        <div class="well banner" style="height: 540px;">
-          <!--Nav Tabs using Bootstrap -->
-          <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#piechart">Category Pie Chart</a></li>
-            <li><a data-toggle="tab" href="#categorytable">Category Table</a></li>
-          </ul>
-          <div class="tab-content">
-            <div id="piechart" class="tab-pane fade in active" style="padding-top: 20px;">
-              <small class="form-text text-muted" style="align-items: center;">Hover to see details</small>
-              Example
-            </div>
-            <div id="categorytable" class="tab-pane fade" style="padding-top: 80px;">
-              Example2
-            </div>
-          </div>
+        <div class="well banner">
+          
+          {% if not zero_flag %}
+          <h4>Your Avg Expenditure per Month</h4>
+          <table class="table table-sm table-striped table-hover">
+            <div class="w-auto">
+                <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Expenditure</th>
+                    <th scope="col">Percent</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories_data %}
+                    <tr>
+                        <td>{{category.name}}</td>
+                        <td>${{category.expenditure}}</td>
+                        <td>{{category.percent}}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <h4>Your Avg Expenditure per Month (Not Enough Data)</h4>
+            <table class="table table-sm table-striped table-hover">
+              <div class="w-auto">
+                  <thead>
+                  <tr>
+                      <th scope="col">Category</th>
+                      <th scope="col">Expenditure</th>
+                      <th scope="col">Percent</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                      {% for category in categories_data %}
+                      <tr>
+                          <td>{{category.name}}</td>
+                          <td>-</td>
+                          <td>-</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+            {% endif %}
         </div>
       </div>
 
       <!--Viz-->
       <!--Charts -->
       <div class="col-sm-6">
-        <div class="well banner" style="height: 540px;">
-          <!--Nav Tabs using Bootstrap -->
-          <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#piechartamerican">Category Pie Chart</a></li>
-            <li><a data-toggle="tab" href="#categorytableamerican">Category Table</a></li>
-          </ul>
-          <div class="tab-content">
-            <div id="piechartamerican" class="tab-pane fade in active" style="padding-top: 20px;">
-              <small class="form-text text-muted" style="align-items: center;">Hover to see details</small>
-              Example American
-            </div>
-            <div id="categorytableamerican" class="tab-pane fade" style="padding-top: 80px;">
-              Example2 America 
-            </div>
-          </div>
+        <div class="well banner">
+          <h4>US Consumer Avg Expenditure per Month</h4>
+          <table class="table table-sm table-striped table-hover">
+            <div class="w-auto">
+                <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Avg Expenditure per Month</th>
+                    <th scope="col">Percent</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for category in us_categories_data %}
+                    <tr>
+                        <td>{{category.name}}</td>
+                        <td>${{category.expenditure}}</td>
+                        <td>{{category.percent}}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
         </div>
       </div>
   </div>
