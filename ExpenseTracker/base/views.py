@@ -32,7 +32,7 @@ DAYS_BUFFER = 4
 WARNING_THRESHOLD = 1.1
 BAD_THRESHOLD = 1.3
 
-
+# Color branch
 from django.contrib.auth.mixins import AccessMixin
 
 class CategoryData():
