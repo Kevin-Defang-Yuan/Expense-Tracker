@@ -295,6 +295,7 @@ class PanelView(CustomLoginRequiredMixin, TemplateView):
         categories = Category.objects.filter(user=self.request.user)
         category_labels = []
         category_data = []
+        category_colors = []
         for category in categories:
             expenses = category.all_expenses.filter(user=self.request.user)            
             if year:
@@ -309,7 +310,8 @@ class PanelView(CustomLoginRequiredMixin, TemplateView):
             category_labels.append(category.name)
 
             category_data.append(round(float(total)))
-        return (category_labels, category_data)
+            category_colors.append(category.color)
+        return (category_labels, category_data, category_colors)
     
 
     """
@@ -476,7 +478,7 @@ class YearlyPanel(PanelView):
             context['labels'] = categories_data[0]
             context['data'] = categories_data[1]
             # Use of glasbey to generate distinct colors
-            context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
+            context['background_colors'] = categories_data[2]
 
 
         context['active_subscriptions'], context['was_active_subscriptions'] = self.get_subscriptions_by_time_range(year=year)
@@ -605,7 +607,7 @@ class MonthlyPanel(PanelView):
         else:
             context['labels'] = categories_data[0]
             context['data'] = categories_data[1]
-            context['background_colors'] = sns.color_palette(cc.glasbey, n_colors=len(context['labels'])).as_hex() 
+            context['background_colors'] = categories_data[2]
 
         context['expenditure_per_month'] = self.get_avg_expenditure_per_month()
 

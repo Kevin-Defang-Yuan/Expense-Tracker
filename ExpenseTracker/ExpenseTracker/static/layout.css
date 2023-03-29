@@ -1,0 +1,240 @@
+
+/* We add padding to body so that header does not overlap with body 
+    The 50px is the default size of a navbar (the header)
+*/
+body {
+    padding-top: 50px; 
+    
+    
+}
+
+/* Here I added a shadow to the header to contrast between the header and content */
+#header {
+    background-color: white;
+}
+#header-container {
+    box-shadow: 0px 2px 10px rgb(218, 216, 216);
+}
+
+.navbar-brand, .nav.navbar-nav.navbar-right li a {
+    color: black; 
+}
+
+.navbar-brand, .nav.navbar-nav.navbar-right li {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+#main-content {
+    background-color: rgb(237,237,237);
+    
+
+    
+}
+
+#sidebar {
+    padding-top: 20px;
+    background-color: white;
+    /* background-color: rgb(237, 241, 247); */
+}
+
+/* Here we add a breakpoint cause the header automatically collapses. 
+    Since the default padding we use is 50px, this needs to increase to adjust to the collapsed header. 
+*/
+@media (max-width: 768px) {
+    body {
+        padding-top: 100px;
+    }
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: rgb(254, 206, 241);
+}
+
+/* Style buttons */
+.btn {
+    background-color: none; /* Blue background */
+    border: none; /* Remove borders */
+    color: none; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+}
+  
+/* Darker background on mouse-over */
+.btn:hover {
+    background-color: RoyalBlue;
+}
+
+#change-icon {
+    color: green; 
+}
+
+#add-icon {
+    color: rgb(66, 135, 245);
+    font-size: 25px;
+}
+
+#delete-icon {
+    color: red; 
+}
+
+#dollar-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: rgb(247, 185, 12);
+} 
+
+#piggy-icon {
+    color: rgb(253, 176, 188);
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+} 
+
+#neutral-icon {
+    color: green;
+    font-size: 65px;
+    float: right; 
+    border-radius: 40px;
+} 
+
+#satisfied-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: green;
+} 
+
+#warning-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: gray;
+} 
+
+#stressed-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: orange;
+} 
+
+#sad-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: red;
+} 
+
+#content-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: green;
+} 
+
+#dead-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: red;
+} 
+
+#calm-icon {
+    color: white;
+    font-size: 60px;
+    float: right; 
+    border-radius: 40px;
+    background-color: lightskyblue;
+} 
+
+
+#terminate-icon {
+    color: gray;
+}
+
+#arrow-up-icon {
+    color: red;
+    font-size: 30px;
+}
+
+input#subscription-date-picker[type="date"] {
+    position: relative;
+    /* width: 50%; */
+}
+#subscription-date-picker[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
+
+#form-box {
+    background-color: white;
+    box-shadow: None;
+    border: None;
+}
+
+input[type=submit]:hover {
+	background: #B9DFFF;
+	color: #fff;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #eee;
+	text-shadow: none;
+}
+
+input[type=submit] {
+    float: right;
+	background: #016ABC;
+	color: #fff;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #eee;
+	text-shadow: none;
+    width: 80px;
+    height: 40px;
+}
+
+input[type=radio] {
+    width: 20px;
+    height: 20px;
+}
+
+h4 {
+    font-size: 30px; 
+    font-family: 'Sofia Sans Extra Condensed', sans-serif;
+
+}
+
+textarea { 
+    resize: none;
+    height: 200px;
+}
+
+.alert-box {
+	padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;  
+}
+
+.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+

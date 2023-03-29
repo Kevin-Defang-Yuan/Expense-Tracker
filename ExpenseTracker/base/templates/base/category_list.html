@@ -47,6 +47,7 @@
                             <div class="w-auto">
                                 <thead>
                                 <tr>
+                                    <th scope="col"></th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
@@ -55,7 +56,9 @@
                                 <tbody>
                                     {% for category in categories %}
                                     <tr>
+                                        <td><div style="width: 20px; height: 20px; background-color: {{category.color}}; border-radius: 40px; border-color: black; border-style: solid; border-width: thin;"></div></td>
                                         <td>{{category.name}}</td>
+                                        <!-- <td><span class="material-symbols-outlined" style="background-color: {{category.color}}; border-radius: 40px; border-width: thick;">check_box_outline_blank</span></td> -->
                                         <td><a href="{% url 'category-update' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-update' category.pk %}"><span id="change-icon" class="material-symbols-outlined">edit</span></a></td>
                                         <td><a href="{% url 'category-delete' category.pk %}" method="POST" class="open-incident" data-popup-url="{% url 'category-delete' category.pk %}"><span id="delete-icon" class="material-symbols-outlined">close</span></a></a></td>
             

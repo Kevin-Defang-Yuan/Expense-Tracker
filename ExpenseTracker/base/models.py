@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from colorfield.fields import ColorField
+import seaborn as sns
+import colorcet as cc
 
 """
 Category Class
@@ -21,6 +24,8 @@ class Category(models.Model):
         max_length=200,
         verbose_name="Name of Category"
     )
+
+    color = ColorField(default='#FF0000')
 
     class Meta:
         ordering = ['name']
@@ -130,17 +135,9 @@ Automatically creates the default categories for the user
 """
 @receiver(post_save, sender=User)
 def init_new_user(instance, created, raw, **kwargs):
+    glasbey_colors = sns.color_palette(cc.glasbey, n_colors=len(BLS_2021_DATA)).as_hex() 
+    color_index = 0
     if created and not raw:
-        Category.objects.create(user=instance, name='Food')
-        Category.objects.create(user=instance, name='Alcohol and tobacco')
-        Category.objects.create(user=instance, name='Housing and utilities')
-        Category.objects.create(user=instance, name='Apparel and services')
-        Category.objects.create(user=instance, name='Transportation')
-        Category.objects.create(user=instance, name='Healthcare')
-        Category.objects.create(user=instance, name='Entertainment')
-        Category.objects.create(user=instance, name='Personal care')
-        Category.objects.create(user=instance, name='Reading')
-        Category.objects.create(user=instance, name='Education')
-        Category.objects.create(user=instance, name='Miscellaneous')
-        Category.objects.create(user=instance, name='Cash contributions')
-        Category.objects.create(user=instance, name='Personal insurance and pensions')
+        for key, value in BLS_2021_DATA.items():
+            Category.objects.create(user=instance, name=key, color=glasbey_colors[color_index])
+            color_index += 1

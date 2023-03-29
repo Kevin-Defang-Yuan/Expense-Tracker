@@ -7,10 +7,16 @@
                     <div class="well" id="form-box">
                         <h3 style="text-align: center;">Edit Category</h3>
                         <div class="form-group">
+                            <label>Color</label>
+                            {{form.color}}
+                            <input type="color" id="color-picker">
+                            <br>
+                            <br>
                             <label>Name</label>
                             {{form.name}}  
                             <small class="form-text text-muted">200 characters maximum</small>
                             <span id="characters" style="float: right; padding: 3px; color: gray; font-size: small">0/200</span>
+                            
                         </div>
                         <input type="submit" value="Submit" style="float: right;">
                     </div>
@@ -33,4 +39,15 @@
         console.log(num)
         $('#characters').text(num.toString() + '/200');
     }
+
+    color = document.querySelector('#id_color')
+    colorpicker = document.querySelector('#color-picker')
+    colorpicker.value = color.value
+    color.style.display = 'none'
+
+    $('#color-picker').change(() => {
+        let colorfield = document.querySelector('#id_color')
+        let colorpicker = document.querySelector('#color-picker')
+        colorfield.value = colorpicker.value
+    })
 </script>

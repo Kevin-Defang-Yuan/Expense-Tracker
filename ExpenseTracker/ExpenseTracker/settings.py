@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'budget',
     'subscription',
     'django_filters',
+    'colorfield'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'base/static/')
 ]
+
+# Some stuff needed for the colorfield
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')

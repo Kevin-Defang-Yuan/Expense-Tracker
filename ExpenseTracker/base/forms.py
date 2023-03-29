@@ -3,6 +3,7 @@ from django.forms import Select, NumberInput, Textarea
 from .models import Expense, Category
 from django.core.exceptions import ValidationError
 import datetime
+from colorfield.widgets import ColorWidget
 
 EARLIEST_YEAR = 2000
 LATEST_YEAR = 2099
@@ -11,6 +12,7 @@ LATEST_YEAR = 2099
 # Here we create a date input class so that it creates an HTML input date element
 class DateInput(DateInput):
     input_type = 'date'
+
 
 """
 The form for creating an expense. This is needed in order to add styling to the widgets
@@ -60,10 +62,12 @@ Form for creating a category
 class CreateCategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['name', 'color']
         widgets = {
-            'name': TextInput(attrs={'class': 'form-control', 'id': 'category-name-input'})
+            'name': TextInput(attrs={'class': 'form-control', 'id': 'category-name-input'}),
+            'color': TextInput(attrs={'type': 'color', 'id': 'color-picker'})
         }
     
-    name = TextInput()
+
+
 

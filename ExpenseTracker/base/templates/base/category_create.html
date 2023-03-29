@@ -7,10 +7,16 @@
                     <div class="well" id="form-box">
                         <h3 style="text-align: center;">New Category</h3>
                         <div class="form-group">
+                            <label style="display: block">Color</label>
+                            {{form.color}}
+                            <input type="color" id="color-picker">
+                            <br>
+                            <br>
                             <label>Name</label>
                             {{form.name}}  
                             <small class="form-text text-muted">200 characters maximum</small>
                             <span id="characters" style="float: right; padding: 3px; color: gray; font-size: small">0/200</span>
+                            
                         </div>
                         <input type="submit" value="Submit" style="float: right;">
                     </div>
@@ -23,12 +29,35 @@
 </div>
 
 <script>
+
     $('#category-name-input').keyup(updateCount);
     $('#category-name-input').keydown(updateCount);
+
+    
 
     function updateCount() {
         let num = $('#category-name-input').val().length;
         console.log(num)
         $('#characters').text(num.toString() + '/200');
     }
+
+    color = document.querySelector('#id_color')
+    colorpicker = document.querySelector('#color-picker')
+    colorpicker.value = color.value
+    color.style.display = 'none'
+
+    $('#color-picker').change(() => {
+        let colorfield = document.querySelector('#id_color')
+        let colorpicker = document.querySelector('#color-picker')
+        colorfield.value = colorpicker.value
+    })
+
+    
+    // $('#id_color').load(function() {
+    //     let color = document.querySelector('#id_color')
+    //     color.style.display = 'none'
+    // })
+    // let v = $('#id_color').val()
+    // let z = $('#color-picker').val()
+    // console.log(z)
 </script>
