@@ -825,7 +825,7 @@ class OverviewPanel(PanelView):
         context['avg_monthly'] = round(context['avg_daily'] * AVG_DAYS_PER_MONTH, 2)
         context['avg_yearly'] = round(context['avg_daily'] * AVG_DAYS_PER_YEAR, 2)
 
-        category_names, category_expenditure = self.get_categories_expenditure_by_time_range()
+        category_names, category_expenditure, _ = self.get_categories_expenditure_by_time_range()
         category_dict = dict(zip(category_names, category_expenditure))
         sorted_category_list = sorted(category_dict.items(), key=lambda x: x[1], reverse=True)
         total = 0
