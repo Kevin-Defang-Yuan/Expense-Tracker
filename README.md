@@ -34,7 +34,18 @@ There are also similar views for handling subscriptions, categories, and budgets
 And finally, the application employs basic authentication. Below is a screenshot of the login page.
 ![image info](./images/login.png)
 
-## Project Setup
+## Project Setup (For MacOS only)
 
 1. Clone the repository
-2. Create a 
+2. Create a virtual environment in the home directory (Optional)
+3. Run the following command to install dependencies
+* pip install -r requirements.txt
+4. Create a .env file in the ExpenseTracker directory
+5. Create a random Django SECRET KEY
+6. In the .env file, write: 
+* SECRET_KEY = your-random-Django-secret-key
+
+7. Run the following commands in order (make sure you are in the same directory with the manage.py file: the ExpenseTracker directory)
+* python manage.py makemigrations
+* python manage.py migrate
+* python manage.py runserver
