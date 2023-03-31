@@ -27,6 +27,46 @@ class Category(models.Model):
 
     color = ColorField(default='#FF0000')
 
+  
+    FOOD = 'Food'
+    ALCOHOL_TOBACCO = 'Alcohol and tobacco'
+    HOUSING_UTILITIES = 'Housing and utilities'
+    APPAREL_SERVICES = 'Apparel and services'
+    TRANSPORTATION = 'Transportation'
+    HEALTHCARE = 'Healthcare'
+    ENTERTAINMENT = 'Entertainment'
+    PERSONAL_CARE = 'Personal care'
+    READING = 'Reading'
+    EDUCATION = 'Education'
+    MISCELLANEOUS = 'Miscellaneous'
+    CASH_CONTRIBUTIONS = 'Cash contributions'
+    PERSONAL_INSURANCE_AND_PENSIONS = 'Personal insurance and pensions'
+
+
+    BASE_CATEGORY_CHOICES = (
+        (FOOD, 'Food'),
+        (ALCOHOL_TOBACCO, 'Alcohol and tobacco'),
+        (HOUSING_UTILITIES, 'Housing and utilities'),
+        (APPAREL_SERVICES, 'Apparel and services'),
+        (TRANSPORTATION, 'Transportation'),
+        (HEALTHCARE, 'Healthcare'),
+        (ENTERTAINMENT, 'Entertainment'),
+        (PERSONAL_CARE, 'Personal care'),
+        (READING, 'Reading'),
+        (EDUCATION, 'Education'),
+        (MISCELLANEOUS, 'Miscellaneous'),
+        (CASH_CONTRIBUTIONS, 'Cash contributions'),
+        (PERSONAL_INSURANCE_AND_PENSIONS, 'Personal insurance and pensions')
+    )
+
+    relation = models.CharField(
+        max_length=40,
+        choices=BASE_CATEGORY_CHOICES,
+        default=None,
+        null=True,
+        blank=True
+    )
+
     class Meta:
         ordering = ['name']
     
@@ -128,6 +168,43 @@ BLS_2021_DATA = {
     'Personal insurance and pensions': 7873      
 }
 
+BLS_CATEGORY_CHOICES = [
+    Category.FOOD,
+    Category.ALCOHOL_TOBACCO,
+    Category.HOUSING_UTILITIES,
+    Category.APPAREL_SERVICES,
+    Category.TRANSPORTATION,
+    Category.HEALTHCARE,
+    Category.ENTERTAINMENT,
+    Category.PERSONAL_CARE,
+    Category.READING,
+    Category.EDUCATION,
+    Category.MISCELLANEOUS,
+    Category.CASH_CONTRIBUTIONS,
+    Category.PERSONAL_INSURANCE_AND_PENSIONS
+]
+
+LIVING_CATEGORIES = [
+    Category.HOUSING_UTILITIES,
+    Category.TRANSPORTATION,
+    Category.FOOD,
+    Category.PERSONAL_INSURANCE_AND_PENSIONS,
+    Category.HEALTHCARE
+]
+
+QUALITY_CATEGORIES = [
+    Category.ENTERTAINMENT,
+    Category.CASH_CONTRIBUTIONS,
+    Category.APPAREL_SERVICES,
+    Category.EDUCATION
+]
+
+EXTRA_CATEGORIES = [
+    Category.ALCOHOL_TOBACCO,
+    Category.PERSONAL_CARE,
+    Category.READING
+]
+
 
 """
 Function that runs when a users first creates an account
@@ -139,5 +216,5 @@ def init_new_user(instance, created, raw, **kwargs):
     color_index = 0
     if created and not raw:
         for key, value in BLS_2021_DATA.items():
-            Category.objects.create(user=instance, name=key, color=glasbey_colors[color_index])
+            Category.objects.create(user=instance, name=key, color=glasbey_colors[color_index], relation=BLS_CATEGORY_CHOICES[color_index])
             color_index += 1

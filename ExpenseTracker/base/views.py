@@ -345,7 +345,7 @@ class PanelView(CustomLoginRequiredMixin, TemplateView):
             current_monthly_spending_rate = month_expenditure / today.day if today.day > DAYS_BUFFER else month_expenditure / DAYS_BUFFER
             
             # Get remaining monthly spending rate
-            remaining_days = monthrange(today.year, today.month)[1] - today.day
+            remaining_days = monthrange(today.year, today.month)[1] - today.day + 1
             remaining_budget = float(monthlybudget.budget) - month_expenditure
 
             # If we surpass, then set to CURRENT_OVER
