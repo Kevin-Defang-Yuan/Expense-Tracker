@@ -72,6 +72,14 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_total(self):
+        expenses = self.all_expenses.all()
+        total = 0
+        for expense in expenses:
+            total += expense.cost
+        return total
+
 
 """
 Payment Class
@@ -153,35 +161,36 @@ HOUSEHOLD_SIZE = 3.13
 # https://www.bls.gov/news.release/cesan.nr0.htm
 # Represents a single consumer unit per year
 BLS_2021_DATA = {
-    'Food': 8289,
-    'Alcohol and tobacco': 895,
     'Housing and utilities': 22624,
-    'Apparel and services': 1754,
     'Transportation': 10961,
+    'Food': 8289,
+    'Personal insurance and pensions': 7873,
     'Healthcare': 5452,
     'Entertainment': 3568,
-    'Personal care': 771,
-    'Reading': 114,
+    'Cash contributions': 2415,
+    'Apparel and services': 1754,
     'Education': 1226,
     'Miscellaneous': 986,
-    'Cash contributions': 2415,
-    'Personal insurance and pensions': 7873      
+    'Alcohol and tobacco': 895,
+    'Personal care': 771,
+    'Reading': 114,
+       
 }
 
 BLS_CATEGORY_CHOICES = [
-    Category.FOOD,
-    Category.ALCOHOL_TOBACCO,
     Category.HOUSING_UTILITIES,
-    Category.APPAREL_SERVICES,
     Category.TRANSPORTATION,
+    Category.FOOD,
+    Category.PERSONAL_INSURANCE_AND_PENSIONS,
     Category.HEALTHCARE,
     Category.ENTERTAINMENT,
-    Category.PERSONAL_CARE,
-    Category.READING,
+    Category.CASH_CONTRIBUTIONS,
+    Category.APPAREL_SERVICES,
     Category.EDUCATION,
     Category.MISCELLANEOUS,
-    Category.CASH_CONTRIBUTIONS,
-    Category.PERSONAL_INSURANCE_AND_PENSIONS
+    Category.ALCOHOL_TOBACCO,
+    Category.PERSONAL_CARE,
+    Category.READING,
 ]
 
 LIVING_CATEGORIES = [
@@ -189,17 +198,19 @@ LIVING_CATEGORIES = [
     Category.TRANSPORTATION,
     Category.FOOD,
     Category.PERSONAL_INSURANCE_AND_PENSIONS,
-    Category.HEALTHCARE
+    
 ]
 
 QUALITY_CATEGORIES = [
+    Category.HEALTHCARE,
     Category.ENTERTAINMENT,
     Category.CASH_CONTRIBUTIONS,
     Category.APPAREL_SERVICES,
     Category.EDUCATION
 ]
 
-EXTRA_CATEGORIES = [
+ACCESSORY_CATEGORIES = [
+    Category.MISCELLANEOUS,
     Category.ALCOHOL_TOBACCO,
     Category.PERSONAL_CARE,
     Category.READING
