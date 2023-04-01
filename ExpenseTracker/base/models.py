@@ -27,11 +27,59 @@ class Category(models.Model):
 
     color = ColorField(default='#FF0000')
 
+  
+    FOOD = 'Food'
+    ALCOHOL_TOBACCO = 'Alcohol and tobacco'
+    HOUSING_UTILITIES = 'Housing and utilities'
+    APPAREL_SERVICES = 'Apparel and services'
+    TRANSPORTATION = 'Transportation'
+    HEALTHCARE = 'Healthcare'
+    ENTERTAINMENT = 'Entertainment'
+    PERSONAL_CARE = 'Personal care'
+    READING = 'Reading'
+    EDUCATION = 'Education'
+    MISCELLANEOUS = 'Miscellaneous'
+    CASH_CONTRIBUTIONS = 'Cash contributions'
+    PERSONAL_INSURANCE_AND_PENSIONS = 'Personal insurance and pensions'
+
+
+    BASE_CATEGORY_CHOICES = (
+        (FOOD, 'Food'),
+        (ALCOHOL_TOBACCO, 'Alcohol and tobacco'),
+        (HOUSING_UTILITIES, 'Housing and utilities'),
+        (APPAREL_SERVICES, 'Apparel and services'),
+        (TRANSPORTATION, 'Transportation'),
+        (HEALTHCARE, 'Healthcare'),
+        (ENTERTAINMENT, 'Entertainment'),
+        (PERSONAL_CARE, 'Personal care'),
+        (READING, 'Reading'),
+        (EDUCATION, 'Education'),
+        (MISCELLANEOUS, 'Miscellaneous'),
+        (CASH_CONTRIBUTIONS, 'Cash contributions'),
+        (PERSONAL_INSURANCE_AND_PENSIONS, 'Personal insurance and pensions')
+    )
+
+    relation = models.CharField(
+        max_length=40,
+        choices=BASE_CATEGORY_CHOICES,
+        default=None,
+        null=True,
+        blank=True
+    )
+
     class Meta:
         ordering = ['name']
     
     def __str__(self):
         return self.name
+    
+    def get_total(self):
+        expenses = self.all_expenses.all()
+        total = 0
+        for expense in expenses:
+            total += expense.cost
+        return total
+
 
 """
 Payment Class
@@ -113,20 +161,60 @@ HOUSEHOLD_SIZE = 3.13
 # https://www.bls.gov/news.release/cesan.nr0.htm
 # Represents a single consumer unit per year
 BLS_2021_DATA = {
-    'Food': 8289,
-    'Alcohol and tobacco': 895,
     'Housing and utilities': 22624,
-    'Apparel and services': 1754,
     'Transportation': 10961,
+    'Food': 8289,
+    'Personal insurance and pensions': 7873,
     'Healthcare': 5452,
     'Entertainment': 3568,
-    'Personal care': 771,
-    'Reading': 114,
+    'Cash contributions': 2415,
+    'Apparel and services': 1754,
     'Education': 1226,
     'Miscellaneous': 986,
-    'Cash contributions': 2415,
-    'Personal insurance and pensions': 7873      
+    'Alcohol and tobacco': 895,
+    'Personal care': 771,
+    'Reading': 114,
+       
 }
+
+BLS_CATEGORY_CHOICES = [
+    Category.HOUSING_UTILITIES,
+    Category.TRANSPORTATION,
+    Category.FOOD,
+    Category.PERSONAL_INSURANCE_AND_PENSIONS,
+    Category.HEALTHCARE,
+    Category.ENTERTAINMENT,
+    Category.CASH_CONTRIBUTIONS,
+    Category.APPAREL_SERVICES,
+    Category.EDUCATION,
+    Category.MISCELLANEOUS,
+    Category.ALCOHOL_TOBACCO,
+    Category.PERSONAL_CARE,
+    Category.READING,
+]
+
+LIVING_CATEGORIES = [
+    Category.HOUSING_UTILITIES,
+    Category.TRANSPORTATION,
+    Category.FOOD,
+    Category.PERSONAL_INSURANCE_AND_PENSIONS,
+    
+]
+
+QUALITY_CATEGORIES = [
+    Category.HEALTHCARE,
+    Category.ENTERTAINMENT,
+    Category.CASH_CONTRIBUTIONS,
+    Category.APPAREL_SERVICES,
+    Category.EDUCATION
+]
+
+ACCESSORY_CATEGORIES = [
+    Category.MISCELLANEOUS,
+    Category.ALCOHOL_TOBACCO,
+    Category.PERSONAL_CARE,
+    Category.READING
+]
 
 
 """
@@ -139,5 +227,5 @@ def init_new_user(instance, created, raw, **kwargs):
     color_index = 0
     if created and not raw:
         for key, value in BLS_2021_DATA.items():
-            Category.objects.create(user=instance, name=key, color=glasbey_colors[color_index])
+            Category.objects.create(user=instance, name=key, color=glasbey_colors[color_index], relation=BLS_CATEGORY_CHOICES[color_index])
             color_index += 1

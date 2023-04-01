@@ -62,10 +62,12 @@ Form for creating a category
 class CreateCategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'color']
+        fields = ['name', 'color', 'relation']
         widgets = {
             'name': TextInput(attrs={'class': 'form-control', 'id': 'category-name-input'}),
-            'color': TextInput(attrs={'type': 'color', 'id': 'color-picker'})
+            'color': TextInput(attrs={'type': 'color', 'id': 'color-picker'}),
+            'relation': Select(attrs={'class': 'form-control', 'id': 'relation-input'}),
+
         }
     
 

@@ -32,7 +32,7 @@ DAYS_BUFFER = 4
 WARNING_THRESHOLD = 1.1
 BAD_THRESHOLD = 1.3
 
-# Color branch
+# Color relate
 from django.contrib.auth.mixins import AccessMixin
 
 class CategoryData():
@@ -40,7 +40,10 @@ class CategoryData():
         self.name = name
         self.expenditure = expenditure
         self.percent = 0
+        self.subcategories = []
 
+    def __str__(self):
+        return f'{self.name}: {self.expenditure}'
 
 class CustomLoginRequiredMixin(AccessMixin):
     """Verify that the current user is authenticated."""
@@ -345,7 +348,7 @@ class PanelView(CustomLoginRequiredMixin, TemplateView):
             current_monthly_spending_rate = month_expenditure / today.day if today.day > DAYS_BUFFER else month_expenditure / DAYS_BUFFER
             
             # Get remaining monthly spending rate
-            remaining_days = monthrange(today.year, today.month)[1] - today.day
+            remaining_days = monthrange(today.year, today.month)[1] - today.day + 1
             remaining_budget = float(monthlybudget.budget) - month_expenditure
 
             # If we surpass, then set to CURRENT_OVER
@@ -810,7 +813,7 @@ class DailyPanel(PanelView):
             total += expense.cost
         return total
         
-from .models import HOUSEHOLD_SIZE, BLS_2021_DATA
+from .models import HOUSEHOLD_SIZE, BLS_2021_DATA, LIVING_CATEGORIES, QUALITY_CATEGORIES, ACCESSORY_CATEGORIES
 MONTHS_IN_YEAR = 12
 class OverviewPanel(PanelView):
     model = Expense
@@ -827,6 +830,8 @@ class OverviewPanel(PanelView):
 
         category_names, category_expenditure, _ = self.get_categories_expenditure_by_time_range()
         category_dict = dict(zip(category_names, category_expenditure))
+
+        
         sorted_category_list = sorted(category_dict.items(), key=lambda x: x[1], reverse=True)
         total = 0
         category_data = []
@@ -847,21 +852,117 @@ class OverviewPanel(PanelView):
                 category.percent = round(category.expenditure / total * 100, 1)
         
         context['categories_data'] = category_data
-
-        us_category_list = sorted(BLS_2021_DATA.items(), key=lambda x: x[1], reverse=True)
-        us_total = 0
-        us_category_data = []
- 
-        for category in us_category_list:
-            expenditure = round((category[1] / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2)
-            category = CategoryData(category[0], expenditure)
-            us_total += float(expenditure)
-            us_category_data.append(category)
         
-        for category in us_category_data:
-            category.percent = round(category.expenditure / us_total * 100, 1)
+        us_categories_data = {key: round((value / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2) for key, value in BLS_2021_DATA.items()}
+        us_categories_data_object_array = []
+        us_total = 0
+        for category, value in us_categories_data.items():
+            us_total += value
+        
+        for category, value in us_categories_data.items():
+            data = CategoryData(category, value)
+            data.percent = round(value / us_total * 100, 1)
+            us_categories_data_object_array.append(data)
+        
+        context['us_categories_data'] = us_categories_data_object_array
 
-        context['us_categories_data'] = us_category_data
+
+        categories = Category.objects.all().filter(user=self.request.user)
+        base_categories = {key: [] for key in BLS_2021_DATA}
+        all_categories_data = []
+        for category in categories:
+            if category.relation:
+                base_categories[category.relation].append(category)
+            else:
+                all_categories_data.append(CategoryData(category.name, category.get_total()))
+        
+        for category, category_array in base_categories.items():
+            base_category = CategoryData(category, 0)
+            for sub_category in category_array:
+                base_category.subcategories.append(CategoryData(sub_category.name, sub_category.get_total()))
+                base_category.expenditure += sub_category.get_total() 
+            all_categories_data.append(base_category)
+        
+        # Calculate total
+        for category in all_categories_data:
+            category.expenditure = round(float(category.expenditure) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+            category.percent = round(category.expenditure / total * 100, 1)
+            for subcategory in category.subcategories:
+                subcategory.expenditure = round(float(subcategory.expenditure) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+                subcategory.percent = round(subcategory.expenditure / total * 100, 1)
+
+        
+        
+        
+        dup_all_categories_data = all_categories_data
+
+        sorted_all_categories_data = []
+        for category_name in BLS_2021_DATA:
+            for category in all_categories_data:
+                if category_name == category.name:
+                    sorted_all_categories_data.append(category)
+                    dup_all_categories_data.remove(category)
+
+        
+        # print(sorted_all_categories_data)
+        context['sorted_all_categories_data'] = sorted_all_categories_data
+        context['other_categories_data'] = dup_all_categories_data
+
+        
+        # categories_dict = {category.name: category for category in categories}
+        # print(categories_dict)
+        
+
+        # category_object_dict = {key:0 for key in BLS_2021_DATA}
+        # for category in categories:
+        #     if not category.relation:
+        #         category_object_dict[category_data] = CategoryData(category.name, round(float(category.get_total()) / (days_passed / AVG_DAYS_PER_MONTH), 2))
+                
+        #     else:
+        
+        # First initialize BLS ones
+        # category_relational_dict = {categories_dict[category].relation: categories_dict[category].name for category in BLS_2021_DATA if categories_dict[category].relation} 
+        # print(category_relational_dict)
+        # for category in BLS_2021_DATA:
+
+
+
+        # Used only for the radar graphs
+        related_category_dict = {key:0 for key in BLS_2021_DATA}        
+        for category in categories:
+            if category.relation:
+                related_category_dict[category.relation] += float(category.get_total())
+
+        us_living_categories = {}
+        user_living_categories = {}
+        for category in LIVING_CATEGORIES:
+            us_living_categories[category] = round((BLS_2021_DATA[category] / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2)
+            user_living_categories[category] = round(float(related_category_dict[category]) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+
+        context['us_living_categories'] = list(us_living_categories.keys())
+        context['us_living_categories_data'] = list(us_living_categories.values())
+        context['user_living_categories_data'] = list(user_living_categories.values())
+
+        us_quality_categories = {}
+        user_quality_categories = {}
+        for category in QUALITY_CATEGORIES:
+            us_quality_categories[category] = round((BLS_2021_DATA[category] / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2)
+            user_quality_categories[category] = round(float(related_category_dict[category]) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+
+        context['us_quality_categories'] = list(us_quality_categories.keys())
+        context['us_quality_categories_data'] = list(us_quality_categories.values())
+        context['user_quality_categories_data'] = list(user_quality_categories.values())
+
+        us_accessory_categories = {}
+        user_accessory_categories = {}
+        for category in ACCESSORY_CATEGORIES:
+            us_accessory_categories[category] = round((BLS_2021_DATA[category] / HOUSEHOLD_SIZE) / MONTHS_IN_YEAR, 2)
+            user_accessory_categories[category] = round(float(related_category_dict[category]) / (days_passed / AVG_DAYS_PER_MONTH), 2)
+
+        context['us_accessory_categories'] = list(us_accessory_categories.keys())
+        context['us_accessory_categories_data'] = list(us_accessory_categories.values())
+        context['user_accessory_categories_data'] = list(user_accessory_categories.values())
+
 
         return context
 
