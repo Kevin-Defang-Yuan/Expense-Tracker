@@ -866,7 +866,7 @@ class OverviewPanel(PanelView):
 
         # Calculate Percents and then adjust
         days_passed = self.get_days_passed()
-        if days_passed:
+        if days_passed >= MIN_DAYS_PASSED:
             for base_category_name, base_category_data in base_category_dict.items():
                 base_category_data.percent = round(base_category_data.expenditure / total_expenditure * 100, 1)
                 base_category_data.expenditure = round(float(base_category_data.expenditure) / (days_passed / AVG_DAYS_PER_MONTH), 2)
@@ -903,29 +903,24 @@ class OverviewPanel(PanelView):
             context['labels'] = list(user_categories_dict.keys())
             context['data'] = [round(float(category.get_total()) / (days_passed / AVG_DAYS_PER_MONTH), 2) for category in user_categories_dict.values()]
             context['background_colors'] = [category.color for category in user_categories_dict.values()]
-
-
-                
-
         
-        
-        
-        
-        context['sorted_all_categories_data'] = list(base_category_dict.values())
-        context['other_categories_data'] = list(other_category_dict.values())
+            context['sorted_all_categories_data'] = list(base_category_dict.values())
+            context['other_categories_data'] = list(other_category_dict.values())
 
 
-        context['us_living_categories'] = list(us_living_categories.keys())
-        context['us_living_categories_data'] = list(us_living_categories.values())
-        context['user_living_categories_data'] = list(user_living_categories.values())
-        
-        context['us_quality_categories'] = list(us_quality_categories.keys())
-        context['us_quality_categories_data'] = list(us_quality_categories.values())
-        context['user_quality_categories_data'] = list(user_quality_categories.values())
+            context['us_living_categories'] = list(us_living_categories.keys())
+            context['us_living_categories_data'] = list(us_living_categories.values())
+            context['user_living_categories_data'] = list(user_living_categories.values())
+            
+            context['us_quality_categories'] = list(us_quality_categories.keys())
+            context['us_quality_categories_data'] = list(us_quality_categories.values())
+            context['user_quality_categories_data'] = list(user_quality_categories.values())
 
-        context['us_accessory_categories'] = list(us_accessory_categories.keys())
-        context['us_accessory_categories_data'] = list(us_accessory_categories.values())
-        context['user_accessory_categories_data'] = list(user_accessory_categories.values())
+            context['us_accessory_categories'] = list(us_accessory_categories.keys())
+            context['us_accessory_categories_data'] = list(us_accessory_categories.values())
+            context['user_accessory_categories_data'] = list(user_accessory_categories.values())
+        
+        context['enough_data'] = 0 if days_passed < MIN_DAYS_PASSED else 1
 
         
         

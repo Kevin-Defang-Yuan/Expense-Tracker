@@ -15,6 +15,7 @@
   </div>
 </div>
 
+{% if enough_data %}
 <div class="container">
   <div class="row" id="row-content">
       <!--Banner -->
@@ -67,16 +68,16 @@
         <div class="well banner">
 
             {% if not zero_flag %}
-              <h4>Your Avg Expenditure per Month (Standardized)</h4>
+              <h4>Your Avg Expenditure per Month</h4>
               <table class="table table-sm table-hover table-bordered">
                 <div class="w-auto">
                   <thead>
                   <tr>
-                      <th scope="col">Category</th>
-                      <th scope="col"></th>
-                      <th scope="col">Percent of Expenditure</th>
+                      <th scope="col">Standard Categories</th>
+                      <th scope="col">Your Categories</th>
+                      <th scope="col">Percent of Total Spending</th>
                       <th scope="col">Expenditure</th>
-                      <th scope="col">Compare</th>
+                      <th scope="col">Comparison with Avg US consumer</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -141,16 +142,20 @@
       <!--Viz-->
       <!--Charts -->
       <div class="col-sm-6">
-        <div class="well banner">
+        <!-- <div class="well banner">
+          <h4>Your Avg Expenditure per Month</h4>
           {% include 'base/pie_chart.html' %}
-        </div>
+        </div> -->
         <div class="well banner">
+          <h4>Major Expenses Comparisons</h4>
           {% include 'base/living_radar_graph.html' %}
         </div>
         <div class="well banner">
+          <h4>Significant Expenses Comparisons</h4>
           {% include 'base/quality_radar_graph.html' %}
         </div>
         <div class="well banner">
+          <h4>Minor Expenses Comparisons</h4>
           {% include 'base/accessory_radar_graph.html' %}
         </div>
       </div>
@@ -158,5 +163,18 @@
 </div>
 
 {% include 'modal.html' %}
+{% else %}
+<div class="container">
+  <div class="row" id="row-content">
+    <div class="col">
+      <div class="well banner">
+        Need at least two weeks of data
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endif %}
 {% endblock %}
 
