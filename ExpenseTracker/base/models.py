@@ -177,6 +177,8 @@ BLS_2021_DATA = {
        
 }
 
+
+
 BLS_CATEGORY_CHOICES = [
     Category.HOUSING_UTILITIES,
     Category.TRANSPORTATION,

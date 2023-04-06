@@ -128,6 +128,7 @@
                         <th scope="col"></th>
                         <th scope="col">Expenditure</th>
                         <th scope="col">Percent</th>
+                        <th scope="col">Compare</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -137,6 +138,7 @@
                               <td></td>
                               <td>${{category.expenditure}}</td>
                               <td>{{category.percent}}%</td>
+                              <td>{{category.compare}}</td>
                           </tr>
                           {% for sub_category in category.subcategories %}
                           <tr>
@@ -144,6 +146,7 @@
                             <td>{{sub_category.name}}</td>
                             <td>${{sub_category.expenditure}}</td>
                             <td>{{sub_category.percent}}%</td>
+                            <td></td>
                           </tr>
                           {% endfor %}
                         {% endfor %}
