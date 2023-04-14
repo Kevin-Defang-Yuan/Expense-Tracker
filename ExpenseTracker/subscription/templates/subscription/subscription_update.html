@@ -39,9 +39,11 @@
                                 </div>
                                 {{form.cost}}
                             </div>
+                            <small id="negative-err-msg" class="form-text text-muted" style="color: red;" hidden>ERROR: Negative number</small>
+                            <small id="overflow-err-msg" class="form-text text-muted" style="color: red;" hidden>ERROR: Input too large</small>
                         </div>
                         
-                        <input type="submit" value="Submit" style="float: right;">
+                        <input id="subscription-submit" type="submit" value="Submit" style="float: right;">
                     </div>
 
                 </div>       
@@ -50,3 +52,30 @@
         </form>
     </div>
 </div>
+
+<script>
+    $('#subscription-cost-input').keyup(costValidation);
+
+    // Some basic error validation
+    function costValidation() {
+        let num = $('#subscription-cost-input').val();
+        console.log(num);
+        if (num && num < 0) {
+            $('#subscription-cost-input').css({'color': 'red'});
+            $('#negative-err-msg').css({'display': 'block'});
+            $('#subscription-submit').prop('disabled', true);
+        }
+
+        else if (num > 99999999) {
+            $('#subscription-cost-input').css({'color': 'red'});
+            $('#overflow-err-msg').css({'display': 'block'});
+            $('#subscription-submit').prop('disabled', true);
+        }
+        else {
+            $('#subscription-cost-input').css({'color': 'black'});
+            $('#negative-err-msg').css({'display': 'none'});
+            $('#overflow-err-msg').css({'display': 'none'});
+            $('#subscription-submit').prop('disabled', false);
+        }
+    }
+</script>
